@@ -1,0 +1,237 @@
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Style for the dialog */
+#settings-dialog,
+#menu-dialog,
+#bluetooth-dialog {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+}
+
+/* Style for the dialog container */
+#settings-dialogContainer,
+#menu-dialog-container,
+#bluetooth-dialog-container {
+  width: 80%;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  /* Center horizontally and vertically */
+}
+
+/* Style for the header content */
+#settings-headerContent,
+#menu-header-content,
+#bluetooth-header-content {
+  padding: 20px;
+  background-color: #333;
+  color: #fff;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  position: relative;
+}
+
+#bottom-bar-content {
+  padding: 20px;
+  background-color: #333;
+  color: #fff;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  position: relative;
+}
+
+#menu-dialog-right-arrow {
+  position: absolute;
+  right: 0;
+  top: 0px;
+}
+
+#menu-dialog-left-arrow {
+  position: absolute;
+  left: 0;
+  top: 0px;
+  display: none;
+
+}
+
+/* Style for the dialog content */
+#settings-dialogContent,
+#bluetooth-dialog-content,
+#menu-dialog-content-auto-mode {
+  padding: 20px;
+  padding-top: 0px;
+  /* Enable scrolling for dialog content */
+  overflow-y: auto;
+  /* Set a maximum height for the scrollable content */
+  max-height: 300px;
+  text-align: center;
+}
+
+#menu-dialog-content-manual-mode {
+  padding: 20px;
+  padding-top: 0px;
+  /* Enable scrolling for dialog content */
+  overflow-y: auto;
+  /* Set a maximum height for the scrollable content */
+  max-height: 300px;
+
+}
+
+/*  enable / disable classes for manual mode controls    */
+/* TODO TÄSTÄ PUUTTUU VIELÄ JAVASCRIPT TOTEUTUS JOLLA VAIHDETAAN ENABLE/DISABLE -TILAA BLUETOOTH CONNECTIONIN MUKAAN! */
+.enabled {
+  /* Define the styles for the enabled state */
+  cursor: pointer; /* Make it look clickable */
+  pointer-events: auto; /* Allow user interactions */
+  opacity: 1; /* Adjust the opacity value as needed */
+}
+
+.disabled {
+  /* Define the styles for the disabled state */
+  pointer-events: none;
+  opacity: 0.5; /* Adjust the opacity value as needed */
+}
+
+/* Close button style */
+#settings-closeDialogButton,
+#close-menu-dialog-button,
+#bluetooth-closeDialogButton {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  color: #fff;
+}
+
+#settings-icon-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 998;
+}
+
+#bluetooth-icon {
+  position: absolute;
+  top: 90px;
+  left: 10px;
+  z-index: 998;
+}
+
+
+/* Silder related styles  */
+.slider-container {
+  position: inherit;
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
+}
+
+/* Style the range slider track */
+.range-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 10px;
+  background: #ddd;
+  border-radius: 5px;
+  outline: none;
+  margin: 0;
+  opacity: 0.7;
+}
+
+/* Style the range slider thumb/handle */
+.range-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background: #387072;
+  border-radius: 50%;
+  cursor: pointer;
+
+}
+
+/* Style the range slider thumb/handle on hover */
+.range-slider:hover {
+  opacity: 1;
+  /* Fully shown on mouse-over */
+
+}
+
+/* Style the range slider thumb/handle on hover */
+.range-slider::-webkit-slider-thumb:hover {
+  background: #194d4e;
+
+}
+
+/* Remove the default tooltip on the range slider */
+.range-slider::-webkit-slider-thumb::after {
+  content: '';
+  display: none;
+}
+
+/* Style the range slider value display */
+#manual-steering-slider-value,
+#manual-motor-speed-slider-value {
+  display: block;
+  margin-top: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #000000;
+}
+
+#minus-svg-icon-speed,
+#minus-svg-icon-steering {
+  position: relative;
+}
+
+#plus-svg-icon-steering,
+#plus-svg-icon-speed  {
+  position: absolute;
+  right: 0px;
+  padding-right: 18px;
+}
+
+.align-text {
+  text-align: center;
+}
+
+#line-1 {
+  position: absolute;
+  left: 0px;
+  right: 0px;
+}
+
+#lock-direction-button, 
+#start-route-button {
+  margin: 0 auto;
+  display: block;
+  font-size: small;
+}
+
+.center-div {
+  text-align: center;
+}
+
+#bluetooth-connection-state {
+  border: none;
+  border-bottom: 1px solid #000;
+  margin: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">VeneilyApp</string>
+    <string name="location_permission_message">This app requires access to your location to function properly.</string>
+    <string name="request_location_permission">Request Location Permission</string>
+</resources>

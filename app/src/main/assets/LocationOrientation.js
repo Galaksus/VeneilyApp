@@ -1,0 +1,115 @@
+/* File that contains functions related to positioning of the map and rotating the orientation arrow */
+const centerMeButton = document.getElementById("center-me-button");
+
+var isFirstRun = true; // This is for 
+let centerMeButtonToggled = false;
+let angle; // Angle of the orientation arrow
+var customMarker; // This is the orientation arrow
+
+centerMeButton.addEventListener("click", function () {
+    centerMeButtonToggled = !centerMeButtonToggled;
+    if (centerMeButtonToggled) {
+      // gets currentLocation and then Java calls the setViewOnCurrentLocation() here in JS
+      //Android.getCurrentLocation(); // TODO TÄMÄ KUNTOON
+      var currentLatLng = customMarker.getLatLng();
+      drawCircleOnCurrentLocationOnMap(currentLatLng.lat,  currentLatLng.lng);
+  
+      centerMeButton.style.backgroundColor = "#3498db"; // Sets background to light blue
+    } else {
+      centerMeButton.style.backgroundColor = "transparent"; // Sets background to light default (gray)
+    }
+  });
+
+function moveMapView(coordinatesPairs, currentIndex) {
+  clearMap();
+
+  // Create an array to store LatLng objects for each marker
+  var markerLatLngs = [];
+
+  // Add markers to the map and populate the markerLatLngs array
+  for (let i = 0; i < coordinatesPairs.length; i++) {
+    var myMarker = L.marker(coordinatesPairs[i]).addTo(map);
+    markerLatLngs.push(myMarker.getLatLng());
+  }
+
+  let marginPercentage = 0.1;
+  // Calculate bounds with margin
+  var bounds = new L.LatLngBounds(markerLatLngs);
+  bounds = bounds.pad(marginPercentage);
+
+  // fitBounds to set the map view to contain all markers with a margin
+  map.fitBounds(bounds);
+
+  // Draw polygon or polyline
+  // Eli tää onki niin että tässä luetaan databasesta onko polygon vai polyine
+  // Retrieves only last column from database from the desired ID (row)
+  var onlyLastColumn = true;
+  var routeType = window.Android.getData(currentIndex, onlyLastColumn);
+  if (routeType.startsWith("Loop")) {
+    L.polygon(coordinatesPairs, {
+      color: "blue",
+    }).addTo(map);
+  } else if (routeType.startsWith("Route")) {
+    L.polyline(coordinatesPairs, {
+      color: "green",
+    }).addTo(map);
+  }
+}
+
+function drawCircleOnCurrentLocationOnMap(latitude, longitude) {
+    /*
+     - Better name for this function could be updateCustomMarkerLocationOnMap, but had issues with changing name so it is this for now.
+     * Updates custom marker a.k.a the marker that is the orietation arrow
+     * This function is fired periodically when current location is updated
+     */
+    // on startup (first time running this function) center location to current location
+  
+    // Check if the marker already exists on the map
+  
+    if (isFirstRun) { // TUO centerMeButtonToggled TÄYTYY FIXATA!
+      setViewOnCurrentLocation(latitude, longitude); // set location to current location
+      var customIcon = L.divIcon({
+        className: 'custom-icon-class',
+        iconSize: [32, 32],
+        html: '<img src="icons/location-arrow.svg" style="width: 100%; height: 100%; transform-origin: 50% 50%;">'
+      });
+      customMarker = L.marker([latitude, longitude], { icon: customIcon}).addTo(map); // add to map on first run
+      isFirstRun = false; // First run is now false
+    }
+  
+    customMarker.setLatLng([latitude, longitude]); // Update location on all other runs
+  
+    // If center me button is active set view to current location
+    if (centerMeButtonToggled) {
+      setViewOnCurrentLocation(latitude, longitude);
+    }
+  }
+  
+  function setMarkerRotation(_angle) {
+    angle = _angle - 46.5; // -46.5 is to set the icon to point to north 0 degrees (the icon currently points to 46.5 degreesish (one way to fix this is to make new icon))
+    var newIcon = L.divIcon({
+        className: 'custom-icon-class',
+        iconSize: [32, 32],
+        html: '<img src="icons/location-arrow.svg" style="width: 100%; height: 100%; transform-origin: 50% 50%; transform: rotate(' + angle + 'deg);">'
+    });
+  
+    if (customMarker) {
+        customMarker.setIcon(newIcon);
+    } else {
+        // Let's not print anything as it clutters the console output on startup.
+        //console.error("customMarker is undefined or not yet initialized.");
+    }
+  }
+  
+  function setViewOnCurrentLocation(latitude, longitude) {
+    /*
+     * Centers the mapview on the current location
+     * This function is fired when user clicks "center me" -button on the UI
+     */
+    // Set the view of the map and zoom level to 14 if it is smaller than that initially
+    if (map.getZoom() < 14) {
+      map.setView([latitude, longitude], 14);
+    } else {
+      map.setView([latitude, longitude]);
+    }
+  }

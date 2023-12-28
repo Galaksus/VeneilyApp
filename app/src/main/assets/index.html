@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Leaflet Map</title>
+    <link rel="stylesheet" href="stylesheet.css">
+    <link rel="stylesheet" href="dialogs.css">
+    <link rel="stylesheet" href="nameDialog.css">
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+</head>
+
+<body>
+    <div id="map-container">
+        <div id="map"></div>
+
+        <img src="icons/settings-icon.svg" id="settings-icon-button">
+        <img src="icons/bluetooth-icon-black.svg" id="bluetooth-icon">
+    <!-- The bluetooth dialog container -->
+    <div id="bluetooth-dialog" onclick="closeDialog(this);">
+        <div id="bluetooth-dialog-container" onclick="event.stopPropagation();">
+            <!-- Header content -->
+            <div id="bluetooth-header-content">
+                Bluetooth
+                <span id="bluetooth-closeDialogButton"
+                onclick="closeDialog(document.getElementById('bluetooth-dialog'))">&#10006;</span>
+            </div>
+            <div id="bluetooth-dialog-content">
+
+                <div id="bluetooth-connection-state" Type>
+                    <span id="connection-state-text"> </span>
+                </div>
+                <div class="center-div">
+                    <button id="connect-bluetooth-button" class="button-class border-radius-20px">Connect</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+        <!-- The dialog container -->
+        <div id="settings-dialog" onclick="closeDialog(this);">
+            <div id="settings-dialogContainer" onclick="event.stopPropagation();">
+                <!-- Header content -->
+                <div id="settings-headerContent">
+                    Settings
+                    <span id="settings-closeDialogButton"
+                        onclick="closeDialog(document.getElementById('settings-dialog'))">&#10006;</span>
+                </div>
+                <!-- Scrollable dialog content -->
+                <div id="settings-dialogContent">
+                    <!-- scrollable content -->
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit....</p>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit....</p>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit....</p>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit....</p>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit....</p>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit....</p>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit....</p>
+                    <div class="center-div">
+                        <button id="save-settings-button" class="button-class border-radius-20px">Save settings</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- The menu dialog container -->
+        <div id="menu-dialog" onclick="closeDialog(this)">
+            <div id="menu-dialog-container" onclick="event.stopPropagation();">
+                <!-- Header content -->
+                <div id="menu-header-content">
+                    Manual mode
+                    <span id="close-menu-dialog-button"
+                        onclick="closeDialog(document.getElementById('menu-dialog'))">&#10006;</span>
+                    <!-- &#10006; means "x" symbol -->
+                </div>
+                <!-- Scrollable dialog content -->
+                <div class="enabled" id="menu-dialog-content-manual-mode">
+                    <!-- scrollable content -->
+                    <div class="align-text">
+                        <p>Motor speed control</p>
+                    </div>
+                    <div class="slider-container">
+                        <output for="manual-motor-speed-slider" id="manual-motor-speed-slider-value">50</output>
+                        <input type="range" class="range-slider" min="0" max="100" value="50"
+                            id="manual-motor-speed-slider">
+                    </div>
+                    <img src="icons/minus-icon.svg" id="minus-svg-icon-speed" width="24" height="24"
+                        onclick="rangeSliderArithmetic(this, false);">
+                    <img src="icons/plus-icon.svg" id="plus-svg-icon-speed" width="24" height="24"
+                        onclick="rangeSliderArithmetic(this, true);">
+
+                    <hr id="line-1" color="gray" size="2">
+
+                    <div class="align-text">
+                        <p>Motor steering control</p>
+                    </div>
+                    <div class="slider-container">
+                        <output for="manual-steering-slider" id="manual-steering-slider-value">50</output>
+                        <input type="range" class="range-slider" min="0" max="100" value="50"
+                            id="manual-steering-slider">
+                    </div>
+                    <img src="icons/minus-icon.svg" id="minus-svg-icon-steering" width="24" height="24"
+                        onclick="rangeSliderArithmetic(this, false);">
+                    <img src="icons/plus-icon.svg" id="plus-svg-icon-steering" width="24" height="24"
+                        onclick="rangeSliderArithmetic(this, true);">
+                    <button id="lock-direction-button" class="button-class  border-radius-20px">Lock direction</button>
+                    <div id="lock-direction-text" class="align-text" style="display: none;">
+                        <p>Current direction is now locked</p>
+                    </div>
+                </div>
+                <!-- Auto mode-->
+                <div id="menu-dialog-content-auto-mode" style="display: none;">
+                    <!-- scrollable content -->
+                    <div class="auto-mode-info-data">
+                        <p id="auto-mode-selected-route"> Selected route:</p>
+                        <span id="dynamicText-route-name"> </span>
+                    </div>
+                    <hr width="100%" />
+                    <div class="auto-mode-info-data">
+                        <p>Type: </p>
+                        <span id="dynamicText-type"> </span>
+                    </div>
+                    <div class="auto-mode-info-data">
+                        <p>Total length: </p>
+                        <span id="dynamicText-total-length"> </span>
+                    </div>
+                    <div class="auto-mode-info-data">
+                        <p>Checkpoints: </p>
+                        <span id="dynamicText-checkpoints"> </span>
+                    </div>
+                    <!-- Not implemented yet (Not the most necessary thing :D)
+                     <div class="auto-mode-info-data">
+                        <p>Completed: </p>
+                        <span id="dynamicText-completed"> moi</span>
+                    </div> -->
+                    <div class="center-div">
+                        <button id="start-route-button" class="button-class border-radius-20px">Start</button>
+                    </div>
+                    <div id="start-route-text" class="align-text" style="display: none; color: green;">
+                        <p>Route started</p>
+                    </div>
+                </div>
+                <div id="bottom-bar-content">
+                    <img src="icons/right-arrow.svg" id="menu-dialog-right-arrow" width="40" height="40">
+                    <img src="icons/left-arrow.svg" id="menu-dialog-left-arrow" width="40" height="40">
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="overlay" class="hidden"></div>
+    <button id="center-me-button">
+        <img src="icons/center-me.svg">
+    </button>
+    <button id="menu-button" class="button-class" onclick="openDialog(document.getElementById('menu-dialog'))">
+        <img src="icons/menu-icon.svg">
+    </button>
+    <button id="new-route-button" class="button-class">New Route</button>
+    <div id="new-route-container">
+        <button id="revert-button" class="button-class">Revert</button>
+        <button id="reset-button" class="button-class">Reset</button>
+        <button disabled id="draw-button" class="button-class">Draw</button>
+        <button disabled id="save-button" class="button-class">Save</button>
+    </div>
+    <div id="routes-container">
+        <select id="routes" name="routes">
+            <option value="option1">Old routes</option>
+            <option value="option2">Option 2</option>
+            <option value="option3">Option 3</option>
+        </select>
+        <button id="delete-button">
+            <img src="icons/delete-icon.svg">
+        </button>
+    </div>
+
+    <!-- The name dialog container -->
+    <div id="name-dialog" onclick="closeDialog(this);">
+        <div id="name-dialog-container" onclick="event.stopPropagation();">
+            <!-- Header content -->
+            <div id="name-header-content">
+                Enter a name
+            </div>
+            <!-- Input and buttons container -->
+            <div id="input-buttons-container">
+                <input type="text" id="name-input" placeholder="Name" />
+                <div id="name-buttons">
+                    <button id="name-cancel-button">Cancel</button>
+                    <button id="name-ok-button">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="route.js"></script>
+    <script src="dialogs.js"></script>
+    <script src="readDb.js"></script>
+    <script src="deleteRouteFromDb.js"></script>
+    <script src="nameDialog.js"></script>
+    <script src="LocationOrientation.js"></script>
+
+    </div>
+</body>
+
+</html>
