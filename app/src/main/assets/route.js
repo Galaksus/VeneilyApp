@@ -67,6 +67,19 @@ function NewRouteButtonFunction() {
       marker.on("drag", function () {
         // Just to update the polylines/polygon 
         updateDrawing();
+        var markerLatLng = marker.getLatLng();
+
+
+        // Check if the marker is over the SVG element 
+        if (isMarkerOnTop(markerLatLng, DeleteDraggableMarker)) {
+          console.log("Moi12");
+          DeleteDraggableMarker.style.width = "50px"; // Set your desired width
+          DeleteDraggableMarker.style.height = "50px"; // Set your desired height
+          }
+        else {
+          DeleteDraggableMarker.style.width = "38px"; // Set your desired width
+          DeleteDraggableMarker.style.height = "38px"; // Set your desired height
+        }
       });
       marker.on("dragend", function () {
         updateDrawing();
