@@ -7,6 +7,7 @@ const RevertButton = document.getElementById("revert-button");
 const ResetButton = document.getElementById("reset-button");
 const DrawButton = document.getElementById("draw-button");
 const SaveButton = document.getElementById("save-button");
+const DeleteDraggableMarker = document.getElementById("delete-draggable-marker");
 
 var markersEnabled = false;
 var polyline, polygon;
@@ -55,8 +56,34 @@ function NewRouteButtonFunction() {
       marker.addTo(map);
       markers.push(marker);
 
+      // Event listener for Leaflet dragging start
+      marker.on("dragstart", function () {
+        // Show the SVG icon
+        DeleteDraggableMarker.style.display = "block";
+        // Set the new size of the DeleteDraggableMarker
+        DeleteDraggableMarker.style.width = "38px"; // Set your desired width
+        DeleteDraggableMarker.style.height = "38px"; // Set your desired height
+          });
+      marker.on("drag", function () {
+        // Just to update the polylines/polygon 
+        updateDrawing();
+      });
       marker.on("dragend", function () {
         updateDrawing();
+        var markerLatLng = marker.getLatLng();
+
+        // Check if the marker is over the SVG element 
+        if (isMarkerOnTop(markerLatLng, DeleteDraggableMarker)) {
+          // Remove the marker from the map
+          map.removeLayer(marker);
+          // Remove the marker from the array
+          var markerIndex = markers.indexOf(marker);
+          if (markerIndex !== -1) {
+            markers.splice(markerIndex, 1);
+            updateDrawing();
+          }
+        }
+        DeleteDraggableMarker.style.display = "none";
       });
 
       updateDrawing();
@@ -65,8 +92,20 @@ function NewRouteButtonFunction() {
     map.off("click"); // Turn off the click event
   }
 }
-
 NewRouteButton.addEventListener("click", NewRouteButtonFunction);
+// Function to check if the marker is over the SVG element
+function isMarkerOnTop(markerLatLng, svgElement) {
+  var DeleteDraggableMarkergBounds = DeleteDraggableMarker.getBoundingClientRect();
+
+  var point = map.latLngToContainerPoint(markerLatLng);
+  var x = point.x;
+  var y = point.y;
+
+  return x >= DeleteDraggableMarkergBounds.left &&
+         x <= DeleteDraggableMarkergBounds.right &&
+         y >= DeleteDraggableMarkergBounds.top &&
+         y <= DeleteDraggableMarkergBounds.bottom;
+}
 
 function DrawButtonFunction() {
   // Toggle between 'polyline' and 'polygon' modes

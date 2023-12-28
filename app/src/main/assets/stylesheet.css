@@ -37,7 +37,12 @@ body {
   right: 0;
   z-index: 101;
 }
-
+#delete-draggable-marker {
+  position: absolute;
+  z-index: 1000;
+  left: 50%;
+  bottom: 10%;
+}
 
 #routes,
 #delete-button {
