@@ -203,6 +203,7 @@ routesSelect.addEventListener("change", function () {
     // saved route is now drawn to map so other markers are cleared
     if (markersEnabled) {
       NewRouteButton.click();
+      deleteButton.style.display = "block"; // make it "block" again as NewRouteButton.click(); makes it "none"
     }
   } else {
     deleteButton.style.display = "none";
