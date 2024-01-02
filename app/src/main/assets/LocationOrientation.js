@@ -1,5 +1,7 @@
 /* File that contains functions related to positioning of the map and rotating the orientation arrow */
 const centerMeButton = document.getElementById("center-me-button");
+const centerMeButtonSrc = document.getElementById("center-me-button-src");
+
 
 var isFirstRun = true; // This is for 
 let centerMeButtonToggled = false;
@@ -11,18 +13,20 @@ centerMeButton.addEventListener("click", function () {
     if (centerMeButtonToggled) {
       // gets currentLocation and then Java calls the setViewOnCurrentLocation() here in JS
       //Android.getCurrentLocation(); // TODO TÄMÄ KUNTOON
-      var currentLatLng = customMarker.getLatLng();
-      drawCircleOnCurrentLocationOnMap(currentLatLng.lat,  currentLatLng.lng);
+      //var currentLatLng = customMarker.getLatLng();
+      //drawCircleOnCurrentLocationOnMap(currentLatLng.lat,  currentLatLng.lng);
   
-      centerMeButton.style.backgroundColor = "#3498db"; // Sets background to light blue
+      centerMeButtonSrc.src = "icons/center-me-active.svg"
+      console.log("s");
+
     } else {
-      centerMeButton.style.backgroundColor = "transparent"; // Sets background to light default (gray)
+      centerMeButtonSrc.src = "icons/center-me-normal.svg"
+
     }
   });
 
 function moveMapView(coordinatesPairs, currentIndex) {
   clearMap();
-
   // Create an array to store LatLng objects for each marker
   var markerLatLngs = [];
 
@@ -44,7 +48,7 @@ function moveMapView(coordinatesPairs, currentIndex) {
   // Eli tää onki niin että tässä luetaan databasesta onko polygon vai polyine
   // Retrieves only last column from database from the desired ID (row)
   var onlyLastColumn = true;
-  var routeType = window.Android.getData(currentIndex, onlyLastColumn);
+  var routeType = window.Android.getData(parseInt(currentIndex), onlyLastColumn); 
   if (routeType.startsWith("Loop")) {
     L.polygon(coordinatesPairs, {
       color: "blue",
@@ -53,6 +57,7 @@ function moveMapView(coordinatesPairs, currentIndex) {
     L.polyline(coordinatesPairs, {
       color: "green",
     }).addTo(map);
+
   }
 }
 

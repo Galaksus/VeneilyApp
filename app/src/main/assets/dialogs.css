@@ -3,9 +3,7 @@
 }
 
 /* Style for the dialog */
-#settings-dialog,
-#menu-dialog,
-#bluetooth-dialog {
+.default-dialog {
   display: none;
   position: fixed;
   top: 0;
@@ -17,9 +15,7 @@
 }
 
 /* Style for the dialog container */
-#settings-dialogContainer,
-#menu-dialog-container,
-#bluetooth-dialog-container {
+.dialog-container {
   width: 80%;
   background-color: #fff;
   border-radius: 5px;
@@ -34,9 +30,7 @@
 }
 
 /* Style for the header content */
-#settings-headerContent,
-#menu-header-content,
-#bluetooth-header-content {
+.dialog-header-content {
   padding: 20px;
   background-color: #333;
   color: #fff;
@@ -69,9 +63,7 @@
 }
 
 /* Style for the dialog content */
-#settings-dialogContent,
-#bluetooth-dialog-content,
-#menu-dialog-content-auto-mode {
+.dialog-content {
   padding: 20px;
   padding-top: 0px;
   /* Enable scrolling for dialog content */
@@ -107,9 +99,7 @@
 }
 
 /* Close button style */
-#settings-closeDialogButton,
-#close-menu-dialog-button,
-#bluetooth-closeDialogButton {
+.close-dialog-button{
   position: absolute;
   top: 10px;
   right: 10px;
@@ -221,6 +211,7 @@
   margin: 0 auto;
   display: block;
   font-size: small;
+  
 }
 
 .center-div {
@@ -234,4 +225,17 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+
+.option-div-styles {
+  position: relative;
+  display: flex;
+  align-items: center; 
+  justify-content: center; 
+ border-bottom: 1px solid black;
+  margin: 5px; 
+  height: 40px; 
+  line-height: 40px; 
+  color: rgb(68, 68, 68);
 }

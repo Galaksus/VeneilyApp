@@ -1,23 +1,126 @@
 var arrCoordinates = [];
 var arrDropdownOptionNames = [];
 
-
 function createDropdownOptions() {
+  console.log("moi1");
+  // Clear all existing div elements inside the dropdown content div
+  var dropdownContent = document.getElementById("dropdown-dialog-content");
+  dropdownContent.innerHTML = "";
+  // Remove all child elements
+document.querySelectorAll(".option-div-styles").forEach(function (el) {
+  el.remove();
+});
 
-    // Clear all existing select element options expect for the first one
-    var select = document.getElementById("routes");
-    var optionToKeep = select.options[0];
-    select.innerHTML = '';
-    select.appendChild(optionToKeep);
+  // Store the currently selected div
+  let selectedDiv = null;
 
-    // Get element by id and create as many dropdown options as there are elements in the array
-    for (let i = 0; i < arrDropdownOptionNames.length; i++) {
-        const option = document.createElement("option");
-        option.text = arrDropdownOptionNames[i];
-        option.value = arrCoordinates[i].join(",");
-        select.appendChild(option);
+  // Create default div
+  const defaultDiv = document.createElement("div");
+  defaultDiv.className = "option-div-styles";
+  defaultDiv.innerHTML = "default";
+
+  // Add an event listener to change background color on click for the default div
+  defaultDiv.addEventListener("click", function () {
+    setSelectedDiv(defaultDiv);
+  });
+
+  dropdownContent.appendChild(defaultDiv);
+
+  // Get element by id and create as many dropdown divs as there are elements in the array
+  for (let i = 0; i < arrDropdownOptionNames.length; i++) {
+    const div = document.createElement("div");
+    div.className = "option-div-styles";
+    div.innerHTML = arrDropdownOptionNames[i];
+    div.setAttribute("data-coordinates", arrCoordinates[i].join(","));
+
+    // Add an event listener to change background color on click
+    div.addEventListener("click", function () {
+      setSelectedDiv(div);
+    });
+
+    dropdownContent.appendChild(div);
+  }
+
+  // Function to set the selected div and update background colors
+  function setSelectedDiv(newSelectedDiv) {
+    // Remove background color from all divs
+    var allDivs = document.getElementsByClassName("option-div-styles");
+    for (let j = 0; j < allDivs.length; j++) {
+      allDivs[j].style.backgroundColor = "";
     }
+
+    // Set background color for the clicked div
+    newSelectedDiv.style.backgroundColor = "lightblue";
+
+    // Update the selected div
+    selectedDiv = newSelectedDiv;
+
+    // First letter of the string within the div
+    currentIndex = parseInt(
+      newSelectedDiv.innerText.trim().charAt(0).toLowerCase(),
+      10
+    );
+
+    if (!isNaN(currentIndex)) {
+      // Conversion was successful, currentIndex is an integer
+      // Use currentIndex here
+      console.log("Converted value:", currentIndex);
+      document.getElementById("delete-button").style.display = "flex";
+    } else {
+      // Handle the case where conversion failed
+      console.error(
+        "Conversion to integer failed. currentIndex is not a number."
+      );
+      document.getElementById("delete-button").style.display = "none";
+    }
+  }
+
+  // Function to log the attribute of the selected div
+  function okPressedOnSelectContainer() {
+    if (selectedDiv) {
+      const coordinates = selectedDiv.getAttribute("data-coordinates");
+      if (coordinates === null) {
+        clearMap();
+        currentIndex = 0;
+        return;
+      }
+      console.log("Selected div attribute:", coordinates);
+      var newMapLocation = coordinates.split(",");
+      if (newMapLocation.length > 1) {
+        var coordinatesArray = coordinates.split(",").map((str) => str.trim());
+        var coordinatesPairs = [];
+        for (let i = 0; i < coordinatesArray.length; i += 2) {
+          const lat = parseFloat(coordinatesArray[i]);
+          const lng = parseFloat(coordinatesArray[i + 1]);
+          coordinatesPairs.push([lat, lng]);
+        }
+        moveMapView(coordinatesPairs, currentIndex);
+        closeDialog(document.getElementById("dropdown-dialog")); // Closes the dropdown dialog
+
+        // TODO ei toimi jotenkaa
+        // Set route datas to the auto mode dialog page
+        document.getElementById("dynamicText-route-name").textContent =
+          window.Android.getData(currentIndex, "title");
+
+        /* document.getElementById("dynamicText-type").textContent = window.Android.getData(currentIndex, true);
+        //document.getElementById("dynamicText-type").textContent = ;
+    
+        document.getElementById("dynamicText-total-length").textContent = getTotalLengthOfRoute() + " m";
+        document.getElementById("dynamicText-checkpoints").textContent = getMarkersOnMapCount(true);
+        //document.getElementById("dynamicText-completed").textContent = ; // Not implemented yet*/
+      } else clearMap();
+    } else {
+      console.log("No div selected.");
+    }
+  }
+
+  var logButton = document.getElementById("select-ok-button");
+
+  // Add event listener to the button
+  logButton.addEventListener("click", okPressedOnSelectContainer);
 }
+
+
 
 function readSQLiteDb(ID) {
     // read data from db
@@ -81,4 +184,9 @@ function dataStringTrimmer(inputString ) {
   }
 
   // call readSQLiteDb starting from row 1 (that for parameter is 1)
+
     readSQLiteDb(1);
+
+
+
+    

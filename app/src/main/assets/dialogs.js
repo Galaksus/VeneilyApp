@@ -3,7 +3,8 @@ const settingsButton = document.getElementById("settings-icon-button");
 const MenuButton = document.getElementById("menu-button");
 const SettingsDialog = document.getElementById("settings-dialog");
 const BluetoothDialog = document.getElementById("bluetooth-dialog");
-const closeDialogButton = document.getElementById("closeDialogButton");
+const routesSelectbutton = document.getElementById('routes-select-container');
+const routesSelectDialog = document.getElementById('dropdown-dialog');
 const MenuHeaderContent = document.getElementById("menu-header-content");
 const MenuDialogRightArrow = document.getElementById("menu-dialog-right-arrow");
 const MenuDialogLeftArrow = document.getElementById("menu-dialog-left-arrow");
@@ -51,6 +52,11 @@ function openDialog(element) {
 settingsButton.addEventListener("click", function () {
   // Open settings menu here
   SettingsDialog.style.display = "block";
+});
+
+routesSelectbutton.addEventListener("click", function () {
+  // Open settings menu here
+  routesSelectDialog.style.display = "block";
 });
 
 // Menu dialog page switching to manual mode
@@ -342,8 +348,6 @@ function rangeSliderArithmetic(element) {
 buttonsClass.forEach(function (button) {
   button.addEventListener("click", function () {
     if (
-      button.id === "save-button" ||
-      button.id === "draw-button" ||
       button.id === "connect-bluetooth-button"
     ) {
       return;

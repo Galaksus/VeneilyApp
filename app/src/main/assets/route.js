@@ -1,11 +1,11 @@
 var markers = []; // arrays to store markers
 const deleteButton = document.getElementById("delete-button");
 const routesSelect = document.getElementById("routes");
+//const routesSelect = document.getElementById("custom-dropdown");
+
 const NewRouteButton = document.getElementById("new-route-button");
 const newRouteContainer = document.getElementById("new-route-container");
-const RevertButton = document.getElementById("revert-button");
-const ResetButton = document.getElementById("reset-button");
-const DrawButton = document.getElementById("draw-button");
+const DrawButton = document.getElementById("switch-1");
 const SaveButton = document.getElementById("save-button");
 const DeleteDraggableMarker = document.getElementById("delete-draggable-marker");
 
@@ -13,17 +13,26 @@ var markersEnabled = false;
 var polyline, polygon;
 var drawMode = 'polyline'; 
 
+var currentIndex = 0; // The index of selected route
+
 // Add OpenStreetMap tile
 var map = L.map("map", {
-  zoomSnap: 0.1, // Add the zoomSnap option here
-}).setView([63.51501, 26.27171], 4); // Sets view to Tampere initially
-//}).setView([61.49911, 23.78712], 11); // Sets view to Tampere initially
+  zoomSnap: 0.1,
+  attributionControl: false, // Disable the default attribution control
+}).setView([63.51501, 26.27171], 4);
 
+// Add OpenStreetMap tile layer with custom attribution
 L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
   attribution:
     '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
 }).addTo(map);
 
+// Create a custom attribution control and add it to the map
+var customAttribution = L.control.attribution({
+  position: 'topright', // You can change the position here (e.g., 'topleft', 'bottomright', 'bottomleft')
+});
+
+customAttribution.addTo(map);
 // Add also OpenSeaMap tile in top of OpenStreetMap tile
 /*L.tileLayer('http://tiles.openseamap.org/seamark/{z}/{x}/{y}.png', {
     attribution: 'Map data &copy; <a href="http://www.openseamap.org/">OpenSeaMap</a>',
@@ -35,19 +44,40 @@ L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
 
 
 function NewRouteButtonFunction() {
-  DrawButton.disabled = true;
-  SaveButton.disabled = true;
+  // Get all the SVG buttons
+  var svgButtons = document.querySelectorAll(".svg-button");
 
-  if (getComputedStyle(newRouteContainer).display !== "none") {
-    newRouteContainer.style.display = "none"; // Hide the element
-    markersEnabled = false;
+  // Loop through each button and show/hide them accordingly
+  svgButtons.forEach(function (button) {
+    if (button.id === "delete-button") {
+      return;
+    }
+    if (button.id === "new-route-button") {
+      button.style.display = "flex"; // Display the clicked button
+    } else {
+      // Check if the button was initially visible or hidden
+      var initiallyVisible = window.getComputedStyle(button).display === "flex";
+
+      if (initiallyVisible) {
+        button.style.display = "none"; // Hide other initially visible buttons
+      markersEnabled = false;
+      } else {
+        button.style.display = "flex"; // Show other initially hidden buttons
+      markersEnabled = true;
+      }
+    }
+  });
+  // Show/hide also switch-container
+  var switchContainer = document.querySelector(".switch-container");
+  if (switchContainer.style.display === "flex") {
+    switchContainer.style.display = "none"; // Hide other buttons
   } else {
-    newRouteContainer.style.display = "grid"; // Show the element
-    markersEnabled = true;
+    switchContainer.style.display = "flex"; // Show other buttons
   }
 
-  routesSelect.value = "option1"; // Change select element option to default
-  deleteButton.style.display = "none";
+
+  //routesSelect.value = "option1"; // Change select element option to default
+ //deleteButton.style.display = "none";
   clearMap();
 
   if (markersEnabled) {
@@ -63,29 +93,27 @@ function NewRouteButtonFunction() {
         // Set the new size of the DeleteDraggableMarker
         DeleteDraggableMarker.style.width = "38px"; // Set your desired width
         DeleteDraggableMarker.style.height = "38px"; // Set your desired height
-          });
+      });
       marker.on("drag", function () {
-        // Just to update the polylines/polygon 
+        // Just to update the polylines/polygon
         updateDrawing();
         var markerLatLng = marker.getLatLng();
 
-
-        // Check if the marker is over the SVG element 
+        // Check if the marker is over the SVG element
         if (isMarkerOnTop(markerLatLng, DeleteDraggableMarker)) {
-          console.log("Moi12");
           DeleteDraggableMarker.style.width = "50px"; // Set your desired width
           DeleteDraggableMarker.style.height = "50px"; // Set your desired height
-          }
-        else {
+        } else {
           DeleteDraggableMarker.style.width = "38px"; // Set your desired width
           DeleteDraggableMarker.style.height = "38px"; // Set your desired height
         }
       });
+
       marker.on("dragend", function () {
         updateDrawing();
         var markerLatLng = marker.getLatLng();
 
-        // Check if the marker is over the SVG element 
+        // Check if the marker is over the SVG element
         if (isMarkerOnTop(markerLatLng, DeleteDraggableMarker)) {
           // Remove the marker from the map
           map.removeLayer(marker);
@@ -105,7 +133,7 @@ function NewRouteButtonFunction() {
     map.off("click"); // Turn off the click event
   }
 }
-NewRouteButton.addEventListener("click", NewRouteButtonFunction);
+
 // Function to check if the marker is over the SVG element
 function isMarkerOnTop(markerLatLng, svgElement) {
   var DeleteDraggableMarkergBounds = DeleteDraggableMarker.getBoundingClientRect();
@@ -122,7 +150,15 @@ function isMarkerOnTop(markerLatLng, svgElement) {
 
 function DrawButtonFunction() {
   // Toggle between 'polyline' and 'polygon' modes
-  drawMode = (drawMode === 'polyline') ? 'polygon' : 'polyline';
+  if (drawMode === 'polyline') {
+    drawMode = 'polygon';
+    document.getElementById("path-type").textContent = "Type: loop"
+  } else {
+    drawMode = 'polyline';
+    document.getElementById("path-type").textContent = "Type: path"
+
+  }
+  
   updateDrawing();
 }
 
@@ -159,8 +195,6 @@ function updateDrawing() {
     } else if (drawMode === 'polygon') {
       drawPolygon(latlngs);
     }
-  // Route can be saved only if there is 2 or more markers on the map
-  SaveButton.disabled = false; 
 
   }
   // draButton is avaialble if there is 3 or more markers on map
@@ -178,60 +212,11 @@ function RevertButtonFunction() {
   }
 }
 
-RevertButton.addEventListener("click", RevertButtonFunction);
-
 function ResetButtonFunction() {
   clearMap();
-  DrawButton.disabled = true;
-  SaveButton.disabled = true; 
+ // DrawButton.disabled = true;
+ // SaveButton.disabled = true; 
 }
-ResetButton.addEventListener("click", ResetButtonFunction);
-
-
-
-// Add event listener to select element
-routesSelect.addEventListener("change", function () {
-  var selectedOption = routesSelect.options[routesSelect.selectedIndex];
-  var optionName = selectedOption.text;
-  var optionValue = selectedOption.value;
-  var currentIndex = routesSelect.selectedIndex;
-  //  This is used to hide the "New route" features if not default option selected
-
-  if (optionName !== "Old routes") {
-    getTotalLengthOfRoute();
-    deleteButton.style.display = "block";
-    // saved route is now drawn to map so other markers are cleared
-    if (markersEnabled) {
-      NewRouteButton.click();
-      deleteButton.style.display = "block"; // make it "block" again as NewRouteButton.click(); makes it "none"
-    }
-  } else {
-    deleteButton.style.display = "none";
-  }
-
-  // split the optionValue and get the first coordinate pair from there
-  var newMapLocation = optionValue.split(",");
-  if (newMapLocation.length > 1) {
-    var coordinatesArray = optionValue.split(",").map((str) => str.trim());
-    var coordinatesPairs = [];
-    for (let i = 0; i < coordinatesArray.length; i += 2) {
-      const lat = parseFloat(coordinatesArray[i]);
-      const lng = parseFloat(coordinatesArray[i + 1]);
-      coordinatesPairs.push([lat, lng]);
-    }
-    moveMapView(coordinatesPairs, currentIndex);
-
-    // Set route datas to the auto mode dialog page
-    document.getElementById("dynamicText-route-name").textContent = optionName;
-    document.getElementById("dynamicText-type").textContent = window.Android.getData(currentIndex, true);
-    //document.getElementById("dynamicText-type").textContent = ;
-
-    document.getElementById("dynamicText-total-length").textContent = getTotalLengthOfRoute() + " m";
-    document.getElementById("dynamicText-checkpoints").textContent = getMarkersOnMapCount(true);
-    //document.getElementById("dynamicText-completed").textContent = ; // Not implemented yet
-
-  } else clearMap();
-});
 
 function clearMap() {
   // Remove array elements
@@ -264,7 +249,7 @@ function getRouteOptionName() {
   /*
    * Returns boolean value according to if route is selected from the Routes select HTML element
    */
-  var selectedOption = routesSelect.options[routesSelect.selectedIndex];
+  window.android.getData(selectedIndex, "title") // second parameter is column name of the database
   var optionName = selectedOption.text;
   return optionName;
 }
@@ -274,7 +259,7 @@ function getTotalLengthOfRoute() {
     * Function that calculates the total distance between all points in currently selected route
     returns the total distance with two decimals
     */
-  var selectedOption = routesSelect.options[routesSelect.selectedIndex];
+ // var selectedOption = routesSelect.options[routesSelect.selectedIndex];
   var optionValue = selectedOption.value;
   // Split the string into an array of latitude and longitude pairs
   var markerPairs = optionValue.split(",");
@@ -410,7 +395,10 @@ function parseCoordinate(coordinateString) {
   return [lat, lng];
 }
 
+
+
+/*
 function setEnableStateRoutesElement() {
   // Toggles enable/disable of routesSelect
-  routesSelect.disabled = !routesSelect.disabled;
-}
+ // routesSelect.disabled = !routesSelect.disabled;
+}*/

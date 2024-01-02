@@ -175,9 +175,15 @@ public class JavaScriptInterface implements GetOrientation.OrientationListener {
     // retrieve data from the database
    @JavascriptInterface
     public String getData(int id, boolean onlyLastColumn) {
-       // Tämä alempi for looppi vaan debuggausta varten
        return DataAccessObject.getData(id, onlyLastColumn);
     }
+
+    public String getData(int id, String columnName) {
+        Log.e("käykö", "columnName");
+
+        return DataAccessObject.getData(id, columnName);
+    }
+
 
     @JavascriptInterface
     public void deleteRowFromDb(long rowID){

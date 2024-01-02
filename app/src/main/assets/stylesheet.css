@@ -45,51 +45,6 @@ body {
   bottom: 10%;
 }
 
-#routes,
-#delete-button {
-  border: none;
-  background-color: #f5f5f5;
-  cursor: pointer;
-  margin: 3px;
-  font-size: 14px;
-  letter-spacing: .4px;
-  white-space: nowrap;
-  height: 32px;
-  padding: 0 12px;
-  border-radius: 16px;
-  border: 1px solid transparent;
-
-}
-#routes {
-  width: 150px;
-}
-#new-route-button{
-  position: absolute;
-  font-size: small;
-  right: 15px;
-  bottom: 70px;
-  z-index: 200;
-  border-radius: 20px;
-}
-#delete-button {
-  display: none;
-  padding: 0 8px;
-  background-color: transparent;
-}
-
-#center-me-button {
-  position: absolute;
-  bottom: 70px; 
-  left: 20px;
-  z-index: 103;
-  /*background-color: rgba(192, 192, 192, 0.8);*/
-  background-color: transparent;
-
-  padding: 7px 12px; /* Adjust padding to your preference */
-  border-radius: 50%; /* Add rounded corners */
-
-  border: none; /* Remove the button border */
-}
 #menu-button {
     position: absolute;
     bottom: 20px; 
@@ -104,20 +59,11 @@ body {
 }
 #new-route-container {
   position: absolute;
-  display: none;
+  display: grid;
   z-index: 110;
   right: 5%;
   bottom: 17%;
 
-}
-
-#revert-button,
-#reset-button,
-#draw-button,
-#save-button {
-  font-size: xx-small;
-  border-radius: 15px;
-  margin-bottom: 10px;
 }
 
 /* button class related stuff below here */
@@ -146,10 +92,11 @@ body {
   display: flex;
   align-items: center;
   font-size: small;
+  left: 15px;
 }
 
 .auto-mode-info-data p {
-  margin-right: 10px; /* spacing between label and content */
+  margin-left: 10px; 
 }
 
 .border-radius-20px {

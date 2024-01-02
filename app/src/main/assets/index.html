@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="stylesheet.css">
     <link rel="stylesheet" href="dialogs.css">
     <link rel="stylesheet" href="nameDialog.css">
+    <link rel="stylesheet" href="bottomBarStyles.css">
 
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,16 +23,87 @@
         <img src="icons/bluetooth-icon-black.svg" id="bluetooth-icon">
         <img src="icons/delete-icon.svg" id="delete-draggable-marker" class="center-div" style="display: none;">
 
-    <!-- The bluetooth dialog container -->
-    <div id="bluetooth-dialog" onclick="closeDialog(this);">
-        <div id="bluetooth-dialog-container" onclick="event.stopPropagation();">
+        <div class="gradient-element">
+            <div class="svg-button" onclick="openDialog(document.getElementById('menu-dialog'))">
+              <img class="svg-image" src="icons/menu-icon.svg" alt="Menu Icon">
+              <p class="menu-text">Menu</p>
+            </div>
+            <div class="svg-button" id="new-route-button" onclick="NewRouteButtonFunction()">
+              <img class="svg-image"src="icons/new-black.svg" alt="New Icon">
+              <p class="menu-text">New route</p>
+            </div>
+
+
+            <div class="svg-button" id="routes-select-container">
+                <img class="svg-image" src="icons/old-routes.svg" alt="Old routes Icon">
+                <p class="menu-text">My routes</p>
+              </div>
+
+              <div class="svg-button" id="delete-button" style="display: none;" onclick="NewRouteButtonFunction()">
+                <img class="svg-image" src="icons/delete-icon.svg" alt="Delete Icon">
+                <p class="menu-text">Delete route</p>
+              </div>
+
+            <div class="svg-button" id="center-me-button"> 
+              <img class="svg-image" id="center-me-button-src" src="icons/center-me-normal.svg" alt="Delete Icon">
+              <p class="menu-text">Center</p>
+            </div>
+        
+            <div class="svg-button default-display-none" onclick="SaveButtonFunction()">
+              <img class="svg-image-2" src="icons/save.svg" alt="Save Icon">
+              <p class="menu-text">Save</p>
+            </div>
+        
+            <div class="switch-container default-display-none">
+                <label class="switch" >
+                    <input type="checkbox" id="switch-1">
+                    <span class="slider round"></span>
+                </label>
+            <p class="menu-text" id="path-type">Type: path</p>
+            </div>
+        
+            <div class="svg-button default-display-none" onclick="RevertButtonFunction()">
+              <img class="svg-image-2" src="icons/revert.svg" alt="Revert Icon">
+              <p class="menu-text">Revert</p>
+            </div>
+          </div>
+
+    <!-- Routes select dropdown dialog -->
+    <div id="dropdown-dialog" class="default-dialog" onclick="closeDialog(this);">
+        <div class="dialog-container" onclick="event.stopPropagation();">
             <!-- Header content -->
-            <div id="bluetooth-header-content">
+            <div class="dialog-header-content">
+                Select a route
+                <span class="close-dialog-button"
+                onclick="closeDialog(document.getElementById('dropdown-dialog'))">&#10006;</span>
+            </div>
+            <div class="dialog-content" id="dropdown-dialog-content">
+                
+                <div class="option-div-styles">
+                    <!-- Your content inside the nested div -->
+                        moi
+                </div>
+            <!-- Tänne optionit -->
+            </div>
+            <div id="ok-button-container">
+                <button class="button-class border-radius-20px" id="select-ok-button">OK</button>
+            </div>
+        </div>
+        
+    </div>
+
+
+
+    <!-- The bluetooth dialog container -->
+    <div id="bluetooth-dialog" class="default-dialog" onclick="closeDialog(this);">
+        <div class="dialog-container" onclick="event.stopPropagation();">
+            <!-- Header content -->
+            <div class="dialog-header-content">
                 Bluetooth
-                <span id="bluetooth-closeDialogButton"
+                <span class="close-dialog-button"
                 onclick="closeDialog(document.getElementById('bluetooth-dialog'))">&#10006;</span>
             </div>
-            <div id="bluetooth-dialog-content">
+            <div class="dialog-content">
 
                 <div id="bluetooth-connection-state" Type>
                     <span id="connection-state-text"> </span>
@@ -44,16 +116,16 @@
         </div>
     </div>
         <!-- The dialog container -->
-        <div id="settings-dialog" onclick="closeDialog(this);">
-            <div id="settings-dialogContainer" onclick="event.stopPropagation();">
+        <div id="settings-dialog" class="default-dialog" onclick="closeDialog(this);">
+            <div class="dialog-container" onclick="event.stopPropagation();">
                 <!-- Header content -->
-                <div id="settings-headerContent">
+                <div class="dialog-header-content">
                     Settings
-                    <span id="settings-closeDialogButton"
+                    <span class="close-dialog-button"
                         onclick="closeDialog(document.getElementById('settings-dialog'))">&#10006;</span>
                 </div>
                 <!-- Scrollable dialog content -->
-                <div id="settings-dialogContent">
+                <div class="dialog-content">
                     <!-- scrollable content -->
                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit....</p>
                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit....</p>
@@ -69,12 +141,12 @@
             </div>
         </div>
         <!-- The menu dialog container -->
-        <div id="menu-dialog" onclick="closeDialog(this)">
-            <div id="menu-dialog-container" onclick="event.stopPropagation();">
+        <div id="menu-dialog" class="default-dialog" onclick="closeDialog(this)">
+            <div class="dialog-container" onclick="event.stopPropagation();">
                 <!-- Header content -->
-                <div id="menu-header-content">
+                <div class="dialog-header-content" id="menu-header-content">
                     Manual mode
-                    <span id="close-menu-dialog-button"
+                    <span class="close-dialog-button"
                         onclick="closeDialog(document.getElementById('menu-dialog'))">&#10006;</span>
                     <!-- &#10006; means "x" symbol -->
                 </div>
@@ -155,30 +227,6 @@
         </div>
     </div>
     <div id="overlay" class="hidden"></div>
-    <button id="center-me-button">
-        <img src="icons/center-me.svg">
-    </button>
-    <button id="menu-button" class="button-class" onclick="openDialog(document.getElementById('menu-dialog'))">
-        <img src="icons/menu-icon.svg">
-    </button>
-    <button id="new-route-button" class="button-class">New Route</button>
-    <div id="new-route-container">
-        <button id="revert-button" class="button-class">Revert</button>
-        <button id="reset-button" class="button-class">Reset</button>
-        <button disabled id="draw-button" class="button-class">Draw</button>
-        <button disabled id="save-button" class="button-class">Save</button>
-    </div>
-    <div id="routes-container">
-        <select id="routes" name="routes">
-            <option value="option1">Old routes</option>
-            <option value="option2">Option 2</option>
-            <option value="option3">Option 3</option>
-        </select>
-        <button id="delete-button">
-            <img src="icons/delete-icon.svg">
-        </button>
-    </div>
-
     <!-- The name dialog container -->
     <div id="name-dialog" onclick="closeDialog(this);">
         <div id="name-dialog-container" onclick="event.stopPropagation();">
@@ -202,6 +250,8 @@
     <script src="deleteRouteFromDb.js"></script>
     <script src="nameDialog.js"></script>
     <script src="LocationOrientation.js"></script>
+    <script src="styles.js"></script>
+
 
     </div>
 </body>

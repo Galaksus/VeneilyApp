@@ -1,0 +1,122 @@
+.gradient-element {
+    height: 10%;
+    width: 100%;
+    overflow: hidden;
+    position: absolute;
+    bottom: 0px;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.8));
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 1000;
+    left: 0px;
+  }
+
+  .svg-button {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 75px;
+    border-radius: 20px;
+    height: 75px;
+
+  }
+
+  .svg-image {
+    width: 30px;
+    /*height: auto;*/
+    margin-top: 5px;
+
+  }
+
+  .svg-image-2 {
+    width: 30px;
+    /*height: auto;*/
+    margin-top: 5px;
+  }
+  .menu-text {
+    color: #adadad;
+    font-size: 14px;
+    margin-top: 5px;
+  }
+
+.white-text-color {
+  color: white;
+}
+.switch-container {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 75px;
+    height: 75px;
+    border-radius: 20px;
+  
+}
+.switch {
+  margin-top: 10px;
+  position: relative;
+  display: flex;
+  width: 45px;
+  height: 24px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 17px; 
+  width: 17px; 
+  left: 3px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(22px);
+  -ms-transform: translateX(22px);
+  transform: translateX(22px);
+}
+
+.slider.round {
+  border-radius: 30px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+.default-display-none {
+display: none;
+}

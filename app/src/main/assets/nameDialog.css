@@ -67,6 +67,14 @@ outline: none;
     color: #3498db;
   }
 
+  #ok-button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 20%;
+    margin: 10px;
+  }
+
   #name-cancel-button:hover,
   #name-ok-button:hover {
     background-color: #d3d3d3;

@@ -1,17 +1,15 @@
 deleteButton.addEventListener('click', function() {
-    const routesSelectElement = document.getElementById("routes");
-    const selectedOption = routesSelectElement.options[routesSelectElement.selectedIndex];
-    const optionName = selectedOption.text;
-
-    const selectedIndex = routesSelectElement.selectedIndex;
 
     // refresh select element
-    refreshSelectElement(true);
+    //refreshSelectElement(true);
 
     // Delete the row from database
-    window.Android.deleteRowFromDb(selectedIndex);
+    window.Android.deleteRowFromDb(currentIndex);
+    refreshSelectElement(true);
+  //  var row = 1; // Start read sqliteDb from row 1
+    //readSQLiteDb(row);
     // Send a toast to Android about it
-    window.Android.toastMessageFromJS("Route: '" + optionName + "' was deleted");
+    window.Android.toastMessageFromJS("Route deleted successfully");
 
     // TODO tähän joku dialogi josta checkki että haluaako varmasti poistaa? Älä käytä prompt("") näytti aivan paskalta Androidilla
 });
