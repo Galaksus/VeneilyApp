@@ -39,7 +39,7 @@
                 <p class="menu-text">My routes</p>
               </div>
 
-              <div class="svg-button" id="delete-button" style="display: none;" onclick="NewRouteButtonFunction()">
+              <div class="svg-button" id="delete-button" style="display: none;">
                 <img class="svg-image" src="icons/delete-icon.svg" alt="Delete Icon">
                 <p class="menu-text">Delete route</p>
               </div>
@@ -49,18 +49,17 @@
               <p class="menu-text">Center</p>
             </div>
         
-            <div class="svg-button default-display-none" onclick="SaveButtonFunction()">
+            <div class="svg-button default-display-none default-pointerEvent-none" id="save-button" onclick="SaveButtonFunction()">
               <img class="svg-image-2" src="icons/save.svg" alt="Save Icon">
               <p class="menu-text">Save</p>
             </div>
         
-            <div class="switch-container default-display-none">
-                <label class="switch" >
-                    <input type="checkbox" id="switch-1">
-                    <span class="slider round"></span>
-                </label>
-            <p class="menu-text" id="path-type">Type: path</p>
-            </div>
+
+            <div class="svg-button default-display-none default-pointerEvent-none" id="draw-button" onclick="DrawButtonFunction()">
+                <img class="svg-image" src="icons/route-type-path.svg" alt="Route type Icon">
+                <p class="menu-text"id="path-type">Type: path</p>
+              </div>
+
         
             <div class="svg-button default-display-none" onclick="RevertButtonFunction()">
               <img class="svg-image-2" src="icons/revert.svg" alt="Revert Icon">

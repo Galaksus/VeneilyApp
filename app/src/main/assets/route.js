@@ -3,11 +3,10 @@ const deleteButton = document.getElementById("delete-button");
 const routesSelect = document.getElementById("routes");
 //const routesSelect = document.getElementById("custom-dropdown");
 
-const NewRouteButton = document.getElementById("new-route-button");
+//const NewRouteButton = document.getElementById("new-route-button");
 const newRouteContainer = document.getElementById("new-route-container");
-const DrawButton = document.getElementById("switch-1");
-const SaveButton = document.getElementById("save-button");
 const DeleteDraggableMarker = document.getElementById("delete-draggable-marker");
+let drawButtonImage = document.querySelector('[alt="Route type Icon"]');
 
 var markersEnabled = false;
 var polyline, polygon;
@@ -44,17 +43,19 @@ customAttribution.addTo(map);
 
 
 function NewRouteButtonFunction() {
+  updateDrawButtonIcon();
   // Get all the SVG buttons
   var svgButtons = document.querySelectorAll(".svg-button");
 
   // Loop through each button and show/hide them accordingly
   svgButtons.forEach(function (button) {
     if (button.id === "delete-button") {
-      return;
+      button.style.display = "none";
     }
-    if (button.id === "new-route-button") {
+    else if (button.id === "new-route-button") {
       button.style.display = "flex"; // Display the clicked button
-    } else {
+    } 
+    else {
       // Check if the button was initially visible or hidden
       var initiallyVisible = window.getComputedStyle(button).display === "flex";
 
@@ -67,17 +68,7 @@ function NewRouteButtonFunction() {
       }
     }
   });
-  // Show/hide also switch-container
-  var switchContainer = document.querySelector(".switch-container");
-  if (switchContainer.style.display === "flex") {
-    switchContainer.style.display = "none"; // Hide other buttons
-  } else {
-    switchContainer.style.display = "flex"; // Show other buttons
-  }
 
-
-  //routesSelect.value = "option1"; // Change select element option to default
- //deleteButton.style.display = "none";
   clearMap();
 
   if (markersEnabled) {
@@ -91,8 +82,8 @@ function NewRouteButtonFunction() {
         // Show the SVG icon
         DeleteDraggableMarker.style.display = "block";
         // Set the new size of the DeleteDraggableMarker
-        DeleteDraggableMarker.style.width = "38px"; // Set your desired width
-        DeleteDraggableMarker.style.height = "38px"; // Set your desired height
+        DeleteDraggableMarker.style.width = "38px"; 
+        DeleteDraggableMarker.style.height = "38px";
       });
       marker.on("drag", function () {
         // Just to update the polylines/polygon
@@ -100,12 +91,12 @@ function NewRouteButtonFunction() {
         var markerLatLng = marker.getLatLng();
 
         // Check if the marker is over the SVG element
-        if (isMarkerOnTop(markerLatLng, DeleteDraggableMarker)) {
-          DeleteDraggableMarker.style.width = "50px"; // Set your desired width
-          DeleteDraggableMarker.style.height = "50px"; // Set your desired height
+        if (isMarkerOnTop(markerLatLng)) {
+          DeleteDraggableMarker.style.width = "50px"; 
+          DeleteDraggableMarker.style.height = "50px";
         } else {
-          DeleteDraggableMarker.style.width = "38px"; // Set your desired width
-          DeleteDraggableMarker.style.height = "38px"; // Set your desired height
+          DeleteDraggableMarker.style.width = "38px";
+          DeleteDraggableMarker.style.height = "38px"; 
         }
       });
 
@@ -114,7 +105,7 @@ function NewRouteButtonFunction() {
         var markerLatLng = marker.getLatLng();
 
         // Check if the marker is over the SVG element
-        if (isMarkerOnTop(markerLatLng, DeleteDraggableMarker)) {
+        if (isMarkerOnTop(markerLatLng)) {
           // Remove the marker from the map
           map.removeLayer(marker);
           // Remove the marker from the array
@@ -122,6 +113,7 @@ function NewRouteButtonFunction() {
           if (markerIndex !== -1) {
             markers.splice(markerIndex, 1);
             updateDrawing();
+            updateDrawButtonIcon();
           }
         }
         DeleteDraggableMarker.style.display = "none";
@@ -134,8 +126,15 @@ function NewRouteButtonFunction() {
   }
 }
 
+function updateDrawButtonIcon() {
+  if (markers.length < 3) {
+    drawButtonImage.src = "icons/route-type-path.svg";
+    document.getElementById("path-type").textContent = "Type: path"
+  }
+}
+
 // Function to check if the marker is over the SVG element
-function isMarkerOnTop(markerLatLng, svgElement) {
+function isMarkerOnTop(markerLatLng) {
   var DeleteDraggableMarkergBounds = DeleteDraggableMarker.getBoundingClientRect();
 
   var point = map.latLngToContainerPoint(markerLatLng);
@@ -152,9 +151,11 @@ function DrawButtonFunction() {
   // Toggle between 'polyline' and 'polygon' modes
   if (drawMode === 'polyline') {
     drawMode = 'polygon';
+    drawButtonImage.src = "icons/route-type-loop.svg";
     document.getElementById("path-type").textContent = "Type: loop"
   } else {
     drawMode = 'polyline';
+    drawButtonImage.src = "icons/route-type-path.svg";
     document.getElementById("path-type").textContent = "Type: path"
 
   }
@@ -162,7 +163,6 @@ function DrawButtonFunction() {
   updateDrawing();
 }
 
-DrawButton.addEventListener("click", DrawButtonFunction);
 
 function drawPolyline(latlngs) {
   polyline = L.polyline(latlngs, { color: 'green' }).addTo(map);
@@ -198,7 +198,24 @@ function updateDrawing() {
 
   }
   // draButton is avaialble if there is 3 or more markers on map
-  DrawButton.disabled = (markers.length >= 3) ? false : true;
+  //DrawButton.disabled = (markers.length >= 3) ? false : true;
+
+  const SaveButton = document.getElementById("save-button");
+  const DrawButton = document.getElementById("draw-button");
+  if (markers.length >= 2) { // Save button clickable if >= 2 markers on map
+    SaveButton.style.pointerEvents = "auto"; // Enable pointer events
+  }
+  else {
+    SaveButton.style.pointerEvents = "none"; // Disable pointer events
+
+  }
+  if (markers.length >= 3) { // Draw button clickable if >= 3 markers on map
+    DrawButton.style.pointerEvents = "auto"; // Enable pointer events
+
+  }
+  else {
+    DrawButton.style.pointerEvents = "none"; // Disable pointer events
+  }
 
 }
 
@@ -210,12 +227,12 @@ function RevertButtonFunction() {
   } else if (polyline || polygon) {
     map.removeLayer(polyline || polygon);
   }
+
+  updateDrawButtonIcon();
 }
 
 function ResetButtonFunction() {
   clearMap();
- // DrawButton.disabled = true;
- // SaveButton.disabled = true; 
 }
 
 function clearMap() {

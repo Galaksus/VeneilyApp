@@ -60,28 +60,21 @@ document.querySelectorAll(".option-div-styles").forEach(function (el) {
       newSelectedDiv.innerText.trim().charAt(0).toLowerCase(),
       10
     );
-
-    if (!isNaN(currentIndex)) {
-      // Conversion was successful, currentIndex is an integer
-      // Use currentIndex here
-      console.log("Converted value:", currentIndex);
-      document.getElementById("delete-button").style.display = "flex";
-    } else {
-      // Handle the case where conversion failed
-      console.error(
-        "Conversion to integer failed. currentIndex is not a number."
-      );
-      document.getElementById("delete-button").style.display = "none";
-    }
   }
 
   // Function to log the attribute of the selected div
   function okPressedOnSelectContainer() {
     if (selectedDiv) {
       const coordinates = selectedDiv.getAttribute("data-coordinates");
-      if (coordinates === null) {
+      if (coordinates === null) { // 'coordinates' will be null when "default" route is selected
         clearMap();
         currentIndex = 0;
+
+        closeDialog(document.getElementById("dropdown-dialog")); // Closes the dropdown dialog
+        // Hides the delete button
+        document.getElementById("delete-button").style.display = "none";
+        // Moves view to current location
+        map.setView(customMarker.getLatLng(), 10);
         return;
       }
       console.log("Selected div attribute:", coordinates);
@@ -96,6 +89,9 @@ document.querySelectorAll(".option-div-styles").forEach(function (el) {
         }
         moveMapView(coordinatesPairs, currentIndex);
         closeDialog(document.getElementById("dropdown-dialog")); // Closes the dropdown dialog
+
+        // Shows the delete button
+        document.getElementById("delete-button").style.display = "flex";
 
         // TODO ei toimi jotenkaa
         // Set route datas to the auto mode dialog page

@@ -9,8 +9,6 @@ var routeType = ""; // Need to be global
 function SaveButtonFunction() {
   // routeType is route if polyline and loop if polygon on map
   routeType = drawMode === 'polyline' ? 'Route' : 'Loop';
-
- console.log("TGdshg", routeType);
    // 
     nameDialog.style.display = "block"; // Shows name dialog
     nameInput.focus(); // Focus cursor on the input field
@@ -46,8 +44,8 @@ okButton.addEventListener("click", () => {
       window.Android.newRouteCreated(latlngs, routeType, newName);
       refreshSelectElement(false); // Refreshes the select element by recreating the script
 
-      ResetButtonFunction(); // closes the route creation tool
-      NewRouteButton.click();
+      ResetButtonFunction(); // Clears map
+      NewRouteButtonFunction(); // Closes the route creation buttons and opens the default buttons 
   } else {
       console.log("Name must be at most 15 characters long.");
       // Update input field placeholder text

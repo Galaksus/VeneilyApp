@@ -6,8 +6,7 @@ deleteButton.addEventListener('click', function() {
     // Delete the row from database
     window.Android.deleteRowFromDb(currentIndex);
     refreshSelectElement(true);
-  //  var row = 1; // Start read sqliteDb from row 1
-    //readSQLiteDb(row);
+
     // Send a toast to Android about it
     window.Android.toastMessageFromJS("Route deleted successfully");
 

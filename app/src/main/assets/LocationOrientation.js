@@ -17,7 +17,6 @@ centerMeButton.addEventListener("click", function () {
       //drawCircleOnCurrentLocationOnMap(currentLatLng.lat,  currentLatLng.lng);
   
       centerMeButtonSrc.src = "icons/center-me-active.svg"
-      console.log("s");
 
     } else {
       centerMeButtonSrc.src = "icons/center-me-normal.svg"
