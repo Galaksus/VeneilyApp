@@ -95,15 +95,15 @@ document.querySelectorAll(".option-div-styles").forEach(function (el) {
 
         // TODO ei toimi jotenkaa
         // Set route datas to the auto mode dialog page
-        document.getElementById("dynamicText-route-name").textContent =
-          window.Android.getData(currentIndex, "title");
-
-        /* document.getElementById("dynamicText-type").textContent = window.Android.getData(currentIndex, true);
+        let originalRouteNameString = window.Android.getData(currentIndex, "title");
+        // Split the coordinates from the name resulting with only the name
+        document.getElementById("dynamicText-route-name").textContent = originalRouteNameString.split(' - ')[0];
+        document.getElementById("dynamicText-type").textContent = window.Android.getData(currentIndex, true);
         //document.getElementById("dynamicText-type").textContent = ;
     
-        document.getElementById("dynamicText-total-length").textContent = getTotalLengthOfRoute() + " m";
+        document.getElementById("dynamicText-total-length").textContent = getTotalLengthOfRoute(coordinates) + " m";
         document.getElementById("dynamicText-checkpoints").textContent = getMarkersOnMapCount(true);
-        //document.getElementById("dynamicText-completed").textContent = ; // Not implemented yet*/
+        //document.getElementById("dynamicText-completed").textContent = ; // Not implemented yet
       } else clearMap();
     } else {
       console.log("No div selected.");

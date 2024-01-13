@@ -271,13 +271,13 @@ function getRouteOptionName() {
   return optionName;
 }
 
-function getTotalLengthOfRoute() {
+function getTotalLengthOfRoute(coordinates) {
   /*
     * Function that calculates the total distance between all points in currently selected route
     returns the total distance with two decimals
     */
  // var selectedOption = routesSelect.options[routesSelect.selectedIndex];
-  var optionValue = selectedOption.value;
+  var optionValue = coordinates;
   // Split the string into an array of latitude and longitude pairs
   var markerPairs = optionValue.split(",");
 
