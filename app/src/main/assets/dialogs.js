@@ -3,6 +3,7 @@ const settingsButton = document.getElementById("settings-icon-button");
 const MenuButton = document.getElementById("menu-button");
 const SettingsDialog = document.getElementById("settings-dialog");
 const BluetoothDialog = document.getElementById("bluetooth-dialog");
+const AreYouSureDialog = document.getElementById("are-you-sure-dialog");
 const routesSelectbutton = document.getElementById('routes-select-container');
 const routesSelectDialog = document.getElementById('dropdown-dialog');
 const MenuHeaderContent = document.getElementById("menu-header-content");

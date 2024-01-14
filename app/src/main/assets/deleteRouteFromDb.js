@@ -1,17 +1,29 @@
 deleteButton.addEventListener('click', function() {
-
-    // refresh select element
-    //refreshSelectElement(true);
-
-    // Delete the row from database
-    window.Android.deleteRowFromDb(currentIndex);
-    refreshSelectElement(true);
-
-    // Send a toast to Android about it
-    window.Android.toastMessageFromJS("Route deleted successfully");
-
-    // TODO tähän joku dialogi josta checkki että haluaako varmasti poistaa? Älä käytä prompt("") näytti aivan paskalta Androidilla
+  /*
+  * Reveals the "are you sure" dialog
+  */
+    AreYouSureDialog.style.display = "block";
 });
+
+function cancelClickOnAreYouSurePrompt() {
+  /*
+  * Hides the "are you sure" dialog on cancel click
+  */
+  AreYouSureDialog.style.display = "none";
+}
+
+function OKClickOnAreYouSurePrompt() {
+  /*
+   * Performs the delete operation if OK is cliced on the Are you sure propmpt
+   */
+  AreYouSureDialog.style.display = "none";
+  // Delete the row from database
+  window.Android.deleteRowFromDb(currentIndex);
+  refreshSelectElement(true);
+
+  // Send a toast to Android about it
+  window.Android.toastMessageFromJS("Route deleted successfully");
+}
 
 function refreshSelectElement(mapWillBeCleared) {
   deleteButton.style.display = "none";

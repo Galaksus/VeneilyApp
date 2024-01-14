@@ -33,7 +33,7 @@
   border-top-right-radius: 5px;
   position: relative;
 }
-#input-buttons-container {
+.input-buttons-container-class {
     display: flex;
     flex-direction: column;
   }
@@ -49,15 +49,17 @@
 outline: none;
 }
   /* Style for the buttons */
-#name-buttons {
+.name-buttons-class {
     display: flex;
     justify-content: flex-end; /* Align buttons to the right */
     height: 20%;
     margin: 10px;
   }
 
-  #name-cancel-button,
-  #name-ok-button {
+  .name-buttons-class-2 {
+    margin-bottom: -10px;
+  }
+  .dialog-ok-cancel-buttons {
     border: none;
     border-radius: 25px;
     background: none;
