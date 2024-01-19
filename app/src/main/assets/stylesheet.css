@@ -97,6 +97,7 @@ body {
 
 .auto-mode-info-data p {
   margin-left: 10px; 
+  font-weight: bold;
 }
 
 .border-radius-20px {
@@ -104,7 +105,11 @@ body {
 }
 
 #auto-mode-selected-route {
-  font-size: x-large;
+  font-size: large;
   margin-bottom: 5px;
   margin-top: 5px;
+}
+
+.margin-left-5 {
+  margin-left: 5px;
 }

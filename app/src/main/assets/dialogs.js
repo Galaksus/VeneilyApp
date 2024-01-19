@@ -192,7 +192,7 @@ function toggleStartRouteButton() {
     return;
   }
   // If no route selected return
-  if (parseInt(routesSelect.selectedIndex) === 0) {
+  if (parseInt(currentIndex) === 0) {
     startRouteText.children[0].textContent = "Please select a route first";
     startRouteText.children[0].style.color = "red";
     startRouteText.style.display = "block";
@@ -220,7 +220,7 @@ function toggleStartRouteButton() {
     startRouteButton.textContent = "Start";
     startRouteText.style.display = "none";
   } else {
-    Android.JSToBLEInterface(BLEConnectedElementIDs.allRouteCoordinates_, parseInt(routesSelect.selectedIndex));
+    Android.JSToBLEInterface(BLEConnectedElementIDs.allRouteCoordinates_, parseInt(currentIndex));
     // These will be run periodically given the interval time
     isRouteStarted = setInterval(function () {
       Android.JSToBLEInterface(BLEConnectedElementIDs.startRouteButton_);
