@@ -239,7 +239,7 @@ const BluetoothConnectionStates = {
   2: "Connected",
   3: "Disconnecting...",
   10: "Not connected",
-  11: "device was not found",
+  11: "Device was not found",
   12: "Scanning for bluetooth devices...",
 };
 
