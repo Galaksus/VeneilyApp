@@ -7,6 +7,8 @@ const routesSelect = document.getElementById("routes");
 const newRouteContainer = document.getElementById("new-route-container");
 const DeleteDraggableMarker = document.getElementById("delete-draggable-marker");
 let drawButtonImage = document.querySelector('[alt="Route type Icon"]');
+let newRouteImage = document.querySelector('[alt="New route"]');
+
 
 var markersEnabled = false;
 var polyline, polygon;
@@ -40,8 +42,6 @@ customAttribution.addTo(map);
 }).addTo(map);*/
 
 
-
-
 function NewRouteButtonFunction() {
   updateDrawButtonIcon();
   // Get all the SVG buttons
@@ -54,11 +54,18 @@ function NewRouteButtonFunction() {
     }
     else if (button.id === "new-route-button") {
       button.style.display = "flex"; // Display the clicked button
-    } 
+      if (markersEnabled) { // Changes the icon for the button
+        newRouteImage.src = "icons/new-black.svg";
+        document.getElementById("new-route-text").textContent = "New route";
+      } else {
+        newRouteImage.src = "icons/go-back.svg";
+        document.getElementById("new-route-text").textContent = "Back to main page";
+      }
+    }
     else {
       // Check if the button was initially visible or hidden
       var initiallyVisible = window.getComputedStyle(button).display === "flex";
-
+     // newRouteImage = "icons/new-black.svg";
       if (initiallyVisible) {
         button.style.display = "none"; // Hide other initially visible buttons
       markersEnabled = false;
