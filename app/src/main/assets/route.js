@@ -5,14 +5,15 @@ const routesSelect = document.getElementById("routes");
 
 //const NewRouteButton = document.getElementById("new-route-button");
 const newRouteContainer = document.getElementById("new-route-container");
-const DeleteDraggableMarker = document.getElementById("delete-draggable-marker");
+const DeleteDraggableMarker = document.getElementById(
+  "delete-draggable-marker"
+);
 let drawButtonImage = document.querySelector('[alt="Route type Icon"]');
 let newRouteImage = document.querySelector('[alt="New route"]');
 
-
 var markersEnabled = false;
 var polyline, polygon;
-var drawMode = 'polyline'; 
+var drawMode = "polyline";
 
 var currentIndex = 0; // The index of selected route
 
@@ -30,7 +31,7 @@ L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
 
 // Create a custom attribution control and add it to the map
 var customAttribution = L.control.attribution({
-  position: 'topright', // You can change the position here (e.g., 'topleft', 'bottomright', 'bottomleft')
+  position: "topright", // You can change the position here (e.g., 'topleft', 'bottomright', 'bottomleft')
 });
 
 customAttribution.addTo(map);
@@ -41,7 +42,6 @@ customAttribution.addTo(map);
     opacity: 0.75
 }).addTo(map);*/
 
-
 function NewRouteButtonFunction() {
   updateDrawButtonIcon();
   // Get all the SVG buttons
@@ -51,27 +51,27 @@ function NewRouteButtonFunction() {
   svgButtons.forEach(function (button) {
     if (button.id === "delete-button") {
       button.style.display = "none";
-    }
-    else if (button.id === "new-route-button") {
+    } else if (button.id === "new-route-button") {
       button.style.display = "flex"; // Display the clicked button
-      if (markersEnabled) { // Changes the icon for the button
+      if (markersEnabled) {
+        // Changes the icon and textContent for the button
         newRouteImage.src = "icons/new-black.svg";
         document.getElementById("new-route-text").textContent = "New route";
       } else {
         newRouteImage.src = "icons/go-back.svg";
-        document.getElementById("new-route-text").textContent = "Back to main page";
+        document.getElementById("new-route-text").textContent =
+          "Back to main page";
       }
-    }
-    else {
+    } else {
       // Check if the button was initially visible or hidden
       var initiallyVisible = window.getComputedStyle(button).display === "flex";
-     // newRouteImage = "icons/new-black.svg";
+      // newRouteImage = "icons/new-black.svg";
       if (initiallyVisible) {
         button.style.display = "none"; // Hide other initially visible buttons
-      markersEnabled = false;
+        markersEnabled = false;
       } else {
         button.style.display = "flex"; // Show other initially hidden buttons
-      markersEnabled = true;
+        markersEnabled = true;
       }
     }
   });
@@ -89,7 +89,7 @@ function NewRouteButtonFunction() {
         // Show the SVG icon
         DeleteDraggableMarker.style.display = "block";
         // Set the new size of the DeleteDraggableMarker
-        DeleteDraggableMarker.style.width = "38px"; 
+        DeleteDraggableMarker.style.width = "38px";
         DeleteDraggableMarker.style.height = "38px";
       });
       marker.on("drag", function () {
@@ -99,11 +99,11 @@ function NewRouteButtonFunction() {
 
         // Check if the marker is over the SVG element
         if (isMarkerOnTop(markerLatLng)) {
-          DeleteDraggableMarker.style.width = "50px"; 
+          DeleteDraggableMarker.style.width = "50px";
           DeleteDraggableMarker.style.height = "50px";
         } else {
           DeleteDraggableMarker.style.width = "38px";
-          DeleteDraggableMarker.style.height = "38px"; 
+          DeleteDraggableMarker.style.height = "38px";
         }
       });
 
@@ -136,52 +136,54 @@ function NewRouteButtonFunction() {
 function updateDrawButtonIcon() {
   if (markers.length < 3) {
     drawButtonImage.src = "icons/route-type-path.svg";
-    document.getElementById("path-type").textContent = "Type: path"
+    document.getElementById("path-type").textContent = "Type: path";
   }
 }
 
 // Function to check if the marker is over the SVG element
 function isMarkerOnTop(markerLatLng) {
-  var DeleteDraggableMarkergBounds = DeleteDraggableMarker.getBoundingClientRect();
+  var DeleteDraggableMarkergBounds =
+    DeleteDraggableMarker.getBoundingClientRect();
 
   var point = map.latLngToContainerPoint(markerLatLng);
   var x = point.x;
   var y = point.y;
 
-  return x >= DeleteDraggableMarkergBounds.left &&
-         x <= DeleteDraggableMarkergBounds.right &&
-         y >= DeleteDraggableMarkergBounds.top &&
-         y <= DeleteDraggableMarkergBounds.bottom;
+  return (
+    x >= DeleteDraggableMarkergBounds.left &&
+    x <= DeleteDraggableMarkergBounds.right &&
+    y >= DeleteDraggableMarkergBounds.top &&
+    y <= DeleteDraggableMarkergBounds.bottom
+  );
 }
 
 function DrawButtonFunction() {
   // Toggle between 'polyline' and 'polygon' modes
-  if (drawMode === 'polyline') {
-    drawMode = 'polygon';
+  if (drawMode === "polyline") {
+    drawMode = "polygon";
     drawButtonImage.src = "icons/route-type-loop.svg";
-    document.getElementById("path-type").textContent = "Type: loop"
+    document.getElementById("path-type").textContent = "Type: loop";
   } else {
-    drawMode = 'polyline';
+    drawMode = "polyline";
     drawButtonImage.src = "icons/route-type-path.svg";
-    document.getElementById("path-type").textContent = "Type: path"
-
+    document.getElementById("path-type").textContent = "Type: path";
   }
-  
+
   updateDrawing();
 }
 
-
 function drawPolyline(latlngs) {
-  polyline = L.polyline(latlngs, { color: 'green' }).addTo(map);
+  polyline = L.polyline(latlngs, { color: "green" }).addTo(map);
 }
 
 function drawPolygon(latlngs) {
-  if (latlngs.length >= 3) { // Check if there are three or more markers
-    polygon = L.polygon(latlngs, { color: 'blue' }).addTo(map);
+  if (latlngs.length >= 3) {
+    // Check if there are three or more markers
+    polygon = L.polygon(latlngs, { color: "blue" }).addTo(map);
   } else {
-    drawMode = 'polyline'; // Switch back to polyline mode if not enough markers for polygon
+    drawMode = "polyline"; // Switch back to polyline mode if not enough markers for polygon
     updateDrawing();
-    console.log('Please add three or more markers to draw a polygon.');
+    console.log("Please add three or more markers to draw a polygon.");
   }
 }
 
@@ -193,37 +195,33 @@ function updateDrawing() {
     map.removeLayer(polygon);
   }
   if (markers.length >= 2) {
-    var latlngs = markers.map(function(marker) {
+    var latlngs = markers.map(function (marker) {
       return marker.getLatLng();
     });
 
-    if (drawMode === 'polyline') {
+    if (drawMode === "polyline") {
       drawPolyline(latlngs);
-    } else if (drawMode === 'polygon') {
+    } else if (drawMode === "polygon") {
       drawPolygon(latlngs);
     }
-
   }
   // draButton is avaialble if there is 3 or more markers on map
   //DrawButton.disabled = (markers.length >= 3) ? false : true;
 
   const SaveButton = document.getElementById("save-button");
   const DrawButton = document.getElementById("draw-button");
-  if (markers.length >= 2) { // Save button clickable if >= 2 markers on map
+  if (markers.length >= 2) {
+    // Save button clickable if >= 2 markers on map
     SaveButton.style.pointerEvents = "auto"; // Enable pointer events
-  }
-  else {
+  } else {
     SaveButton.style.pointerEvents = "none"; // Disable pointer events
-
   }
-  if (markers.length >= 3) { // Draw button clickable if >= 3 markers on map
+  if (markers.length >= 3) {
+    // Draw button clickable if >= 3 markers on map
     DrawButton.style.pointerEvents = "auto"; // Enable pointer events
-
-  }
-  else {
+  } else {
     DrawButton.style.pointerEvents = "none"; // Disable pointer events
   }
-
 }
 
 function RevertButtonFunction() {
@@ -250,15 +248,14 @@ function clearMap() {
   map.eachLayer(function (layer) {
     if (
       (layer instanceof L.Marker ||
-      layer instanceof L.Polygon ||
-      layer instanceof L.Polyline) &&
+        layer instanceof L.Polygon ||
+        layer instanceof L.Polyline) &&
       layer !== customMarker // doesn't remove orientation marker
     ) {
       map.removeLayer(layer);
     }
   });
 }
-
 
 function onZoomEnd() {
   // Your code to be executed when the zoom level changes
@@ -273,7 +270,7 @@ function getRouteOptionName() {
   /*
    * Returns boolean value according to if route is selected from the Routes select HTML element
    */
-  window.android.getData(selectedIndex, "title") // second parameter is column name of the database
+  window.android.getData(selectedIndex, "title"); // second parameter is column name of the database
   var optionName = selectedOption.text;
   return optionName;
 }
@@ -283,7 +280,7 @@ function getTotalLengthOfRoute(coordinates) {
     * Function that calculates the total distance between all points in currently selected route
     returns the total distance with two decimals
     */
- // var selectedOption = routesSelect.options[routesSelect.selectedIndex];
+  // var selectedOption = routesSelect.options[routesSelect.selectedIndex];
   var optionValue = coordinates;
   // Split the string into an array of latitude and longitude pairs
   var markerPairs = optionValue.split(",");
@@ -323,9 +320,9 @@ function getMarkersOnMapCount(markersOnly) {
    * If called with false parameter:
    * returns string of marker points in the map
    */
-  if (markersEnabled) {
+  /*if (markersEnabled) {
     return;
-  }
+  }*/
   var layers = map._layers;
   var markerCount = 0;
   var makersOnMapArray = "";
@@ -334,12 +331,18 @@ function getMarkersOnMapCount(markersOnly) {
     var layer = layers[layerId];
 
     if (layer instanceof L.Marker) {
-      // increase counter
-      markerCount++;
-      // Adds only coordinates of the markers on the map to the array
-      var markerData = layer.getLatLng().lat + "," + layer.getLatLng().lng;
-      makersOnMapArray +=
-        makersOnMapArray === "" ? markerData : "," + markerData;
+      // Check if the marker has a custom icon
+      if (layer.options.icon instanceof L.DivIcon &&
+        layer.options.icon.options.className === "custom-icon-class") {
+        // Do nothing, this is a custom marker
+      } else {
+        // Increase counter for non-custom markers
+        markerCount++;
+        // Adds only coordinates of the markers on the map to the array
+        var markerData = layer.getLatLng().lat + "," + layer.getLatLng().lng;
+        makersOnMapArray +=
+          makersOnMapArray === "" ? markerData : "," + markerData;
+      }
     }
   }
 
@@ -418,8 +421,6 @@ function parseCoordinate(coordinateString) {
   var lng = parseFloat(coordinateArray[1].trim());
   return [lat, lng];
 }
-
-
 
 /*
 function setEnableStateRoutesElement() {
