@@ -31,7 +31,7 @@ L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
 
 // Create a custom attribution control and add it to the map
 var customAttribution = L.control.attribution({
-  position: "topright", // You can change the position here (e.g., 'topleft', 'bottomright', 'bottomleft')
+  position: "topright",
 });
 
 customAttribution.addTo(map);

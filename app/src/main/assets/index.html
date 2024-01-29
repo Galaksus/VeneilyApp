@@ -20,7 +20,6 @@
         <div id="map"></div>
 
         <img src="icons/settings-icon.svg" id="settings-icon-button">
-        <img src="icons/bluetooth-icon-black.svg" id="bluetooth-icon">
         <img src="icons/delete-icon.svg" id="delete-draggable-marker" class="center-div" style="display: none;">
 
         <div class="gradient-element">
@@ -32,7 +31,6 @@
               <img class="svg-image"src="icons/new-black.svg" alt="New route">
               <p class="menu-text" id="new-route-text"> New route</p>
             </div>
-
 
             <div class="svg-button" id="routes-select-container">
                 <img class="svg-image" src="icons/old-routes.svg" alt="Old routes Icon">
@@ -48,23 +46,26 @@
               <img class="svg-image" id="center-me-button-src" src="icons/center-me-normal.svg" alt="Delete Icon">
               <p class="menu-text">Center</p>
             </div>
-        
+            <div class="svg-button">
+                <img class="svg-image" id="bluetooth-icon" src="icons/bluetooth-icon-black.svg" alt="Bluetooth icon">
+                <p class="menu-text">Bluetooth</p>
+            </div>
+
             <div class="svg-button default-display-none default-pointerEvent-none" id="save-button" onclick="SaveButtonFunction()">
               <img class="svg-image-2" src="icons/save.svg" alt="Save Icon">
               <p class="menu-text">Save</p>
             </div>
-        
 
             <div class="svg-button default-display-none default-pointerEvent-none" id="draw-button" onclick="DrawButtonFunction()">
                 <img class="svg-image" src="icons/route-type-path.svg" alt="Route type Icon">
                 <p class="menu-text"id="path-type">Type: path</p>
               </div>
-
         
             <div class="svg-button default-display-none" onclick="RevertButtonFunction()">
               <img class="svg-image-2" src="icons/revert.svg" alt="Revert Icon">
               <p class="menu-text">Revert</p>
             </div>
+
           </div>
 
     <!-- Routes select dropdown dialog -->
@@ -137,9 +138,8 @@
                 <!-- Scrollable dialog content -->
                 <div class="dialog-content">
                     <!-- scrollable content -->
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit....</p>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit....</p>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit....</p>
+                    <p>Tee tänne Toggle Switch bluetooth buttonin värille että enable/disable</p>
+                    <p>Nämähän pitäis lukee sitten databasesta käynnistyksen kohilla</p>
                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit....</p>
                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit....</p>
                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit....</p>
