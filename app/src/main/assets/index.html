@@ -23,32 +23,26 @@
         <img src="icons/delete-icon.svg" id="delete-draggable-marker" class="center-div" style="display: none;">
 
         <div class="gradient-element">
+
+            <div class="svg-button default-display-none" id="" onclick="NewRouteButtonFunction()">
+                <img class="svg-image"src="icons/go-back.svg" alt="New route">
+                <p class="menu-text" id="">Home</p>
+            </div>
+
             <div class="svg-button" onclick="openDialog(document.getElementById('menu-dialog'))">
               <img class="svg-image" src="icons/menu-icon.svg" alt="Menu Icon">
               <p class="menu-text">Menu</p>
             </div>
-            <div class="svg-button" id="new-route-button" onclick="NewRouteButtonFunction()">
-              <img class="svg-image"src="icons/new-black.svg" alt="New route">
-              <p class="menu-text" id="new-route-text"> New route</p>
-            </div>
 
-            <div class="svg-button" id="routes-select-container">
-                <img class="svg-image" src="icons/old-routes.svg" alt="Old routes Icon">
-                <p class="menu-text">My routes</p>
-              </div>
 
-              <div class="svg-button" id="delete-button" style="display: none;">
-                <img class="svg-image" src="icons/delete-icon.svg" alt="Delete Icon">
-                <p class="menu-text">Delete route</p>
-              </div>
 
             <div class="svg-button" id="center-me-button"> 
               <img class="svg-image" id="center-me-button-src" src="icons/center-me-normal.svg" alt="Delete Icon">
               <p class="menu-text">Center</p>
             </div>
-            <div class="svg-button">
-                <img class="svg-image" id="bluetooth-icon" src="icons/bluetooth-icon-black.svg" alt="Bluetooth icon">
-                <p class="menu-text">Bluetooth</p>
+            <div class="svg-button" onclick="MoreButtonsFunction()">
+                <img class="svg-image" id="" src="icons/more-icon.svg" alt="Bluetooth icon">  <!-- TODO TEE ID KUNTOON-->
+                <p class="menu-text">More</p>
             </div>
 
             <div class="svg-button default-display-none default-pointerEvent-none" id="save-button" onclick="SaveButtonFunction()">
@@ -67,6 +61,46 @@
             </div>
 
           </div>
+ 
+          <!-- TESTI alkaa--> <!-- TODO TEE ID KUNTOON-->
+          <div id="button-navigation-dialog" class="default-dialog" onclick="closeDialog(this);">
+            <div class="dialog-container" id="button-navigation-dialog-container" onclick="event.stopPropagation();">
+                <!-- Header content -->
+                <div class="dialog-header-content" id="button-navigation-dialog-header-content">
+                    <span class="close-dialog-button"
+                    onclick="closeDialog(document.getElementById('button-navigation-dialog'))">&#10006;</span>
+
+                    <div class="svg-button" id="routes-select-container">
+                        <img class="svg-image" src="icons/old-routes.svg" alt="Old routes Icon">
+                        <p class="menu-text">My routes</p>
+                      </div>
+
+                      <div class="svg-button" id="delete-button" style="display: none;">
+                        <img class="svg-image" src="icons/delete-icon.svg" alt="Delete Icon">
+                        <p class="menu-text">Delete</p>
+                    </div>
+
+                    <div class="svg-button" id="new-route-button" onclick="NewRouteButtonFunction()">
+                        <img class="svg-image"src="icons/new-gray.svg" alt="New route">
+                        <p class="menu-text" id="new-route-text"> New route</p>
+                    </div>
+
+                    <div class="svg-button">
+                        <img class="svg-image" id="bluetooth-icon" src="icons/bluetooth-icon.svg" alt="Bluetooth icon">
+                        <p class="menu-text">Bluetooth</p>
+                    </div>
+
+                    <div class="svg-button" onclick="settingsButtonFunction()">
+                        <img class="svg-image" id="settings-icon-button" src="icons/settings-icon.svg" alt="Settings icon">
+                        <p class="menu-text">Settings</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+          <!-- TESTI loppuu -->
+
+
+
 
     <!-- Routes select dropdown dialog -->
     <div id="dropdown-dialog" class="default-dialog" onclick="closeDialog(this);">

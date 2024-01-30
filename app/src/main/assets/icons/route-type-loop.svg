@@ -4,8 +4,8 @@
     <line x1="190" y1="120" x2="12" y2="188" stroke="blue" stroke-width="15" />
     <line x1="12" y1="50" x2="12" y2="188" stroke="blue" stroke-width="15" />
 
-    <circle cx="15" cy="50" r="12" fill="black" />
-    <circle cx="100" cy="10" r="12" fill="black" />
-    <circle cx="190" cy="120" r="12" fill="black" />
-    <circle cx="12" cy="188" r="12" fill="black" />
+    <circle cx="15" cy="50" r="12" fill="#bdbdbd" />
+    <circle cx="100" cy="10" r="12" fill="#bdbdbd" />
+    <circle cx="190" cy="120" r="12" fill="#bdbdbd" />
+    <circle cx="12" cy="188" r="12" fill="#bdbdbd" />
 </svg>

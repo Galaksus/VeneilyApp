@@ -50,10 +50,10 @@ function openDialog(element) {
   element.style.display = "block";
 }
 
-settingsButton.addEventListener("click", function () {
-  // Open settings menu here
+function settingsButtonFunction() {
   SettingsDialog.style.display = "block";
-});
+
+}
 
 routesSelectbutton.addEventListener("click", function () {
   // Open settings menu here
@@ -259,7 +259,7 @@ function setBluetoothConnectionStateText(BLEState) {
       case 2:
         BluetoothConnectionText.style.color = "green"; // Connected (green color)
         ConnectBluetoothButton.disabled = true;
-        BluetoothButton.src = 'icons/bluetooth-icon-green.svg';
+       // BluetoothButton.src = 'icons/bluetooth-icon-green.svg';
 
         Android.BLEReadRequest(); // Tää ei toimi (BLEHandlerin puolella Androidin Java-koodissa siis)
         break;
@@ -269,12 +269,12 @@ function setBluetoothConnectionStateText(BLEState) {
       case 11:
         BluetoothConnectionText.style.color = "red"; // Disconnected, Disconnecting, or Device not found (red color)
         ConnectBluetoothButton.disabled = false;
-        BluetoothButton.src = 'icons/bluetooth-icon-red.svg';
+       // BluetoothButton.src = 'icons/bluetooth-icon-red.svg';
         break;
       case 12:
         BluetoothConnectionText.style.color = "blue"; // Scanning
         ConnectBluetoothButton.disabled = true;
-        BluetoothButton.src = 'icons/bluetooth-icon-blue.svg';
+      //  BluetoothButton.src = 'icons/bluetooth-icon-blue.svg';
         break;
       default:
         BluetoothConnectionText.style.color = defaultColor;

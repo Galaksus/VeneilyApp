@@ -43,7 +43,13 @@ customAttribution.addTo(map);
 }).addTo(map);*/
 
 function NewRouteButtonFunction() {
-  updateDrawButtonIcon();
+  updateDrawButtonIcon(); 
+  markersEnabled = !markersEnabled; // Toggle markers enabled variable
+
+  if (markersEnabled) {
+    MoreButtonsFunction();
+  }
+
   // Get all the SVG buttons
   var svgButtons = document.querySelectorAll(".svg-button");
 
@@ -51,32 +57,20 @@ function NewRouteButtonFunction() {
   svgButtons.forEach(function (button) {
     if (button.id === "delete-button") {
       button.style.display = "none";
-    } else if (button.id === "new-route-button") {
-      button.style.display = "flex"; // Display the clicked button
-      if (markersEnabled) {
-        // Changes the icon and textContent for the button
-        newRouteImage.src = "icons/new-black.svg";
-        document.getElementById("new-route-text").textContent = "New route";
-      } else {
-        newRouteImage.src = "icons/go-back.svg";
-        document.getElementById("new-route-text").textContent =
-          "Back to main page";
-      }
-    } else {
+    }  else {
       // Check if the button was initially visible or hidden
       var initiallyVisible = window.getComputedStyle(button).display === "flex";
       // newRouteImage = "icons/new-black.svg";
       if (initiallyVisible) {
         button.style.display = "none"; // Hide other initially visible buttons
-        markersEnabled = false;
       } else {
         button.style.display = "flex"; // Show other initially hidden buttons
-        markersEnabled = true;
       }
     }
   });
 
   clearMap();
+  console.log(markersEnabled);
 
   if (markersEnabled) {
     map.on("click", function (event) {
@@ -156,9 +150,25 @@ function isMarkerOnTop(markerLatLng) {
     y <= DeleteDraggableMarkergBounds.bottom
   );
 }
+function MoreButtonsFunction() {
+  /*
+  * toggles the display of an element with the ID "button-navigation-dialog" each time tis function is called
+  */
+  let moreButtons = document.getElementById("button-navigation-dialog");
+  let displayStyle = window.getComputedStyle(moreButtons).display;
+
+  if (displayStyle === "none") {
+    moreButtons.style.display = "flex";
+  } else {
+    moreButtons.style.display = "none";
+  }
+}
+
 
 function DrawButtonFunction() {
-  // Toggle between 'polyline' and 'polygon' modes
+  /*
+  * Toggle between 'polyline' and 'polygon' modes
+  */ 
   if (drawMode === "polyline") {
     drawMode = "polygon";
     drawButtonImage.src = "icons/route-type-loop.svg";

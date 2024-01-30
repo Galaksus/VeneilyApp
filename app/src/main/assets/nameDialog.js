@@ -9,12 +9,10 @@ var routeType = ""; // Need to be global
 function SaveButtonFunction() {
   // routeType is route if polyline and loop if polygon on map
   routeType = drawMode === 'polyline' ? 'Route' : 'Loop';
-   // 
-    nameDialog.style.display = "block"; // Shows name dialog
-    nameInput.focus(); // Focus cursor on the input field
   
-    // Toinen homma voisi olla että sen routen nimeksi ei vosi antaa liian pitkää nimeä!
-  }
+  nameDialog.style.display = "block"; // Shows name dialog
+  nameInput.focus(); // Focus cursor on the input field
+}
   
 cancelButton.addEventListener("click", () => {
     nameInput.value = ""; // Clear input field
