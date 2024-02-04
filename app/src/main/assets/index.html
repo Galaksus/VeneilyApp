@@ -22,6 +22,7 @@
         <img src="icons/settings-icon.svg" id="settings-icon-button">
         <img src="icons/delete-icon.svg" id="delete-draggable-marker" class="center-div" style="display: none;">
 
+        <!-- Bottom navigatiom bar -->
         <div class="gradient-element">
 
             <div class="svg-button default-display-none" id="" onclick="NewRouteButtonFunction()">
@@ -33,8 +34,6 @@
               <img class="svg-image" src="icons/menu-icon.svg" alt="Menu Icon">
               <p class="menu-text">Menu</p>
             </div>
-
-
 
             <div class="svg-button" id="center-me-button"> 
               <img class="svg-image" id="center-me-button-src" src="icons/center-me-normal.svg" alt="Delete Icon">
@@ -59,13 +58,11 @@
               <img class="svg-image-2" src="icons/revert.svg" alt="Revert Icon">
               <p class="menu-text">Revert</p>
             </div>
-
           </div>
  
-          <!-- TESTI alkaa--> <!-- TODO TEE ID KUNTOON-->
+          <!-- Extra buttons that are revealed when "More" Button is clicked -->
           <div id="button-navigation-dialog" class="default-dialog" onclick="closeDialog(this);">
             <div class="dialog-container" id="button-navigation-dialog-container" onclick="event.stopPropagation();">
-                <!-- Header content -->
                 <div class="dialog-header-content" id="button-navigation-dialog-header-content">
                     <span class="close-dialog-button"
                     onclick="closeDialog(document.getElementById('button-navigation-dialog'))">&#10006;</span>
@@ -97,10 +94,6 @@
                 </div>
             </div>
         </div>
-          <!-- TESTI loppuu -->
-
-
-
 
     <!-- Routes select dropdown dialog -->
     <div id="dropdown-dialog" class="default-dialog" onclick="closeDialog(this);">
