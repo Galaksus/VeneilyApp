@@ -1,5 +1,6 @@
 package com.my.VeneilyApp;
 
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,13 +9,16 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity  {
 
+    private static final int REQUEST_LOCATION_PERMISSION = 1;
     public static WebView mywebView;
-
+    GetLocation getLocation;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,7 +27,7 @@ public class MainActivity extends AppCompatActivity  {
         mywebView.setWebViewClient(new WebViewClient());
 
         // Starts getting location updates periodically
-        GetLocation getLocation = new GetLocation(this);
+        getLocation = new GetLocation(this);
         getLocation.startLocationUpdates(this);
 
 
@@ -61,7 +65,19 @@ public class MainActivity extends AppCompatActivity  {
 
 
 
-
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_LOCATION_PERMISSION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission is granted, start location updates
+                getLocation.startLocationUpdatesInternal();
+            } else {
+                // Permission denied, notify user about it
+                Toast.makeText(this, "Location permission is required for the app to function properly", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
 
 
     public class mywebClient extends WebViewClient {

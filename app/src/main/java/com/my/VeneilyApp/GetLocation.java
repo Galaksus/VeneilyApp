@@ -1,4 +1,5 @@
 package com.my.VeneilyApp;
+
 import static com.my.VeneilyApp.MainActivity.mywebView;
 
 import android.Manifest;
@@ -29,6 +30,7 @@ public class GetLocation {
     private LocationRequest locationRequest;
     private static final int REQUEST_LOCATION_PERMISSION = 1;
     private final int MAX_ALLOWED_ACCURACY_METERS = 20;
+
     public GetLocation(Context context) {
         mContext = context;
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(mContext);
@@ -36,6 +38,7 @@ public class GetLocation {
         mLocationCallback = new LocationCallback() {
             private boolean locationReceivedWithinTimePeriod = false;
             private Handler handler = new Handler();
+
             @Override
             public void onLocationResult(LocationResult locationResult) {
                 if (locationResult == null) {
@@ -59,11 +62,10 @@ public class GetLocation {
                         // Handle location updates here
                         Log.d("MYLOCATION", "Current location prevented from BLE due to accuracy: " + location.getAccuracy() + " meters");
                         //TODO tähän joku GPS-signal issue ilmotus javaSriptiin?
-                    //  if (BluetoothBLECommunication.getConnectionState() /*&& routeStarted*/)
-                    //        // JS-kutsu jossa tuodaan joku GPS connection state teksti esille
-                    //    return;
-                    }
-                    else {
+                        //  if (BluetoothBLECommunication.getConnectionState() /*&& routeStarted*/)
+                        //        // JS-kutsu jossa tuodaan joku GPS connection state teksti esille
+                        //    return;
+                    } else {
                     }
 
 
@@ -74,9 +76,8 @@ public class GetLocation {
     }
 
     public void startLocationUpdates(Activity activity) {
-        // Check if permission to access location is granted
-        if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) !=
-                PackageManager.PERMISSION_GRANTED) {
+        // Check if permission to ACCESS_FINE_LOCATION and ACCESS_COARSE_LOCATION is granted
+        if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // Permission is not granted, request it
             ActivityCompat.requestPermissions(activity,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
@@ -84,19 +85,26 @@ public class GetLocation {
             return;
         }
 
-        // TODO tähän noita argumenttejä lisää vai mitä noi on :D jos siis tarvii
-        // TODO toki noita olemassa olevia voi muokata myös mielensä mukaan
+        // Permission is granted, start location updates
+        startLocationUpdatesInternal();
+    }
+
+    public void startLocationUpdatesInternal() {
         locationRequest = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 1000)
                 .setWaitForAccurateLocation(false)
                 .setMinUpdateIntervalMillis(500) // Sets the fastest allowed interval of location updates.
                 .setMaxUpdateDelayMillis(1000) // Sets the longest a location update may be delayed
                 .build(); // Builds a new LocationRequest
 
-
+        // Permisison check required here as well
+        if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
         mFusedLocationClient.requestLocationUpdates(locationRequest,
                 mLocationCallback,
-                Looper.getMainLooper()); // Use the main looper to handle location updates
+                Looper.getMainLooper());
     }
+
 
     public void stopLocationUpdates() {
         // stops location updates

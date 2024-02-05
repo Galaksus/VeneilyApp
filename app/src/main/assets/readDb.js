@@ -2,7 +2,6 @@ var arrCoordinates = [];
 var arrDropdownOptionNames = [];
 
 function createDropdownOptions() {
-  console.log("moi1");
   // Clear all existing div elements inside the dropdown content div
   var dropdownContent = document.getElementById("dropdown-dialog-content");
   dropdownContent.innerHTML = "";

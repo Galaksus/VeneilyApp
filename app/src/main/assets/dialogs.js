@@ -261,7 +261,7 @@ function setBluetoothConnectionStateText(BLEState) {
         ConnectBluetoothButton.disabled = true;
        // BluetoothButton.src = 'icons/bluetooth-icon-green.svg';
 
-        Android.BLEReadRequest(); // Tää ei toimi (BLEHandlerin puolella Androidin Java-koodissa siis)
+       // Android.BLEReadRequest(); // Tää ei toimi (BLEHandlerin puolella Androidin Java-koodissa siis)
         break;
       case 0:
       case 3:
