@@ -78,6 +78,8 @@ public class GetLocation {
     public void startLocationUpdates(Activity activity) {
         // Check if permission to ACCESS_FINE_LOCATION and ACCESS_COARSE_LOCATION is granted
         if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // Hides the permission required note for user
+            JavaScriptInterface.callJavaScriptFunction("displayLocationPermissionRequiredNoteForUser('" + false + "');");
             // Permission is not granted, request it
             ActivityCompat.requestPermissions(activity,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
@@ -86,10 +88,6 @@ public class GetLocation {
         }
 
         // Permission is granted, start location updates
-        startLocationUpdatesInternal();
-    }
-
-    public void startLocationUpdatesInternal() {
         locationRequest = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 1000)
                 .setWaitForAccurateLocation(false)
                 .setMinUpdateIntervalMillis(500) // Sets the fastest allowed interval of location updates.
@@ -97,12 +95,14 @@ public class GetLocation {
                 .build(); // Builds a new LocationRequest
 
         // Permisison check required here as well
-        if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
+
         mFusedLocationClient.requestLocationUpdates(locationRequest,
                 mLocationCallback,
                 Looper.getMainLooper());
+    }
+
+    public void startLocationUpdatesInternal() {
+
     }
 
 

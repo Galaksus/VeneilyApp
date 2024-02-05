@@ -97,3 +97,24 @@ body {
   margin-bottom: 5px;
   margin-top: 5px;
 }
+#location-permission-required-container {
+  z-index: 200;
+  background-color: #808080;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  color: white;
+}
+#location-permission-required-label {
+  z-index: 201;
+  width: 100%;
+  background-color: rgba(128, 128, 128, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  text-align: center;
+  top: 0;
+  left: 0;
+  z-index: 999;
+}

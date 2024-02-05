@@ -1,5 +1,6 @@
 package com.my.VeneilyApp;
 
+import android.Manifest;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -13,12 +14,14 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 public class MainActivity extends AppCompatActivity  {
 
     private static final int REQUEST_LOCATION_PERMISSION = 1;
     public static WebView mywebView;
     GetLocation getLocation;
+    JavaScriptInterface jsInterface;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,7 +35,7 @@ public class MainActivity extends AppCompatActivity  {
 
 
         // Create a new instance JavaScriptInterface and add it to the WebView
-        JavaScriptInterface jsInterface = new JavaScriptInterface(this, getLocation, MainActivity.this);
+        jsInterface = new JavaScriptInterface(this, getLocation, MainActivity.this);
         mywebView.addJavascriptInterface(jsInterface, "Android");
 
         // Load HTML to the Webview element
@@ -71,13 +74,17 @@ public class MainActivity extends AppCompatActivity  {
         if (requestCode == REQUEST_LOCATION_PERMISSION) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Permission is granted, start location updates
-                getLocation.startLocationUpdatesInternal();
+                getLocation.startLocationUpdates(this);
+                // Hides the permission required note for user
+                jsInterface.callJavaScriptFunction("displayLocationPermissionRequiredNoteForUser('" + true + "');");
             } else {
-                // Permission denied, notify user about it
-                Toast.makeText(this, "Location permission is required for the app to function properly", Toast.LENGTH_SHORT).show();
+                // Permission denied, reveal a note for user about it
+                jsInterface.callJavaScriptFunction("displayLocationPermissionRequiredNoteForUser('" + false + "');");
+
             }
         }
     }
+
 
 
     public class mywebClient extends WebViewClient {

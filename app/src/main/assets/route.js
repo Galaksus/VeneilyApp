@@ -432,8 +432,20 @@ function parseCoordinate(coordinateString) {
   return [lat, lng];
 }
 
-/*
-function setEnableStateRoutesElement() {
-  // Toggles enable/disable of routesSelect
- // routesSelect.disabled = !routesSelect.disabled;
-}*/
+function displayLocationPermissionRequiredNoteForUser(hide) {
+  console.log("Kutsuttu?", "Parameterillä: ", hide)
+  let permissionRequiredLabel = document.getElementById("location-permission-required-label");
+
+
+  if (hide === "true") {
+    console.log("käykö");
+
+    permissionRequiredLabel.style.display = "none";
+  }
+  else {
+    console.log("käykö2");
+
+    permissionRequiredLabel.style.display = "flex";
+
+  }
+}

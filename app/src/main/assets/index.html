@@ -19,8 +19,12 @@
     <div id="map-container">
         <div id="map"></div>
 
-        <img src="icons/settings-icon.svg" id="settings-icon-button">
-        <img src="icons/delete-icon.svg" id="delete-draggable-marker" class="center-div" style="display: none;">
+        <img src="icons/delete-icon-black.svg" id="delete-draggable-marker" class="center-div" style="display: none;">
+
+        <!-- Shown only when permission is not granted for location updates -->
+        <div id="location-permission-required-label" style="display: none;">
+            <p>Location permission is required for the app to function properly</p>
+        </div>
 
         <!-- Bottom navigatiom bar -->
         <div class="gradient-element">

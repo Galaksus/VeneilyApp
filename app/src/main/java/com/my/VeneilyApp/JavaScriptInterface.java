@@ -195,6 +195,8 @@ public class JavaScriptInterface implements GetOrientation.OrientationListener {
 
     public static void callJavaScriptFunction(String javascriptCode){
         // Execute JavaScript function
+        Log.e("käykö", javascriptCode);
+
         mywebView.evaluateJavascript(javascriptCode, null);
     }
 
