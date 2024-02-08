@@ -64,7 +64,7 @@ function NewRouteButtonFunction() {
       if (initiallyVisible) {
         button.style.display = "none"; // Hide other initially visible buttons
       } else {
-        button.style.display = "flex"; // Show other initially hidden buttons
+        button.style.display = "inline-flex"; // Show other initially hidden buttons
       }
     }
   });

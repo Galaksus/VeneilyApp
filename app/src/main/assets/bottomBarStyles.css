@@ -17,9 +17,9 @@
     left: 0px;
   }
 
-  .svg-button {
+.svg-button {
     cursor: pointer;
-    display: flex;
+    display: inline-flex; /* Change to inline-flex */
     flex-direction: column;
     justify-content: flex-end;
     align-items: center;
@@ -27,8 +27,8 @@
     width: 75px;
     border-radius: 20px;
     height: 75px;
-
-  }
+    margin: 5px; /* Add some margin for spacing */
+}
 
   .svg-image {
     width: 25px;

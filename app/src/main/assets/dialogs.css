@@ -30,18 +30,24 @@
 }
 
 #button-navigation-dialog-container {
+  top: auto;
+  left: auto;
+  transform: none;
+  bottom: 10%;
+  left: 0.5%;
   position: absolute;
   width: 99%;
   border-radius: 15px;
-  height: 10%;
-  top: 83%;
+  
 }
 
 
 /* Style for the header content */
 .dialog-header-content {
   padding: 20px;
-  background-color: #333;
+  /*background-color: #333;*/
+  background-color: #005081;
+
   color: #fff;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
@@ -54,12 +60,13 @@
   border-radius: 15px;
   height: 100%;
   justify-content: space-around;
+  background-color: #333;
 
   
 }
 #bottom-bar-content {
   padding: 20px;
-  background-color: #333;
+  background-color: #005081;
   color: #fff;
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
@@ -214,7 +221,7 @@
   text-align: center;
 }
 
-#line-1 {
+.line-1 {
   position: absolute;
   left: 0px;
   right: 0px;

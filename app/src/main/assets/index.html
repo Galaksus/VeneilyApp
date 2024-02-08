@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Leaflet Map</title>
+    <title>VeneilyApp</title>
     <link rel="stylesheet" href="stylesheet.css">
     <link rel="stylesheet" href="dialogs.css">
     <link rel="stylesheet" href="nameDialog.css">
@@ -71,29 +71,31 @@
                     <span class="close-dialog-button"
                     onclick="closeDialog(document.getElementById('button-navigation-dialog'))">&#10006;</span>
 
-                    <div class="svg-button" id="routes-select-container">
-                        <img class="svg-image" src="icons/old-routes.svg" alt="Old routes Icon">
-                        <p class="menu-text">My routes</p>
-                      </div>
+                    <div class="svg-buttons-container">
+                        <div class="svg-button" id="routes-select-container">
+                            <img class="svg-image" src="icons/old-routes.svg" alt="Old routes Icon">
+                            <p class="menu-text">My routes</p>
+                        </div>
 
-                      <div class="svg-button" id="delete-button" style="display: none;">
-                        <img class="svg-image" src="icons/delete-icon.svg" alt="Delete Icon">
-                        <p class="menu-text">Delete</p>
-                    </div>
+                        <div class="svg-button" id="new-route-button" onclick="NewRouteButtonFunction()">
+                            <img class="svg-image"src="icons/new-gray.svg" alt="New route">
+                            <p class="menu-text" id="new-route-text"> New route</p>
+                        </div>
 
-                    <div class="svg-button" id="new-route-button" onclick="NewRouteButtonFunction()">
-                        <img class="svg-image"src="icons/new-gray.svg" alt="New route">
-                        <p class="menu-text" id="new-route-text"> New route</p>
-                    </div>
+                        <div class="svg-button">
+                            <img class="svg-image" id="bluetooth-icon" src="icons/bluetooth-icon.svg" alt="Bluetooth icon">
+                            <p class="menu-text">Bluetooth</p>
+                        </div>
 
-                    <div class="svg-button">
-                        <img class="svg-image" id="bluetooth-icon" src="icons/bluetooth-icon.svg" alt="Bluetooth icon">
-                        <p class="menu-text">Bluetooth</p>
-                    </div>
+                        <div class="svg-button" onclick="settingsButtonFunction()">
+                            <img class="svg-image" id="settings-icon-button" src="icons/settings-icon.svg" alt="Settings icon">
+                            <p class="menu-text">Settings</p>
+                        </div>
 
-                    <div class="svg-button" onclick="settingsButtonFunction()">
-                        <img class="svg-image" id="settings-icon-button" src="icons/settings-icon.svg" alt="Settings icon">
-                        <p class="menu-text">Settings</p>
+                        <div class="svg-button" id="delete-button" style="display: none;">
+                            <img class="svg-image" src="icons/delete-icon.svg" alt="Delete Icon">
+                            <p class="menu-text">Delete</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -186,11 +188,45 @@
             <div class="dialog-container" onclick="event.stopPropagation();">
                 <!-- Header content -->
                 <div class="dialog-header-content" id="menu-header-content">
-                    Manual mode
+                    Controls
                     <span class="close-dialog-button"
                         onclick="closeDialog(document.getElementById('menu-dialog'))">&#10006;</span>
                     <!-- &#10006; means "x" symbol -->
                 </div>
+                                <!-- Auto mode-->
+                                <div id="menu-dialog-content-auto-mode" style="display: block;">
+                                    <!-- scrollable content -->
+                                    <div class="auto-mode-info-data">
+                                        <p id="auto-mode-selected-route"> Selected route:</p>
+                                        <span class="margin-left-5" id="dynamicText-route-name"> </span>
+                                    </div>
+                                    <hr width="100%" />
+                                    <div class="auto-mode-info-data">
+                                        <p>Type: </p>
+                                        <span class="margin-left-5" id="dynamicText-type"> </span>
+                                    </div>
+                                    <div class="auto-mode-info-data">
+                                        <p>Total length: </p>
+                                        <span class="margin-left-5" id="dynamicText-total-length"> </span>
+                                    </div>
+                                    <div class="auto-mode-info-data">
+                                        <p>Checkpoints: </p>
+                                        <span class="margin-left-5" id="dynamicText-checkpoints"> </span>
+                                    </div>
+                                    <!-- Not implemented yet (Not the most necessary thing :D)
+                                     <div class="auto-mode-info-data">
+                                        <p>Completed: </p>
+                                        <span id="dynamicText-completed"> moi</span>
+                                    </div> -->
+                                    <div class="center-div">
+                                        <button id="start-route-button" class="button-class border-radius-20px">Start</button>
+                                    </div>
+                                    <div id="start-route-text" class="align-text" style="display: none; color: green;">
+                                        <p>Route started</p>
+                                    </div>
+                    <hr class="line-1" color="gray" size="2">
+
+                                </div>
                 <!-- Scrollable dialog content -->
                 <div class="enabled" id="menu-dialog-content-manual-mode">
                     <!-- scrollable content -->
@@ -207,7 +243,7 @@
                     <img src="icons/plus-icon.svg" id="plus-svg-icon-speed" width="24" height="24"
                         onclick="rangeSliderArithmetic(this, true);">
 
-                    <hr id="line-1" color="gray" size="2">
+                    <hr class="line-1" color="gray" size="2">
 
                     <div class="align-text">
                         <p>Motor steering control</p>
@@ -225,44 +261,9 @@
                     <div id="lock-direction-text" class="align-text" style="display: none;">
                         <p>Current direction is now locked</p>
                     </div>
-                </div>
-                <!-- Auto mode-->
-                <div id="menu-dialog-content-auto-mode" style="display: none;">
-                    <!-- scrollable content -->
-                    <div class="auto-mode-info-data">
-                        <p id="auto-mode-selected-route"> Selected route:</p>
-                        <span class="margin-left-5" id="dynamicText-route-name"> </span>
-                    </div>
-                    <hr width="100%" />
-                    <div class="auto-mode-info-data">
-                        <p>Type: </p>
-                        <span class="margin-left-5" id="dynamicText-type"> </span>
-                    </div>
-                    <div class="auto-mode-info-data">
-                        <p>Total length: </p>
-                        <span class="margin-left-5" id="dynamicText-total-length"> </span>
-                    </div>
-                    <div class="auto-mode-info-data">
-                        <p>Checkpoints: </p>
-                        <span class="margin-left-5" id="dynamicText-checkpoints"> </span>
-                    </div>
-                    <!-- Not implemented yet (Not the most necessary thing :D)
-                     <div class="auto-mode-info-data">
-                        <p>Completed: </p>
-                        <span id="dynamicText-completed"> moi</span>
-                    </div> -->
-                    <div class="center-div">
-                        <button id="start-route-button" class="button-class border-radius-20px">Start</button>
-                    </div>
-                    <div id="start-route-text" class="align-text" style="display: none; color: green;">
-                        <p>Route started</p>
-                    </div>
+
                 </div>
                 <div id="bottom-bar-content">
-                    <img src="icons/right-arrow.svg" id="menu-dialog-right-arrow" width="40" height="40">
-                    <img src="icons/left-arrow.svg" id="menu-dialog-left-arrow" width="40" height="40">
-
-
                 </div>
             </div>
         </div>

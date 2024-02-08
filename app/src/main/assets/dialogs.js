@@ -1,4 +1,3 @@
-// Get references to the HTML elements
 const settingsButton = document.getElementById("settings-icon-button");
 const MenuButton = document.getElementById("menu-button");
 const SettingsDialog = document.getElementById("settings-dialog");
@@ -7,8 +6,6 @@ const AreYouSureDialog = document.getElementById("are-you-sure-dialog");
 const routesSelectbutton = document.getElementById('routes-select-container');
 const routesSelectDialog = document.getElementById('dropdown-dialog');
 const MenuHeaderContent = document.getElementById("menu-header-content");
-const MenuDialogRightArrow = document.getElementById("menu-dialog-right-arrow");
-const MenuDialogLeftArrow = document.getElementById("menu-dialog-left-arrow");
 const MenuDialogContentManualMode = document.getElementById(
   "menu-dialog-content-manual-mode"
 );
@@ -19,12 +16,8 @@ const ManualSteeringSlider = document.getElementById("manual-steering-slider");
 const ManualSteeringSliderValue = document.getElementById(
   "manual-steering-slider-value"
 );
-const ManualMotorSpeedSlider = document.getElementById(
-  "manual-motor-speed-slider"
-);
-const ManualMotorSpeedSliderValue = document.getElementById(
-  "manual-motor-speed-slider-value"
-);
+const ManualMotorSpeedSlider = document.getElementById("manual-motor-speed-slider");
+const ManualMotorSpeedSliderValue = document.getElementById("manual-motor-speed-slider-value");
 const BluetoothButton = document.getElementById("bluetooth-icon");
 const ConnectBluetoothButton = document.getElementById(
   "connect-bluetooth-button"
@@ -58,30 +51,6 @@ function settingsButtonFunction() {
 routesSelectbutton.addEventListener("click", function () {
   // Open settings menu here
   routesSelectDialog.style.display = "block";
-});
-
-// Menu dialog page switching to manual mode
-MenuDialogRightArrow.addEventListener("click", function () {
-  // Set other arrow hidden and other visible
-  MenuDialogRightArrow.style.display = "none";
-  MenuDialogLeftArrow.style.display = "block";
-  // Set manual mode elements visible and auto mode hidden
-  MenuDialogContentManualMode.style.display = "none";
-  MenuDialogContentAutoMode.style.display = "block";
-  // Set text to the menu header
-  MenuHeaderContent.textContent = "Auto mode";
-});
-
-// Menu dialog page switching to auto mode
-MenuDialogLeftArrow.addEventListener("click", function () {
-  // Set other arrow hidden and other visible
-  MenuDialogRightArrow.style.display = "block";
-  MenuDialogLeftArrow.style.display = "none";
-  // Set auto mode elements visible and manual mode hidden
-  MenuDialogContentAutoMode.style.display = "none";
-  MenuDialogContentManualMode.style.display = "block";
-  // Set text to the menu header
-  MenuHeaderContent.textContent = "Manual mode";
 });
 
 const BLEConnectedElementIDs = {
@@ -153,10 +122,17 @@ ManualMotorSpeedSlider.addEventListener("touchend", function () {
 ManualMotorSpeedSliderValue.textContent = ManualMotorSpeedSlider.value; // Initialize with the default value
 
 LockDirectionButton.addEventListener("click", function () {
-  // if route is started then perform click on the button to stop it
-  if (isRouteStarted) {
-    startRouteButton.click();
-  }
+      if (parseInt(BluetoothConnectionState) !== 2 && !isLockModeOn) {
+        // Create error message element
+        createErrorMessage(LockDirectionButton, "Bluetooth not connected", "lockdirection-button-error-message");
+        return;
+      }
+
+    // if route is started then perform click on the button to stop it
+    if (isRouteStarted) {
+      startRouteButton.click();
+    }
+
 
   if (!isLockModeOn) {
     Android.JSToBLEInterface(
@@ -186,21 +162,39 @@ ConnectBluetoothButton.addEventListener("click", function () {
   Android.connectBluetooth();
 });
 
+function createErrorMessage(parentHTMLElement, errorMessageString, errorMessageId) {
+  var errorMessage = document.getElementById(errorMessageId);
+
+  if (errorMessage) {
+    errorMessage.parentNode.removeChild(errorMessage);
+  }
+  var errorMessage = document.createElement("p");
+  errorMessage.id = errorMessageId;
+  errorMessage.innerText = errorMessageString;
+  errorMessage.style.textAlign = "center";
+  errorMessage.style.color = "red";
+
+  // Append the text element below the button
+  parentHTMLElement.parentNode.insertBefore(errorMessage, parentHTMLElement.nextSibling);
+
+  setTimeout(function() {
+    if (errorMessage && errorMessage.parentNode) {
+      errorMessage.parentNode.removeChild(errorMessage);
+    }
+  }, 5000);
+}
+
 function toggleStartRouteButton() {
-  // If bluetooth not connected return
+  // If bluetooth not connected create error message and return
   if (parseInt(BluetoothConnectionState) !== 2) {
+    // Create error message element
+    createErrorMessage(startRouteButton, "Bluetooth not connected", "start-button-error-message");
     return;
   }
-  // If no route selected return
+  // If no route selected create error message and return
   if (parseInt(currentIndex) === 0) {
-    startRouteText.children[0].textContent = "Please select a route first";
-    startRouteText.children[0].style.color = "red";
-    startRouteText.style.display = "block";
-
-    // Hide the element after 2500 ms
-    setTimeout(function () {
-      startRouteText.style.display = "none";
-    }, 2500);
+    // Create error message element
+    createErrorMessage(startRouteButton, "Please select a route first", "start-button-error-message");
     return;
   } else {
     startRouteText.children[0].textContent = "Route started";
