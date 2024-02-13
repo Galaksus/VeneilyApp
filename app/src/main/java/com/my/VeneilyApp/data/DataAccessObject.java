@@ -6,6 +6,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class DataAccessObject {
 
     private FeedReaderDbHelper dbHelper;
@@ -139,6 +143,46 @@ public class DataAccessObject {
         db.close();
     }
 
+    public void updateSettingsTable(String columnName, String value) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
 
+        ContentValues values = new ContentValues();
+        values.put(columnName, value);
+
+        // Define a condition if you want to update specific rows, otherwise, it will update all rows.
+        // For example, updating all rows:
+        // String selection = null;
+        // String[] selectionArgs = null;
+
+        // Update the rows
+        int rowsUpdated = db.update(SettingsTable.FeedEntry.TABLE_NAME, values, null, null);
+
+        Log.d("Database", "Rows updated: " + rowsUpdated);
+        db.close();
+    }
+    public String getAllSettingsDataAsJson() {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + SettingsTable.FeedEntry.TABLE_NAME, null);
+        JSONArray jsonArray = new JSONArray();
+
+        try {
+            while (cursor.moveToNext()) {
+                JSONObject jsonObject = new JSONObject();
+                int columnsCount = cursor.getColumnCount();
+                for (int i = 0; i < columnsCount; i++) {
+                    String columnName = cursor.getColumnName(i);
+                    String columnValue = cursor.getString(i);
+                    jsonObject.put(columnName, columnValue);
+                }
+                jsonArray.put(jsonObject);
+            }
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        } finally {
+            cursor.close();
+        }
+
+        return jsonArray.toString();
+    }
 }
 

@@ -260,3 +260,63 @@
   line-height: 40px; 
   color: rgb(68, 68, 68);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+.toggle-switch {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: column;
+}
+
+.toggle-switch .text-element {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: relative;
+  cursor: pointer;
+  width: 60px;
+  height: 34px;
+  margin-left: 10px;
+  background-color: #ccc;
+  border-radius: 34px;
+  transition: .4s;
+}
+
+.toggle-slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  border-radius: 50%;
+  transition: .4s;
+}
+
+input:checked + .toggle-slider {
+  background-color: #2196F3;
+}
+
+input:checked + .toggle-slider:before {
+  transform: translateX(26px);
+}

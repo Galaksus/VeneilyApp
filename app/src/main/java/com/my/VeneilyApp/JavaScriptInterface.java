@@ -14,7 +14,11 @@ import com.my.VeneilyApp.BluetoothLE.BLEHandler;
 import com.my.VeneilyApp.data.DataAccessObject;
 import com.my.VeneilyApp.data.FeedReaderContract;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 import java.util.regex.Matcher;
@@ -189,9 +193,34 @@ public class JavaScriptInterface implements GetOrientation.OrientationListener {
     public void deleteRowFromDb(long rowID){
         // deletes the specific row
         DataAccessObject.deleteRow(rowID);
+
+    }
+    @JavascriptInterface
+    public void updateSettingsDB(String jsonString) {
+        try {
+            // Parse the JSON string into a JSONObject
+            JSONObject jsonObject = new JSONObject(jsonString);
+
+            // Get the keys of the JSON object
+            Iterator<String> keys = jsonObject.keys();
+
+            // Iterate over the keys and call your function for each key-value pair
+            while (keys.hasNext()) {
+                String key = keys.next();
+                String value = jsonObject.getString(key);
+                // Call your function with each key-value pair
+                DataAccessObject.updateSettingsTable(key, value);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            // Handle JSON parsing error
+        }
     }
 
-
+    @JavascriptInterface
+    public String getSettingsData() {
+        return DataAccessObject.getAllSettingsDataAsJson();
+    }
 
     public static void callJavaScriptFunction(String javascriptCode){
         // Execute JavaScript function
