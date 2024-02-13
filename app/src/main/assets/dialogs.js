@@ -124,7 +124,7 @@ ManualMotorSpeedSliderValue.textContent = ManualMotorSpeedSlider.value; // Initi
 LockDirectionButton.addEventListener("click", function () {
       if (parseInt(BluetoothConnectionState) !== 2 && !isLockModeOn) {
         // Create error message element
-        createErrorMessage(LockDirectionButton, "Bluetooth not connected", "lockdirection-button-error-message");
+        createMessage(LockDirectionButton, "Bluetooth not connected", "lockdirection-button-error-message", "red");
         return;
       }
 
@@ -162,24 +162,24 @@ ConnectBluetoothButton.addEventListener("click", function () {
   Android.connectBluetooth();
 });
 
-function createErrorMessage(parentHTMLElement, errorMessageString, errorMessageId) {
-  var errorMessage = document.getElementById(errorMessageId);
+function createMessage(parentHTMLElement, messageString, messageId, messageTextColor) {
+  var message = document.getElementById(messageId);
 
-  if (errorMessage) {
-    errorMessage.parentNode.removeChild(errorMessage);
+  if (message) {
+    message.parentNode.removeChild(message);
   }
-  var errorMessage = document.createElement("p");
-  errorMessage.id = errorMessageId;
-  errorMessage.innerText = errorMessageString;
-  errorMessage.style.textAlign = "center";
-  errorMessage.style.color = "red";
+  var message = document.createElement("p");
+  message.id = messageId;
+  message.innerText = messageString;
+  message.style.textAlign = "center";
+  message.style.color = messageTextColor;
 
   // Append the text element below the button
-  parentHTMLElement.parentNode.insertBefore(errorMessage, parentHTMLElement.nextSibling);
+  parentHTMLElement.parentNode.insertBefore(message, parentHTMLElement.nextSibling);
 
   setTimeout(function() {
-    if (errorMessage && errorMessage.parentNode) {
-      errorMessage.parentNode.removeChild(errorMessage);
+    if (message && message.parentNode) {
+      message.parentNode.removeChild(message);
     }
   }, 5000);
 }
@@ -188,13 +188,13 @@ function toggleStartRouteButton() {
   // If bluetooth not connected create error message and return
   if (parseInt(BluetoothConnectionState) !== 2) {
     // Create error message element
-    createErrorMessage(startRouteButton, "Bluetooth not connected", "start-button-error-message");
+    createMessage(startRouteButton, "Bluetooth not connected", "start-button-error-message", "red");
     return;
   }
   // If no route selected create error message and return
   if (parseInt(currentIndex) === 0) {
     // Create error message element
-    createErrorMessage(startRouteButton, "Please select a route first", "start-button-error-message");
+    createMessage(startRouteButton, "Please select a route first", "start-button-error-message", "red");
     return;
   } else {
     startRouteText.children[0].textContent = "Route started";
