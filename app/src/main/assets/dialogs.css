@@ -64,8 +64,8 @@
 
   
 }
-#bottom-bar-content {
-  padding: 20px;
+.bottom-bar-content {
+  padding: 10px;
   background-color: #005081;
   color: #fff;
   border-bottom-left-radius: 5px;

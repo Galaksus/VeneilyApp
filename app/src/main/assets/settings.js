@@ -20,6 +20,8 @@ function updateSettingsDatabase() {
     console.log(jsonString);
     // Call the Java function with the JSON string as a parameter
     Android.updateSettingsDB(jsonString);
+    getAllSettingsData();
+
     // Creates a message that shows that settings are saved
     createMessage(SaveSettingsButton, "Settings saved", "settings-saved-message", "green");
 }

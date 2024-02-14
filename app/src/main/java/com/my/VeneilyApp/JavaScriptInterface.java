@@ -30,7 +30,7 @@ public class JavaScriptInterface implements GetOrientation.OrientationListener {
     private DataAccessObject DataAccessObject;
     BLEHandler blehandler;
     private SensorManager sensorManager;
-
+    private float azimuthDegrees_;
     private final GetLocation getLocation;
     public JavaScriptInterface(Context context, GetLocation getLocation, Activity activity) {
         this.context = context;
@@ -132,15 +132,26 @@ public class JavaScriptInterface implements GetOrientation.OrientationListener {
         }
     }
         @JavascriptInterface
-    public void JSToBLEInterface(int id) {
+    public void JSToBLEInterfaceGPSandOri(int id, String isAndroidGPSinUse, String isAndroidOrientationInUse) {
+            Log.e("testailu: ", isAndroidGPSinUse + isAndroidOrientationInUse + azimuthDegrees_);
+            final String[] BLEStringToBeSent = {""};
+            String orientationString = "";
 
-        getLocation.getCurrentLocationOnce(mainActivity, new LocationCallback() {
+            if (isAndroidOrientationInUse.equals("true")) {
+                orientationString = String.valueOf(azimuthDegrees_);
+            }
 
+            String finalOrientationString = orientationString;
+            getLocation.getCurrentLocationOnce(mainActivity, new LocationCallback() {
             @Override
             public void onLocationReceived(String latitude, String longitude) {
-                String locationData = latitude + ", " + longitude;
+                String locationData = "";
+                if (isAndroidGPSinUse.equals("true")) {
+                    locationData = latitude + ", " + longitude;
+                }
+                BLEStringToBeSent[0] = locationData + ";" + finalOrientationString;
 
-                blehandler.writeCharacteristicWithData(getCorrectUUID(id), locationData);
+                blehandler.writeCharacteristicWithData(getCorrectUUID(id), BLEStringToBeSent[0]);
             }
 
             @Override
@@ -255,7 +266,7 @@ public class JavaScriptInterface implements GetOrientation.OrientationListener {
         float azimuthDegrees = (float) Math.toDegrees(azimuth);
         float pitchDegrees = (float) Math.toDegrees(pitch);
         float rollDegrees = (float) Math.toDegrees(roll);
-
+        azimuthDegrees_ = azimuthDegrees;
         callJavaScriptFunction("setMarkerRotation('"+azimuthDegrees+"');"); // Call the desired JS function with the orientation data
     }
 

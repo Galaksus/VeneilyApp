@@ -92,6 +92,11 @@ body {
   border-radius: 20px;
 }
 
+#save-settings-button {
+  font-size: x-small;
+
+}
+
 #auto-mode-selected-route {
   font-size: large;
   margin-bottom: 5px;

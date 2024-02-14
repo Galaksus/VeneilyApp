@@ -185,6 +185,8 @@ function createMessage(parentHTMLElement, messageString, messageId, messageTextC
 }
 
 function toggleStartRouteButton() {
+  var isAndroidGPSinUse = jsObject["is_android_GPS_used"] === "true";
+  var isAndroidOrientationInUse = jsObject["is_android_orientation_used"] === "true";
   // If bluetooth not connected create error message and return
   if (parseInt(BluetoothConnectionState) !== 2) {
     // Create error message element
@@ -214,10 +216,15 @@ function toggleStartRouteButton() {
     startRouteButton.textContent = "Start";
     startRouteText.style.display = "none";
   } else {
+    // Here it sends all route coordinates via BLE
     Android.JSToBLEInterface(BLEConnectedElementIDs.allRouteCoordinates_, parseInt(currentIndex));
     // These will be run periodically given the interval time
+
+    // TODO täällä pitäis sit kattoo että mitä settingseissä on tilana ja sen mukaan lähettää Android GPS ja orientaiton dataa
+
+    // Here it sends current location every 1,5 seconds coordinates via BLE
     isRouteStarted = setInterval(function () {
-      Android.JSToBLEInterface(BLEConnectedElementIDs.startRouteButton_);
+      Android.JSToBLEInterfaceGPSandOri(BLEConnectedElementIDs.startRouteButton_, isAndroidGPSinUse, isAndroidOrientationInUse);
     }, 1500);
     startRouteButton.textContent = "Stop";
     startRouteText.style.display = "block";
