@@ -53,12 +53,28 @@ routesSelectbutton.addEventListener("click", function () {
   routesSelectDialog.style.display = "block";
 });
 
+// tags to indentify correct BLE characteristics // Muokkaa UUID:ksi?
+const BLECharacteristicUUIDs = {
+  CURRENT_LOCATION_CHARACTERISTIC_UUID:  "e0a432d7-8e2c-4380-b4b2-1568aa0412a3",
+  ROUTE_COORDINATE_CHARACTERISTIC_UUID:  "20e88205-d8cd-42a9-bcfa-4b599484d362",
+  MANUAL_MODE_DATA_CHARACTERISTIC_UUID:  "2f926b0c-c378-474e-8ced-3194b815aedd",
+  OUTBOARDMOTOR_CHARACTERISTIC_UUID:     "f53de08c-1c0c-459a-a6d5-cd26a1523060",
+  ANDROID_SETTINGS_CHARACTERISTIC_UUID:  "33c5c3d4-276d-42fc-88cd-c97422441bc1",
+  ERROR_MESSAGES_CHARACTERISTIC_UUID:    "1e41b064-7652-41ad-b723-71540355bf4c",
+};
+
+
 const BLEConnectedElementIDs = {
   ManualSteeringSlider_: 0,
   ManualMotorSpeedSlider_: 1,
   startRouteButton_: 2,
   allRouteCoordinates_: 3,
+  AndroidSettings_: 4,
+  BLEerrorMessages_: 5,
 };
+
+
+
 
 // Steering sliders
 ManualSteeringSlider.addEventListener("input", function () {
@@ -72,20 +88,16 @@ ManualSteeringSlider.addEventListener("input", function () {
   }
   ManualSteeringSliderValue.textContent = ManualSteeringSlider.value;
   Android.JSToBLEInterface(
-    BLEConnectedElementIDs.ManualSteeringSlider_,
-    parseInt(ManualSteeringSlider.value),
-    null
-  );
+    BLECharacteristicUUIDs.MANUAL_MODE_DATA_CHARACTERISTIC_UUID,
+    ManualSteeringSlider.value)
 });
 
 ManualSteeringSlider.addEventListener("touchend", function () {
   // Timeout is to ensure that bluetooth has enough time to receive the value of the slider at touchend
   setTimeout(function () {
     Android.JSToBLEInterface(
-      BLEConnectedElementIDs.ManualSteeringSlider_,
-      parseInt(ManualSteeringSlider.value),
-      null
-    );
+      BLECharacteristicUUIDs.MANUAL_MODE_DATA_CHARACTERISTIC_UUID,
+      ManualSteeringSlider.value);
   }, 75);
 });
 ManualSteeringSliderValue.textContent = ManualSteeringSlider.value; // Initialize with the default value
@@ -102,21 +114,15 @@ ManualMotorSpeedSlider.addEventListener("input", function () {
   }
 
   ManualMotorSpeedSliderValue.textContent = ManualMotorSpeedSlider.value;
-  Android.JSToBLEInterface(
-    BLEConnectedElementIDs.ManualMotorSpeedSlider_,
-    parseInt(ManualMotorSpeedSlider.value),
-    null
-  );
+  Android.JSToBLEInterface(BLECharacteristicUUIDs.OUTBOARDMOTOR_CHARACTERISTIC_UUID, String(ManualMotorSpeedSlider.value));
 });
 
 ManualMotorSpeedSlider.addEventListener("touchend", function () {
   // Timeout is to ensure that bluetooth has enough time to receive the value of the slider at touchend
   setTimeout(function () {
     Android.JSToBLEInterface(
-      BLEConnectedElementIDs.ManualMotorSpeedSlider_,
-      parseInt(ManualMotorSpeedSlider.value),
-      null
-    );
+      BLECharacteristicUUIDs.OUTBOARDMOTOR_CHARACTERISTIC_UUID,
+      ManualMotorSpeedSlider.value);
   }, 75);
 });
 ManualMotorSpeedSliderValue.textContent = ManualMotorSpeedSlider.value; // Initialize with the default value
@@ -135,20 +141,13 @@ LockDirectionButton.addEventListener("click", function () {
 
 
   if (!isLockModeOn) {
-    Android.JSToBLEInterface(
-      BLEConnectedElementIDs.ManualSteeringSlider_,
-      null,
-      "Lock"
-    );
+    Android.JSToBLEInterface(BLECharacteristicUUIDs.MANUAL_MODE_DATA_CHARACTERISTIC_UUID, "Lock");
     document.getElementById("lock-direction-text").style.display = "block";
     LockDirectionButton.textContent = "Unlock direction";
   } else {
     document.getElementById("lock-direction-text").style.display = "none";
     Android.JSToBLEInterface(
-      BLEConnectedElementIDs.ManualSteeringSlider_,
-      null,
-      "stop"
-    );
+      BLECharacteristicUUIDs.MANUAL_MODE_DATA_CHARACTERISTIC_UUID, "stop");
     LockDirectionButton.textContent = "Lock direction";
   }
   isLockModeOn = !isLockModeOn;
@@ -217,14 +216,15 @@ function toggleStartRouteButton() {
     startRouteText.style.display = "none";
   } else {
     // Here it sends all route coordinates via BLE
-    Android.JSToBLEInterface(BLEConnectedElementIDs.allRouteCoordinates_, parseInt(currentIndex));
+    // The second parameter is the current index of a route that is selected, it is then retrieved form database wi th the given index
+    Android.JSToBLEInterfaceSelectedRoute(BLECharacteristicUUIDs.ROUTE_COORDINATE_CHARACTERISTIC_UUID, parseInt(currentIndex));
     // These will be run periodically given the interval time
 
     // TODO täällä pitäis sit kattoo että mitä settingseissä on tilana ja sen mukaan lähettää Android GPS ja orientaiton dataa
 
     // Here it sends current location every 1,5 seconds coordinates via BLE
     isRouteStarted = setInterval(function () {
-      Android.JSToBLEInterfaceGPSandOri(BLEConnectedElementIDs.startRouteButton_, isAndroidGPSinUse, isAndroidOrientationInUse);
+      Android.JSToBLEInterfaceGPSandOri(BLECharacteristicUUIDs.CURRENT_LOCATION_CHARACTERISTIC_UUID, isAndroidGPSinUse, isAndroidOrientationInUse);
     }, 1500);
     startRouteButton.textContent = "Stop";
     startRouteText.style.display = "block";
@@ -304,19 +304,15 @@ function rangeSliderArithmetic(element) {
       ManualMotorSpeedSlider.value = parseInt(ManualMotorSpeedSlider.value) - 5;
       ManualMotorSpeedSliderValue.textContent = ManualMotorSpeedSlider.value;
       Android.JSToBLEInterface(
-        BLEConnectedElementIDs.ManualMotorSpeedSlider_,
-        parseInt(ManualMotorSpeedSlider.value),
-        null
-      );
+        BLECharacteristicUUIDs.OUTBOARDMOTOR_CHARACTERISTIC_UUID,
+        ManualMotorSpeedSlider.value);
       break;
     case "plus-svg-icon-speed":
       ManualMotorSpeedSlider.value = parseInt(ManualMotorSpeedSlider.value) + 5;
       ManualMotorSpeedSliderValue.textContent = ManualMotorSpeedSlider.value;
       Android.JSToBLEInterface(
-        BLEConnectedElementIDs.ManualMotorSpeedSlider_,
-        parseInt(ManualMotorSpeedSlider.value),
-        null
-      );
+        BLECharacteristicUUIDs.OUTBOARDMOTOR_CHARACTERISTIC_UUID,
+        ManualMotorSpeedSlider.value);
 
       break;
     case "minus-svg-icon-steering":
@@ -324,10 +320,8 @@ function rangeSliderArithmetic(element) {
         parseInt(ManualSteeringSliderValue.value) - 5;
       ManualSteeringSliderValue.textContent = ManualSteeringSlider.value;
       Android.JSToBLEInterface(
-        BLEConnectedElementIDs.ManualSteeringSlider_,
-        parseInt(ManualSteeringSlider.value),
-        null
-      );
+        BLECharacteristicUUIDs.MANUAL_MODE_DATA_CHARACTERISTIC_UUID,
+        ManualSteeringSlider.value);
 
       break;
     case "plus-svg-icon-steering":
@@ -335,10 +329,8 @@ function rangeSliderArithmetic(element) {
         parseInt(ManualSteeringSliderValue.value) + 5;
       ManualSteeringSliderValue.textContent = ManualSteeringSlider.value;
       Android.JSToBLEInterface(
-        BLEConnectedElementIDs.ManualSteeringSlider_,
-        parseInt(ManualSteeringSlider.value),
-        null
-      );
+        BLECharacteristicUUIDs.MANUAL_MODE_DATA_CHARACTERISTIC_UUID,
+        ManualSteeringSlider.value);
       break;
     default:
       console.log("Unexpected situation");

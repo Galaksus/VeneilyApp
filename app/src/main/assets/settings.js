@@ -10,7 +10,9 @@ var jsObject = {
     //key3: 'value3' // add more column names and values when needed
 };
 
-
+function sendSettingsViaBLE() {
+    
+}
 function updateSettingsDatabase() {
     /*
     * Updates the settings table in the database

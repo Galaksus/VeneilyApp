@@ -90,29 +90,17 @@ public class JavaScriptInterface implements GetOrientation.OrientationListener {
     }
 
     @JavascriptInterface
-    public void JSToBLEInterface(int id, int value, String data) {
-        /**
-         * "String data" is null if it is not desired to be sent via BLE within this function call
-          */
-        boolean bleWriteSuccessful = false;
-        if (data == null) {
-            bleWriteSuccessful = blehandler.writeCharacteristicWithData(getCorrectUUID(id), String.valueOf(value) /*convertedValue*/);
-        }
-        else {
-            bleWriteSuccessful = blehandler.writeCharacteristicWithData(getCorrectUUID(id), data /*convertedValue*/);
+    public void JSToBLEInterface(String uuid, String data) {
+        Log.e("testailu", "UUID: " +uuid+ " data: "+data);
 
-        }
+        boolean bleWriteSuccessful = blehandler.writeCharacteristicWithData(UUID.fromString(uuid), data);
+        Log.e("testailu", String.valueOf(bleWriteSuccessful));
 
-        Log.e("mydebug2", "Elmentti: " +id+ " value: "+data);
-
-        // Calls bluetooth write method
-        //blehandler.writeCharacteristicWithData(uuid, String.valueOf(value) /*convertedValue*/);
-        //blehandler.writeCharacteristicWithData(getCorrectUUID(id), String.valueOf(value) /*convertedValue*/);
     }
 
     @JavascriptInterface
-    public void JSToBLEInterface(int id, int selectedRoute) {
-        Log.e("mydebug2", "ID: " +id+ " selectedRoute: "+selectedRoute);
+    public void JSToBLEInterfaceSelectedRoute(String uuid, int selectedRoute) {
+        Log.e("testailu", "UUID: " +uuid+ " selectedRoute int: "+selectedRoute);
 
         // No route selected
         if (selectedRoute == 0) {
@@ -127,12 +115,12 @@ public class JavaScriptInterface implements GetOrientation.OrientationListener {
         String allDataRouteString = routeType + allRouteCoordinates;
 
         // Send all route coordinates and route type to remote BLE device, while loop should ensure the data is sent correctly
-        while (!blehandler.writeCharacteristicWithData(getCorrectUUID(id), allDataRouteString)) {
-            blehandler.writeCharacteristicWithData(getCorrectUUID(id), allDataRouteString);
+        while (!blehandler.writeCharacteristicWithData(UUID.fromString(uuid), allDataRouteString)) {
+            blehandler.writeCharacteristicWithData(UUID.fromString(uuid), allDataRouteString);
         }
     }
         @JavascriptInterface
-    public void JSToBLEInterfaceGPSandOri(int id, String isAndroidGPSinUse, String isAndroidOrientationInUse) {
+    public void JSToBLEInterfaceGPSandOri(String uuid, String isAndroidGPSinUse, String isAndroidOrientationInUse) {
             Log.e("testailu: ", isAndroidGPSinUse + isAndroidOrientationInUse + azimuthDegrees_);
             final String[] BLEStringToBeSent = {""};
             String orientationString = "";
@@ -151,7 +139,7 @@ public class JavaScriptInterface implements GetOrientation.OrientationListener {
                 }
                 BLEStringToBeSent[0] = locationData + ";" + finalOrientationString;
 
-                blehandler.writeCharacteristicWithData(getCorrectUUID(id), BLEStringToBeSent[0]);
+                blehandler.writeCharacteristicWithData(UUID.fromString(uuid), BLEStringToBeSent[0]);
             }
 
             @Override
@@ -161,24 +149,6 @@ public class JavaScriptInterface implements GetOrientation.OrientationListener {
 
             }
         });
-    }
-
-
-    UUID getCorrectUUID(int id){
-        UUID uuid = null;
-        if (id == 0) {
-            uuid = BLEHandler.MANUAL_MODE_DATA_CHARACTERISTIC_UUID;
-        }
-        else if (id == 1) {
-            uuid = BLEHandler.OUTBOARDMOTOR_CHARACTERISTIC_UUID;
-        }
-        else if (id == 2){
-            uuid = BLEHandler.CURRENT_LOCATION_CHARACTERISTIC_UUID;
-        }
-        else if (id == 3){
-            uuid = BLEHandler.ROUTE_COORDINATE_CHARACTERISTIC_UUID;
-        }
-        return uuid;
     }
 
     /* Database related methods */
