@@ -3,7 +3,7 @@ const Switch_GPS = document.getElementById("Switch-GPS");
 const Switch_orientation = document.getElementById("Switch-orientation");
 
 
-// JavaScript object (dict), where key equals table's column name and value the value for the column (string)
+// The settings, C++ equivalent of struct and JavaScript object (dict), where key equals table's column name and value the value for the column (string)
 var jsObject = {
     is_android_GPS_used: 'false',
     is_android_orientation_used: 'false'
@@ -11,7 +11,12 @@ var jsObject = {
 };
 
 function sendSettingsViaBLE() {
-    
+    /*
+    * Sends settings as a json string to microcontroller via BLE
+    */
+    var jsonString = JSON.stringify(jsObject);
+    // send data
+    Android.JSToBLEInterface(BLECharacteristicUUIDs.ANDROID_SETTINGS_CHARACTERISTIC_UUID, jsonString);
 }
 function updateSettingsDatabase() {
     /*
@@ -58,6 +63,8 @@ function initSettingsDialogWidgets() {
 SaveSettingsButton.addEventListener("click", function () {
     // Update DB
     updateSettingsDatabase(); 
+    // Send settings via bluetooth
+    sendSettingsViaBLE();
 });
 
 Switch_GPS.addEventListener("change", function () {
