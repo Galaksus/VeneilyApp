@@ -32,7 +32,8 @@ const startRouteText = document.getElementById("start-route-text");
 const buttonsClass = document.querySelectorAll(".button-class");
 
 let isLockModeOn = false;
-let isRouteStarted; // Variable to store the interval id meaning if the route is started or not
+let isRouteStarted = false; // Variable to store the interval id meaning if the route is started or not
+let interValForAutoModeBLE; // Interval for sending current location and orientation
 
 // Function to close the dialog
 function closeDialog(element) {
@@ -94,11 +95,11 @@ ManualSteeringSlider.addEventListener("input", function () {
 
 ManualSteeringSlider.addEventListener("touchend", function () {
   // Timeout is to ensure that bluetooth has enough time to receive the value of the slider at touchend
-  setTimeout(function () {
-    Android.JSToBLEInterface(
-      BLECharacteristicUUIDs.MANUAL_MODE_DATA_CHARACTERISTIC_UUID,
-      ManualSteeringSlider.value);
-  }, 75);
+  //setTimeout(function () {
+  //  Android.JSToBLEInterface(
+  //    BLECharacteristicUUIDs.MANUAL_MODE_DATA_CHARACTERISTIC_UUID,
+  //    ManualSteeringSlider.value);
+  //}, 75);
 });
 ManualSteeringSliderValue.textContent = ManualSteeringSlider.value; // Initialize with the default value
 
@@ -119,11 +120,11 @@ ManualMotorSpeedSlider.addEventListener("input", function () {
 
 ManualMotorSpeedSlider.addEventListener("touchend", function () {
   // Timeout is to ensure that bluetooth has enough time to receive the value of the slider at touchend
-  setTimeout(function () {
-    Android.JSToBLEInterface(
-      BLECharacteristicUUIDs.OUTBOARDMOTOR_CHARACTERISTIC_UUID,
-      ManualMotorSpeedSlider.value);
-  }, 75);
+  //setTimeout(function () {
+  //  Android.JSToBLEInterface(
+  //    BLECharacteristicUUIDs.OUTBOARDMOTOR_CHARACTERISTIC_UUID,
+  //    ManualMotorSpeedSlider.value);
+  //}, 75);
 });
 ManualMotorSpeedSliderValue.textContent = ManualMotorSpeedSlider.value; // Initialize with the default value
 
@@ -203,31 +204,51 @@ function toggleStartRouteButton() {
     startRouteText.style.display = "none";
   }
 
+  isRouteStarted = !isRouteStarted; // Update isRouteStarted state
+
   // if direction is locked then perform click on the button to stop it
   if (isLockModeOn) {
     LockDirectionButton.click();
   }
 
-  // if a route selected start calling Java to send current location periodically
+
+  // if direction is locked then perform click on the button to stop it
+  if (isLockModeOn) {
+    LockDirectionButton.click();
+  }
+  console.log("RouteStarted: ", isRouteStarted);
+  
   if (isRouteStarted) {
-    clearInterval(isRouteStarted);
-    isRouteStarted = null;
-    startRouteButton.textContent = "Start";
-    startRouteText.style.display = "none";
-  } else {
-    // Here it sends all route coordinates via BLE
-    // The second parameter is the current index of a route that is selected, it is then retrieved form database wi th the given index
-    Android.JSToBLEInterfaceSelectedRoute(BLECharacteristicUUIDs.ROUTE_COORDINATE_CHARACTERISTIC_UUID, parseInt(currentIndex));
-    // These will be run periodically given the interval time
-
-    // TODO täällä pitäis sit kattoo että mitä settingseissä on tilana ja sen mukaan lähettää Android GPS ja orientaiton dataa
-
-    // Here it sends current location every 1,5 seconds coordinates via BLE
-    isRouteStarted = setInterval(function () {
-      Android.JSToBLEInterfaceGPSandOri(BLECharacteristicUUIDs.CURRENT_LOCATION_CHARACTERISTIC_UUID, isAndroidGPSinUse, isAndroidOrientationInUse);
-    }, 1500);
     startRouteButton.textContent = "Stop";
     startRouteText.style.display = "block";
+    Android.JSToBLEInterface(BLECharacteristicUUIDs.CURRENT_LOCATION_CHARACTERISTIC_UUID, "start");
+  
+    // Here it sends all route coordinates via BLE
+    // The second parameter is the current index of a route that is selected, it is then retrieved from the database with the given index
+    Android.JSToBLEInterfaceSelectedRoute(BLECharacteristicUUIDs.ROUTE_COORDINATE_CHARACTERISTIC_UUID, parseInt(currentIndex));
+  
+    // Send periodic data of Android GPS or Orientation if one or both of them are in use
+    if (isAndroidGPSinUse || isAndroidOrientationInUse) {
+      // Here it sends the current location every 1.5 seconds coordinates via BLE
+      interValForAutoModeBLE = setInterval(function () {
+        console.log("Sending location...");
+        Android.JSToBLEInterfaceGPSandOri(BLECharacteristicUUIDs.CURRENT_LOCATION_CHARACTERISTIC_UUID, isAndroidGPSinUse, isAndroidOrientationInUse);
+      }, 1500);
+      console.log("Interval started: ", interValForAutoModeBLE);
+    }
+  } else {
+    startRouteButton.textContent = "Start";
+    startRouteText.style.display = "none";
+  
+    // Clear the interval if it's set
+    if (interValForAutoModeBLE) {
+      clearInterval(interValForAutoModeBLE);
+      console.log("Interval cleared: ", interValForAutoModeBLE);
+      interValForAutoModeBLE = null;
+    }
+  
+    // Send "stop" 
+    Android.JSToBLEInterface(BLECharacteristicUUIDs.CURRENT_LOCATION_CHARACTERISTIC_UUID, "stop");
   }
 }
 
@@ -261,6 +282,8 @@ function setBluetoothConnectionStateText(BLEState) {
         BluetoothConnectionText.style.color = "green"; // Connected (green color)
         ConnectBluetoothButton.disabled = true;
        // BluetoothButton.src = 'icons/bluetooth-icon-green.svg';
+       // Send settings to ESP32
+       sendSettingsViaBLE();
 
        // Android.BLEReadRequest(); // Tää ei toimi (BLEHandlerin puolella Androidin Java-koodissa siis)
         break;

@@ -91,12 +91,24 @@ public class JavaScriptInterface implements GetOrientation.OrientationListener {
 
     @JavascriptInterface
     public void JSToBLEInterface(String uuid, String data) {
-        Log.e("testailu", "UUID: " +uuid+ " data: "+data);
+        long startTime = System.currentTimeMillis();
+        long timeout = 1000; // 1 second timeout
+        boolean success = false;
 
-        boolean bleWriteSuccessful = blehandler.writeCharacteristicWithData(UUID.fromString(uuid), data);
-        Log.e("testailu", String.valueOf(bleWriteSuccessful));
+        while (!success) {
+            // Check if timeout has been reached
+            if (System.currentTimeMillis() - startTime > timeout) {
+                // Timeout reached, break out of the loop
+                Log.e("bluetoothscan", "JSToBLEInterface function exceeded timeout time!!!");
+                break;
+            }
+
+            // Try to write the characteristic
+            success = blehandler.writeCharacteristicWithData(UUID.fromString(uuid), data);
+        }
 
     }
+
 
     @JavascriptInterface
     public void JSToBLEInterfaceSelectedRoute(String uuid, int selectedRoute) {
@@ -114,10 +126,23 @@ public class JavaScriptInterface implements GetOrientation.OrientationListener {
         // combine the strings
         String allDataRouteString = routeType + allRouteCoordinates;
 
+        // Safety mechanism to stop the loop if exceeds over "timeout" seconds
+        long startTime = System.currentTimeMillis();
+        long timeout = 1000; // 1 second timeout
+        boolean success = false;
         // Send all route coordinates and route type to remote BLE device, while loop should ensure the data is sent correctly
-        while (!blehandler.writeCharacteristicWithData(UUID.fromString(uuid), allDataRouteString)) {
-            blehandler.writeCharacteristicWithData(UUID.fromString(uuid), allDataRouteString);
+        while (!success) {
+            // Check if timeout has been reached
+            if (System.currentTimeMillis() - startTime > timeout) {
+                // Timeout reached, break out of the loop
+                Log.e("bluetoothscan", "JSToBLEInterfaceSelectedRoute function exceeded timeout time!!!");
+                break;
+            }
+
+            // Try to write the characteristic
+            success = blehandler.writeCharacteristicWithData(UUID.fromString(uuid), allDataRouteString);
         }
+
     }
         @JavascriptInterface
     public void JSToBLEInterfaceGPSandOri(String uuid, String isAndroidGPSinUse, String isAndroidOrientationInUse) {
