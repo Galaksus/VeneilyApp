@@ -89,6 +89,16 @@ public class JavaScriptInterface implements GetOrientation.OrientationListener {
         blehandler.startLeDeviceScanning();
     }
 
+
+    @JavascriptInterface
+    public void JSToBLEInterfaceSliders(String uuid, String data) {
+        // There will be many send requests failing but it is fine...
+        // with a while loop this doesn't work smoothly like in other similar functions that I use
+        boolean success = false;
+        // Try to write the characteristic
+        success = blehandler.writeCharacteristicWithData(UUID.fromString(uuid), data);
+    }
+
     @JavascriptInterface
     public void JSToBLEInterface(String uuid, String data) {
         long startTime = System.currentTimeMillis();
@@ -106,7 +116,6 @@ public class JavaScriptInterface implements GetOrientation.OrientationListener {
             // Try to write the characteristic
             success = blehandler.writeCharacteristicWithData(UUID.fromString(uuid), data);
         }
-
     }
 
 

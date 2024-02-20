@@ -88,18 +88,18 @@ ManualSteeringSlider.addEventListener("input", function () {
     LockDirectionButton.click();
   }
   ManualSteeringSliderValue.textContent = ManualSteeringSlider.value;
-  Android.JSToBLEInterface(
+  Android.JSToBLEInterfaceSliders(
     BLECharacteristicUUIDs.MANUAL_MODE_DATA_CHARACTERISTIC_UUID,
     ManualSteeringSlider.value)
 });
 
 ManualSteeringSlider.addEventListener("touchend", function () {
   // Timeout is to ensure that bluetooth has enough time to receive the value of the slider at touchend
-  //setTimeout(function () {
-  //  Android.JSToBLEInterface(
-  //    BLECharacteristicUUIDs.MANUAL_MODE_DATA_CHARACTERISTIC_UUID,
-  //    ManualSteeringSlider.value);
-  //}, 75);
+  setTimeout(function () {
+    Android.JSToBLEInterfaceSliders(
+      BLECharacteristicUUIDs.MANUAL_MODE_DATA_CHARACTERISTIC_UUID,
+      ManualSteeringSlider.value);
+  }, 75);
 });
 ManualSteeringSliderValue.textContent = ManualSteeringSlider.value; // Initialize with the default value
 
@@ -115,16 +115,16 @@ ManualMotorSpeedSlider.addEventListener("input", function () {
   }
 
   ManualMotorSpeedSliderValue.textContent = ManualMotorSpeedSlider.value;
-  Android.JSToBLEInterface(BLECharacteristicUUIDs.OUTBOARDMOTOR_CHARACTERISTIC_UUID, String(ManualMotorSpeedSlider.value));
+  Android.JSToBLEInterfaceSliders(BLECharacteristicUUIDs.OUTBOARDMOTOR_CHARACTERISTIC_UUID, String(ManualMotorSpeedSlider.value));
 });
 
 ManualMotorSpeedSlider.addEventListener("touchend", function () {
   // Timeout is to ensure that bluetooth has enough time to receive the value of the slider at touchend
-  //setTimeout(function () {
-  //  Android.JSToBLEInterface(
-  //    BLECharacteristicUUIDs.OUTBOARDMOTOR_CHARACTERISTIC_UUID,
-  //    ManualMotorSpeedSlider.value);
-  //}, 75);
+  setTimeout(function () {
+    Android.JSToBLEInterfaceSliders(
+      BLECharacteristicUUIDs.OUTBOARDMOTOR_CHARACTERISTIC_UUID,
+      ManualMotorSpeedSlider.value);
+  }, 75);
 });
 ManualMotorSpeedSliderValue.textContent = ManualMotorSpeedSlider.value; // Initialize with the default value
 
