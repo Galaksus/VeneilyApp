@@ -255,10 +255,13 @@
                         <input type="range" class="range-slider" min="0" max="100" value="50"
                             id="manual-motor-speed-slider">
                     </div>
-                    <img src="icons/minus-icon.svg" id="minus-svg-icon-speed" width="24" height="24"
+                    <div class="minus-plus-icon-container">
+
+                    <img src="icons/minus-icon.svg" class="minus-svg-icon" id="minus-svg-icon-speed" width="24" height="24"
                         onclick="rangeSliderArithmetic(this, false);">
-                    <img src="icons/plus-icon.svg" id="plus-svg-icon-speed" width="24" height="24"
+                    <img src="icons/plus-icon.svg" class="plus-svg-icon" id="plus-svg-icon-speed" width="24" height="24"
                         onclick="rangeSliderArithmetic(this, true);">
+                    </div>
 
                     <hr class="line-1" color="gray" size="2">
 
@@ -270,13 +273,21 @@
                         <input type="range" class="range-slider" min="0" max="100" value="50"
                             id="manual-steering-slider">
                     </div>
-                    <img src="icons/minus-icon.svg" id="minus-svg-icon-steering" width="24" height="24"
-                        onclick="rangeSliderArithmetic(this, false);">
-                    <img src="icons/plus-icon.svg" id="plus-svg-icon-steering" width="24" height="24"
-                        onclick="rangeSliderArithmetic(this, true);">
-                    <button id="lock-direction-button" class="button-class  border-radius-20px">Lock direction</button>
-                    <div id="lock-direction-text" class="align-text" style="display: none;">
-                        <p>Current direction is now locked</p>
+                    <div class="minus-plus-icon-container">
+                        <img src="icons/minus-icon.svg" class="minus-svg-icon" id="minus-svg-icon-steer" width="24" height="24"
+                            onclick="rangeSliderArithmetic(this, false);">
+                        <img src="icons/plus-icon.svg" class="plus-svg-icon" id="plus-svg-icon-steer" width="24" height="24"
+                            onclick="rangeSliderArithmetic(this, true);">
+                    </div>
+                    <hr class="line-1" color="gray" size="2">
+
+                    <div class="menu-button-container">
+                        <button id="lock-direction-button" class="button-class  border-radius-20px">Lock direction</button>
+                        <button id="anchor-button" class="button-class  border-radius-20px">Set anchor</button>
+
+                            <div id="lock-direction-text" class="align-text" style="display: none;">
+                                <p>Current direction is now locked</p>
+                            </div>
                     </div>
 
                 </div>

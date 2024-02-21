@@ -29,7 +29,6 @@ let BluetoothConnectionState = 10; // default value meaning "Not connected"
 const LockDirectionButton = document.getElementById("lock-direction-button");
 const startRouteButton = document.getElementById("start-route-button");
 const startRouteText = document.getElementById("start-route-text");
-const buttonsClass = document.querySelectorAll(".button-class");
 
 let isLockModeOn = false;
 let isRouteStarted = false; // Variable to store the interval id meaning if the route is started or not
@@ -131,7 +130,7 @@ ManualMotorSpeedSliderValue.textContent = ManualMotorSpeedSlider.value; // Initi
 LockDirectionButton.addEventListener("click", function () {
       if (parseInt(BluetoothConnectionState) !== 2 && !isLockModeOn) {
         // Create error message element
-        createMessage(LockDirectionButton, "Bluetooth not connected", "lockdirection-button-error-message", "red");
+        createMessage("Bluetooth not connected", "lockdirection-button-error-message", "red", "black");
         return;
       }
 
@@ -162,7 +161,7 @@ ConnectBluetoothButton.addEventListener("click", function () {
   Android.connectBluetooth();
 });
 
-function createMessage(parentHTMLElement, messageString, messageId, messageTextColor) {
+function createMessage(messageString, messageId, messageTextColor, messageBackgroundColor) {
   var message = document.getElementById(messageId);
 
   if (message) {
@@ -172,16 +171,31 @@ function createMessage(parentHTMLElement, messageString, messageId, messageTextC
   message.id = messageId;
   message.innerText = messageString;
   message.style.textAlign = "center";
+  message.style.width = "100%";
   message.style.color = messageTextColor;
+  message.style.backgroundColor = messageBackgroundColor;
+  message.style.padding = "10px"; // Adding some padding for better readability
+  message.style.borderRadius = "5px"; // Adding rounded corners
+  message.style.position = "fixed";
+  message.style.top = "50%";
+  message.style.opacity = "0.9";
+  message.style.left = "50%";
+  message.style.transform = "translate(-50%, -50%)";
+  message.style.zIndex = 10001;
+  // Append the message element to the body
+  document.body.appendChild(message);
 
-  // Append the text element below the button
-  parentHTMLElement.parentNode.insertBefore(message, parentHTMLElement.nextSibling);
+  // Remove message after 2.5 seconds
+  setTimeout(removeMessage, 2500);
 
-  setTimeout(function() {
+  // Remove message when clicking anywhere on the message
+  document.addEventListener('click', removeMessage);
+  
+  function removeMessage() {
     if (message && message.parentNode) {
       message.parentNode.removeChild(message);
     }
-  }, 5000);
+  }
 }
 
 function toggleStartRouteButton() {
@@ -190,13 +204,13 @@ function toggleStartRouteButton() {
   // If bluetooth not connected create error message and return
   if (parseInt(BluetoothConnectionState) !== 2) {
     // Create error message element
-    createMessage(startRouteButton, "Bluetooth not connected", "start-button-error-message", "red");
+    createMessage("Bluetooth not connected", "start-button-error-message", "red", "black");
     return;
   }
   // If no route selected create error message and return
   if (parseInt(currentIndex) === 0) {
     // Create error message element
-    createMessage(startRouteButton, "Please select a route first", "start-button-error-message", "red");
+    createMessage("Please select a route first", "start-button-error-message", "red", "black");
     return;
   } else {
     startRouteText.children[0].textContent = "Route started";
@@ -326,32 +340,32 @@ function rangeSliderArithmetic(element) {
     case "minus-svg-icon-speed":
       ManualMotorSpeedSlider.value = parseInt(ManualMotorSpeedSlider.value) - 5;
       ManualMotorSpeedSliderValue.textContent = ManualMotorSpeedSlider.value;
-      Android.JSToBLEInterface(
+      Android.JSToBLEInterfaceSliders(
         BLECharacteristicUUIDs.OUTBOARDMOTOR_CHARACTERISTIC_UUID,
         ManualMotorSpeedSlider.value);
       break;
     case "plus-svg-icon-speed":
       ManualMotorSpeedSlider.value = parseInt(ManualMotorSpeedSlider.value) + 5;
       ManualMotorSpeedSliderValue.textContent = ManualMotorSpeedSlider.value;
-      Android.JSToBLEInterface(
+      Android.JSToBLEInterfaceSliders(
         BLECharacteristicUUIDs.OUTBOARDMOTOR_CHARACTERISTIC_UUID,
         ManualMotorSpeedSlider.value);
 
       break;
-    case "minus-svg-icon-steering":
+    case "minus-svg-icon-steer":
       ManualSteeringSlider.value =
         parseInt(ManualSteeringSliderValue.value) - 5;
       ManualSteeringSliderValue.textContent = ManualSteeringSlider.value;
-      Android.JSToBLEInterface(
+      Android.JSToBLEInterfaceSliders(
         BLECharacteristicUUIDs.MANUAL_MODE_DATA_CHARACTERISTIC_UUID,
         ManualSteeringSlider.value);
 
       break;
-    case "plus-svg-icon-steering":
+    case "plus-svg-icon-steer":
       ManualSteeringSlider.value =
         parseInt(ManualSteeringSliderValue.value) + 5;
       ManualSteeringSliderValue.textContent = ManualSteeringSlider.value;
-      Android.JSToBLEInterface(
+      Android.JSToBLEInterfaceSliders(
         BLECharacteristicUUIDs.MANUAL_MODE_DATA_CHARACTERISTIC_UUID,
         ManualSteeringSlider.value);
       break;
@@ -360,24 +374,7 @@ function rangeSliderArithmetic(element) {
   }
 }
 
-// This function makes buttons change color onClick and returns to normal color after 200ms
-// Add a click event listener to each button
-buttonsClass.forEach(function (button) {
-  button.addEventListener("click", function () {
-    if (
-      button.id === "connect-bluetooth-button"
-    ) {
-      return;
-    }
-    // Change the background color on click
-    this.style.backgroundColor = "#2980b9"; // New color
 
-    // Set a timeout to revert the background color after 200 ms delay
-    setTimeout(function () {
-      button.style.backgroundColor = "#3498db"; // Revert to default color
-    }, 200);
-  });
-});
 
 // Initialize default value
 setBluetoothConnectionStateText(BluetoothConnectionState);

@@ -1,5 +1,6 @@
 const svgButtons = document.querySelectorAll(".svg-button");
 const switchContainer = document.querySelector(".switch-container");
+const buttonsClass = document.querySelectorAll(".button-class");
 
 svgButtons.forEach(button => {
   // Mouseover event for desktop
@@ -18,3 +19,21 @@ svgButtons.forEach(button => {
     button.style.border = ""; // Reset to default
   });
 });
+
+// This function makes buttons change color onClick and returns to normal color after 200ms
+// Add a click event listener to each button
+buttonsClass.forEach(function (button) {
+
+  // Touchstart event for mobile
+  button.addEventListener("touchstart", (event) => {
+      button.style.background = "linear-gradient(to bottom, rgba(52,152,219, 0.8), rgba(100, 175, 255, 1))";
+  
+    });
+
+      // Touchend event for mobile
+  button.addEventListener("touchend", () => {
+    // Revert the touch styles
+    button.style.background = ""; // Reset to default
+    button.style.border = ""; // Reset to default
+  });
+}); 

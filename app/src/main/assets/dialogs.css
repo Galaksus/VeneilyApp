@@ -99,12 +99,12 @@
 }
 
 #menu-dialog-content-manual-mode {
-  padding: 20px;
+  /*padding: 20px;*/
   padding-top: 0px;
   /* Enable scrolling for dialog content */
-  overflow-y: auto;
+  overflow-y: hidden;
   /* Set a maximum height for the scrollable content */
-  max-height: 300px;
+  /*max-height: 500px;*/
 
 }
 
@@ -155,7 +155,7 @@
 .range-slider {
   -webkit-appearance: none;
   appearance: none;
-  width: 100%;
+  width: 85%;
   height: 10px;
   background: #ddd;
   border-radius: 5px;
@@ -205,18 +205,27 @@
   color: #000000;
 }
 
-#minus-svg-icon-speed,
-#minus-svg-icon-steering {
+.minus-svg-icon {
   position: relative;
+  display: grid;
+  justify-content: start;
+  padding: 10px;
+  padding-left: 20px;
 }
 
-#plus-svg-icon-steering,
-#plus-svg-icon-speed  {
-  position: absolute;
-  right: 0px;
-  padding-right: 18px;
+.plus-svg-icon{
+  position: relative;
+  display: grid;
+  justify-content: end;
+  padding: 10px;
+  padding-right: 20px;
+
 }
 
+.minus-plus-icon-container {
+  display: flex;
+  justify-content: space-between;
+}
 .align-text {
   text-align: center;
 }
@@ -227,16 +236,29 @@
   right: 0px;
 }
 
-#lock-direction-button, 
-#start-route-button {
+
+#start-route-button
+ {
   margin: 0 auto;
   display: block;
   font-size: small;
-  
+}
+
+#anchor-button,
+#lock-direction-button {
+  font-size: small;
 }
 
 .center-div {
   text-align: center;
+}
+
+.menu-button-container {
+  padding-top: 15px;
+  padding-bottom: 5px;
+  display: flex;
+  justify-content: space-around;
+  
 }
 
 #bluetooth-connection-state {

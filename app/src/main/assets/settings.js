@@ -15,8 +15,11 @@ function sendSettingsViaBLE() {
     * Sends settings as a json string to microcontroller via BLE
     */
     var jsonString = JSON.stringify(jsObject);
-    // send data
-    Android.JSToBLEInterface(BLECharacteristicUUIDs.ANDROID_SETTINGS_CHARACTERISTIC_UUID, jsonString);
+
+    // send data if BLE is connected
+    if (BluetoothConnectionState == 2) { // 2 means "Conneted" in 'BluetoothConnectionStates' variable
+        Android.JSToBLEInterface(BLECharacteristicUUIDs.ANDROID_SETTINGS_CHARACTERISTIC_UUID, jsonString);
+    }
 }
 function updateSettingsDatabase() {
     /*
@@ -30,7 +33,7 @@ function updateSettingsDatabase() {
     getAllSettingsData();
 
     // Creates a message that shows that settings are saved
-    createMessage(SaveSettingsButton, "Settings saved", "settings-saved-message", "green");
+    createMessage("Settings saved", "settings-saved-message", "green", "black");
 }
 
 function getAllSettingsData() {
