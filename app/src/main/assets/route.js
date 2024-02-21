@@ -169,6 +169,12 @@ function DrawButtonFunction() {
   /*
   * Toggle between 'polyline' and 'polygon' modes
   */ 
+  if (markers.length < 3) {
+    // Draw button clickable if >= 3 markers on map
+    createMessage("At least 3 markers required to change path type to loop", "start-button-error-message", "red", "black");
+    return;
+  } 
+
   if (drawMode === "polyline") {
     drawMode = "polygon";
     drawButtonImage.src = "icons/route-type-loop.svg";
@@ -214,23 +220,6 @@ function updateDrawing() {
     } else if (drawMode === "polygon") {
       drawPolygon(latlngs);
     }
-  }
-  // draButton is avaialble if there is 3 or more markers on map
-  //DrawButton.disabled = (markers.length >= 3) ? false : true;
-
-  const SaveButton = document.getElementById("save-button");
-  const DrawButton = document.getElementById("draw-button");
-  if (markers.length >= 2) {
-    // Save button clickable if >= 2 markers on map
-    SaveButton.style.pointerEvents = "auto"; // Enable pointer events
-  } else {
-    SaveButton.style.pointerEvents = "none"; // Disable pointer events
-  }
-  if (markers.length >= 3) {
-    // Draw button clickable if >= 3 markers on map
-    DrawButton.style.pointerEvents = "auto"; // Enable pointer events
-  } else {
-    DrawButton.style.pointerEvents = "none"; // Disable pointer events
   }
 }
 

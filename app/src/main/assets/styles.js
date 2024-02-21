@@ -1,6 +1,8 @@
 const svgButtons = document.querySelectorAll(".svg-button");
 const switchContainer = document.querySelector(".switch-container");
 const buttonsClass = document.querySelectorAll(".button-class");
+const dialogOkCancelButtons = document.querySelectorAll(".dialog-ok-cancel-buttons");
+const closeDialogButton = document.querySelectorAll(".close-dialog-button");
 
 svgButtons.forEach(button => {
   // Mouseover event for desktop
@@ -37,3 +39,29 @@ buttonsClass.forEach(function (button) {
     button.style.border = ""; // Reset to default
   });
 }); 
+
+dialogOkCancelButtons.forEach(button => {
+  button.addEventListener("touchstart", function(event) {
+      // Change the background color to black
+      button.style.backgroundColor = "#d3d3d3";
+  });
+   // Touchend event for mobile
+   button.addEventListener("touchend", () => {
+    // Revert the touch styles
+    button.style.backgroundColor = ""; // Reset to default
+   // button.style.border = ""; // Reset to default
+  });
+});
+
+closeDialogButton.forEach(button => {
+  button.addEventListener("touchstart", function(event) {
+      // Change the background color to black
+      button.style.color = "black";
+  });
+   // Touchend event for mobile
+   button.addEventListener("touchend", () => {
+    // Revert the touch styles
+    button.style.color = ""; // Reset to default
+   // button.style.border = ""; // Reset to default
+  });
+});

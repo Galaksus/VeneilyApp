@@ -18,7 +18,6 @@
 <body>
     <div id="map-container">
         <div id="map"></div>
-
         <img src="icons/delete-icon-black.svg" id="delete-draggable-marker" class="center-div" style="display: none;">
 
         <!-- Shown only when permission is not granted for location updates -->
@@ -48,12 +47,12 @@
                 <p class="menu-text">More</p>
             </div>
 
-            <div class="svg-button default-display-none default-pointerEvent-none" id="save-button" onclick="SaveButtonFunction()">
+            <div class="svg-button default-display-none" id="save-button" onclick="SaveButtonFunction()">
               <img class="svg-image-2" src="icons/save.svg" alt="Save Icon">
               <p class="menu-text">Save</p>
             </div>
 
-            <div class="svg-button default-display-none default-pointerEvent-none" id="draw-button" onclick="DrawButtonFunction()">
+            <div class="svg-button default-display-none" id="draw-button" onclick="DrawButtonFunction()">
                 <img class="svg-image" src="icons/route-type-path.svg" alt="Route type Icon">
                 <p class="menu-text"id="path-type">Type: path</p>
               </div>
@@ -284,10 +283,9 @@
                     <div class="menu-button-container">
                         <button id="lock-direction-button" class="button-class  border-radius-20px">Lock direction</button>
                         <button id="anchor-button" class="button-class  border-radius-20px">Set anchor</button>
-
-                            <div id="lock-direction-text" class="align-text" style="display: none;">
-                                <p>Current direction is now locked</p>
-                            </div>
+                    </div>
+                    <div id="lock-direction-text" class="align-text" style="display: none; color: green;">
+                        <p>Current direction is now locked</p>
                     </div>
 
                 </div>

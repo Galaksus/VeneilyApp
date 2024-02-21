@@ -108,23 +108,8 @@
 
 }
 
-/*  enable / disable classes for manual mode controls    */
-/* TODO TÄSTÄ PUUTTUU VIELÄ JAVASCRIPT TOTEUTUS JOLLA VAIHDETAAN ENABLE/DISABLE -TILAA BLUETOOTH CONNECTIONIN MUKAAN! */
-.enabled {
-  /* Define the styles for the enabled state */
-  cursor: pointer; /* Make it look clickable */
-  pointer-events: auto; /* Allow user interactions */
-  opacity: 1; /* Adjust the opacity value as needed */
-}
-
-.disabled {
-  /* Define the styles for the disabled state */
-  pointer-events: none;
-  opacity: 0.5; /* Adjust the opacity value as needed */
-}
-
 /* Close button style */
-.close-dialog-button{
+.close-dialog-button {
   position: absolute;
   top: 10px;
   right: 10px;

@@ -7,6 +7,10 @@ var routeType = ""; // Need to be global
 
 // Save to Db on button click
 function SaveButtonFunction() {
+  if (markers.length < 2) {
+    createMessage("At least 2 markers required to save", "start-button-error-message", "red", "black");
+    return;
+  } 
   // routeType is route if polyline and loop if polygon on map
   routeType = drawMode === 'polyline' ? 'Route' : 'Loop';
   

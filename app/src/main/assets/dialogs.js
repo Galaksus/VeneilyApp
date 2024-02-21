@@ -162,6 +162,7 @@ ConnectBluetoothButton.addEventListener("click", function () {
 });
 
 function createMessage(messageString, messageId, messageTextColor, messageBackgroundColor) {
+  console.log("w");
   var message = document.getElementById(messageId);
 
   if (message) {
@@ -170,18 +171,9 @@ function createMessage(messageString, messageId, messageTextColor, messageBackgr
   var message = document.createElement("p");
   message.id = messageId;
   message.innerText = messageString;
-  message.style.textAlign = "center";
-  message.style.width = "100%";
   message.style.color = messageTextColor;
   message.style.backgroundColor = messageBackgroundColor;
-  message.style.padding = "10px"; // Adding some padding for better readability
-  message.style.borderRadius = "5px"; // Adding rounded corners
-  message.style.position = "fixed";
-  message.style.top = "50%";
-  message.style.opacity = "0.9";
-  message.style.left = "50%";
-  message.style.transform = "translate(-50%, -50%)";
-  message.style.zIndex = 10001;
+  message.className = "error-message"; // Assigning the class for styling
   // Append the message element to the body
   document.body.appendChild(message);
 
@@ -189,7 +181,7 @@ function createMessage(messageString, messageId, messageTextColor, messageBackgr
   setTimeout(removeMessage, 2500);
 
   // Remove message when clicking anywhere on the message
-  document.addEventListener('click', removeMessage);
+  message.addEventListener('click', removeMessage);
   
   function removeMessage() {
     if (message && message.parentNode) {
