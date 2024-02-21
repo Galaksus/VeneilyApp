@@ -162,7 +162,6 @@ ConnectBluetoothButton.addEventListener("click", function () {
 });
 
 function createMessage(messageString, messageId, messageTextColor, messageBackgroundColor) {
-  console.log("w");
   var message = document.getElementById(messageId);
 
   if (message) {
