@@ -5,6 +5,8 @@ const BluetoothDialog = document.getElementById("bluetooth-dialog");
 const AreYouSureDialog = document.getElementById("are-you-sure-dialog");
 const routesSelectbutton = document.getElementById('routes-select-container');
 const routesSelectDialog = document.getElementById('dropdown-dialog');
+const backwardRadioButton = document.getElementById("backward");
+const forwardRadioButton = document.getElementById("forward");
 const MenuHeaderContent = document.getElementById("menu-header-content");
 const MenuDialogContentManualMode = document.getElementById(
   "menu-dialog-content-manual-mode"
@@ -86,6 +88,7 @@ ManualSteeringSlider.addEventListener("input", function () {
   if (isLockModeOn) {
     LockDirectionButton.click();
   }
+
   ManualSteeringSliderValue.textContent = ManualSteeringSlider.value;
   Android.JSToBLEInterfaceSliders(
     BLECharacteristicUUIDs.MANUAL_MODE_DATA_CHARACTERISTIC_UUID,
@@ -114,7 +117,17 @@ ManualMotorSpeedSlider.addEventListener("input", function () {
   }
 
   ManualMotorSpeedSliderValue.textContent = ManualMotorSpeedSlider.value;
-  Android.JSToBLEInterfaceSliders(BLECharacteristicUUIDs.OUTBOARDMOTOR_CHARACTERISTIC_UUID, String(ManualMotorSpeedSlider.value));
+  
+  let valueToSend; 
+  if (forwardRadioButton.checked) {
+    valueToSend = ManualMotorSpeedSlider.value;
+    //console.log(typeof(ManualSteeringSlider.value));
+  }
+  else {
+    valueToSend = "-" + ManualMotorSpeedSlider.value;
+  }
+
+  Android.JSToBLEInterfaceSliders(BLECharacteristicUUIDs.OUTBOARDMOTOR_CHARACTERISTIC_UUID, String(valueToSend));
 });
 
 ManualMotorSpeedSlider.addEventListener("touchend", function () {
@@ -365,6 +378,15 @@ function rangeSliderArithmetic(element) {
   }
 }
 
+function fwdBwdRadioButtonChanged() {
+  ManualMotorSpeedSlider.value = 0;
+  ManualMotorSpeedSliderValue.textContent = ManualMotorSpeedSlider.value;
+  setTimeout(function () {
+    Android.JSToBLEInterfaceSliders(
+      BLECharacteristicUUIDs.MANUAL_MODE_DATA_CHARACTERISTIC_UUID,
+      ManualMotorSpeedSlider.value);
+  }, 75);
+}
 
 
 // Initialize default value

@@ -3,6 +3,7 @@ const switchContainer = document.querySelector(".switch-container");
 const buttonsClass = document.querySelectorAll(".button-class");
 const dialogOkCancelButtons = document.querySelectorAll(".dialog-ok-cancel-buttons");
 const closeDialogButton = document.querySelectorAll(".close-dialog-button");
+const rangeSliders = document.querySelectorAll(".range-slider");
 
 svgButtons.forEach(button => {
   // Mouseover event for desktop
@@ -64,4 +65,20 @@ closeDialogButton.forEach(button => {
     button.style.color = ""; // Reset to default
    // button.style.border = ""; // Reset to default
   });
+});
+
+rangeSliders.forEach(slider => { 
+  console.log("ksaf");
+
+  slider.addEventListener("touchstart", function(event) {
+    console.log("ksaf");
+    // Change the background color to black
+    slider.style.opacity = "1";
+});
+slider.addEventListener("touchend", () => {
+  // Revert the touch styles
+  slider.style.opacity = "0.7";
+
+});
+
 });

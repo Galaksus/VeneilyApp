@@ -116,17 +116,6 @@
   cursor: pointer;
   color: #fff;
 }
-/*
-#settings-icon-button {
-  position: absolute;
-  margin-top: 10px;
-  margin-right: 10px;
-  right: 0px;
-  z-index: 998;
-} */
-
-
-
 
 /* Silder related styles  */
 .slider-container {
@@ -158,19 +147,6 @@
   background: #387072;
   border-radius: 50%;
   cursor: pointer;
-
-}
-
-/* Style the range slider thumb/handle on hover */
-.range-slider:hover {
-  opacity: 1;
-  /* Fully shown on mouse-over */
-
-}
-
-/* Style the range slider thumb/handle on hover */
-.range-slider::-webkit-slider-thumb:hover {
-  background: #194d4e;
 
 }
 
