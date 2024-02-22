@@ -59,7 +59,7 @@ routesSelectbutton.addEventListener("click", function () {
 const BLECharacteristicUUIDs = {
   CURRENT_LOCATION_CHARACTERISTIC_UUID:  "e0a432d7-8e2c-4380-b4b2-1568aa0412a3",
   ROUTE_COORDINATE_CHARACTERISTIC_UUID:  "20e88205-d8cd-42a9-bcfa-4b599484d362",
-  MANUAL_MODE_DATA_CHARACTERISTIC_UUID:  "2f926b0c-c378-474e-8ced-3194b815aedd",
+  STEERING_DATA_CHARACTERISTIC_UUID:     "2f926b0c-c378-474e-8ced-3194b815aedd",
   OUTBOARDMOTOR_CHARACTERISTIC_UUID:     "f53de08c-1c0c-459a-a6d5-cd26a1523060",
   ANDROID_SETTINGS_CHARACTERISTIC_UUID:  "33c5c3d4-276d-42fc-88cd-c97422441bc1",
   ERROR_MESSAGES_CHARACTERISTIC_UUID:    "1e41b064-7652-41ad-b723-71540355bf4c",
@@ -91,7 +91,7 @@ ManualSteeringSlider.addEventListener("input", function () {
 
   ManualSteeringSliderValue.textContent = ManualSteeringSlider.value;
   Android.JSToBLEInterfaceSliders(
-    BLECharacteristicUUIDs.MANUAL_MODE_DATA_CHARACTERISTIC_UUID,
+    BLECharacteristicUUIDs.STEERING_DATA_CHARACTERISTIC_UUID,
     ManualSteeringSlider.value)
 });
 
@@ -99,7 +99,7 @@ ManualSteeringSlider.addEventListener("touchend", function () {
   // Timeout is to ensure that bluetooth has enough time to receive the value of the slider at touchend
   setTimeout(function () {
     Android.JSToBLEInterfaceSliders(
-      BLECharacteristicUUIDs.MANUAL_MODE_DATA_CHARACTERISTIC_UUID,
+      BLECharacteristicUUIDs.STEERING_DATA_CHARACTERISTIC_UUID,
       ManualSteeringSlider.value);
   }, 75);
 });
@@ -117,8 +117,8 @@ ManualMotorSpeedSlider.addEventListener("input", function () {
   }
 
   ManualMotorSpeedSliderValue.textContent = ManualMotorSpeedSlider.value;
-  
-  let valueToSend; 
+
+  let valueToSend;
   if (forwardRadioButton.checked) {
     valueToSend = ManualMotorSpeedSlider.value;
     //console.log(typeof(ManualSteeringSlider.value));
@@ -154,13 +154,13 @@ LockDirectionButton.addEventListener("click", function () {
 
 
   if (!isLockModeOn) {
-    Android.JSToBLEInterface(BLECharacteristicUUIDs.MANUAL_MODE_DATA_CHARACTERISTIC_UUID, "Lock");
+    Android.JSToBLEInterface(BLECharacteristicUUIDs.STEERING_DATA_CHARACTERISTIC_UUID, "Lock");
     document.getElementById("lock-direction-text").style.display = "block";
     LockDirectionButton.textContent = "Unlock direction";
   } else {
     document.getElementById("lock-direction-text").style.display = "none";
     Android.JSToBLEInterface(
-      BLECharacteristicUUIDs.MANUAL_MODE_DATA_CHARACTERISTIC_UUID, "stop");
+      BLECharacteristicUUIDs.STEERING_DATA_CHARACTERISTIC_UUID, "stop");
     LockDirectionButton.textContent = "Lock direction";
   }
   isLockModeOn = !isLockModeOn;
@@ -194,7 +194,7 @@ function createMessage(messageString, messageId, messageTextColor, messageBackgr
 
   // Remove message when clicking anywhere on the message
   message.addEventListener('click', removeMessage);
-  
+
   function removeMessage() {
     if (message && message.parentNode) {
       message.parentNode.removeChild(message);
@@ -235,16 +235,16 @@ function toggleStartRouteButton() {
     LockDirectionButton.click();
   }
   console.log("RouteStarted: ", isRouteStarted);
-  
+
   if (isRouteStarted) {
     startRouteButton.textContent = "Stop";
     startRouteText.style.display = "block";
     Android.JSToBLEInterface(BLECharacteristicUUIDs.CURRENT_LOCATION_CHARACTERISTIC_UUID, "start");
-  
+
     // Here it sends all route coordinates via BLE
     // The second parameter is the current index of a route that is selected, it is then retrieved from the database with the given index
     Android.JSToBLEInterfaceSelectedRoute(BLECharacteristicUUIDs.ROUTE_COORDINATE_CHARACTERISTIC_UUID, parseInt(currentIndex));
-  
+
     // Send periodic data of Android GPS or Orientation if one or both of them are in use
     if (isAndroidGPSinUse || isAndroidOrientationInUse) {
       // Here it sends the current location every 1.5 seconds coordinates via BLE
@@ -257,15 +257,15 @@ function toggleStartRouteButton() {
   } else {
     startRouteButton.textContent = "Start";
     startRouteText.style.display = "none";
-  
+
     // Clear the interval if it's set
     if (interValForAutoModeBLE) {
       clearInterval(interValForAutoModeBLE);
       console.log("Interval cleared: ", interValForAutoModeBLE);
       interValForAutoModeBLE = null;
     }
-  
-    // Send "stop" 
+
+    // Send "stop"
     Android.JSToBLEInterface(BLECharacteristicUUIDs.CURRENT_LOCATION_CHARACTERISTIC_UUID, "stop");
   }
 }
@@ -361,7 +361,7 @@ function rangeSliderArithmetic(element) {
         parseInt(ManualSteeringSliderValue.value) - 5;
       ManualSteeringSliderValue.textContent = ManualSteeringSlider.value;
       Android.JSToBLEInterfaceSliders(
-        BLECharacteristicUUIDs.MANUAL_MODE_DATA_CHARACTERISTIC_UUID,
+        BLECharacteristicUUIDs.STEERING_DATA_CHARACTERISTIC_UUID,
         ManualSteeringSlider.value);
 
       break;
@@ -370,7 +370,7 @@ function rangeSliderArithmetic(element) {
         parseInt(ManualSteeringSliderValue.value) + 5;
       ManualSteeringSliderValue.textContent = ManualSteeringSlider.value;
       Android.JSToBLEInterfaceSliders(
-        BLECharacteristicUUIDs.MANUAL_MODE_DATA_CHARACTERISTIC_UUID,
+        BLECharacteristicUUIDs.STEERING_DATA_CHARACTERISTIC_UUID,
         ManualSteeringSlider.value);
       break;
     default:
@@ -383,7 +383,7 @@ function fwdBwdRadioButtonChanged() {
   ManualMotorSpeedSliderValue.textContent = ManualMotorSpeedSlider.value;
   setTimeout(function () {
     Android.JSToBLEInterfaceSliders(
-      BLECharacteristicUUIDs.MANUAL_MODE_DATA_CHARACTERISTIC_UUID,
+      BLECharacteristicUUIDs.OUTBOARDMOTOR_CHARACTERISTIC_UUID,
       ManualMotorSpeedSlider.value);
   }, 75);
 }

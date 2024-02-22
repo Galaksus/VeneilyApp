@@ -4,6 +4,8 @@ const buttonsClass = document.querySelectorAll(".button-class");
 const dialogOkCancelButtons = document.querySelectorAll(".dialog-ok-cancel-buttons");
 const closeDialogButton = document.querySelectorAll(".close-dialog-button");
 const rangeSliders = document.querySelectorAll(".range-slider");
+const minusButtons = document.querySelectorAll(".minus-svg-icon");
+const plusButtons = document.querySelectorAll(".plus-svg-icon");
 
 svgButtons.forEach(button => {
   // Mouseover event for desktop
@@ -29,8 +31,8 @@ buttonsClass.forEach(function (button) {
 
   // Touchstart event for mobile
   button.addEventListener("touchstart", (event) => {
+    if (!button.disabled)
       button.style.background = "linear-gradient(to bottom, rgba(52,152,219, 0.8), rgba(100, 175, 255, 1))";
-  
     });
 
       // Touchend event for mobile
@@ -68,10 +70,8 @@ closeDialogButton.forEach(button => {
 });
 
 rangeSliders.forEach(slider => { 
-  console.log("ksaf");
 
   slider.addEventListener("touchstart", function(event) {
-    console.log("ksaf");
     // Change the background color to black
     slider.style.opacity = "1";
 });
@@ -81,4 +81,26 @@ slider.addEventListener("touchend", () => {
 
 });
 
+});
+
+plusButtons.forEach(button => {
+  button.addEventListener("touchstart", function(event) {
+    console.log("sf");
+    console.log(button.src);
+    button.src = 'icons/plus-icon-hover.svg';
+    console.log(button.src);
+
+  });
+   button.addEventListener("touchend", () => {
+    button.src = 'icons/plus-icon.svg';
+  });
+});
+
+minusButtons.forEach(button => {
+  button.addEventListener("touchstart", function(event) {
+    button.src = 'icons/minus-icon-hover.svg';
+  });
+   button.addEventListener("touchend", () => {
+    button.src = 'icons/minus-icon.svg';
+  });
 });
