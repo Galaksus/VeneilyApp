@@ -143,7 +143,7 @@ ManualMotorSpeedSliderValue.textContent = ManualMotorSpeedSlider.value; // Initi
 LockDirectionButton.addEventListener("click", function () {
       if (parseInt(BluetoothConnectionState) !== 2 && !isLockModeOn) {
         // Create error message element
-        createMessage("Bluetooth not connected", "lockdirection-button-error-message", "red", "black");
+        showToast("Bluetooth not connected", "white");
         return;
       }
 
@@ -174,33 +174,39 @@ ConnectBluetoothButton.addEventListener("click", function () {
   Android.connectBluetooth();
 });
 
-function createMessage(messageString, messageId, messageTextColor, messageBackgroundColor) {
-  var message = document.getElementById(messageId);
 
-  if (message) {
-    message.parentNode.removeChild(message);
+function showToast(message, textColor) {
+  var toast = document.getElementById('toast');
+  var toastText = document.getElementById('toast-text');
+  toastText.textContent = message;
+  toast.style.display = 'flex';
+
+  // Get the width of the page
+  var pageWidth = document.documentElement.clientWidth;
+
+  // Get the width of the toast element
+  var toastWidth = toast.offsetWidth;
+
+  // Calculate the left position for centering the toast
+  var leftPosition = (pageWidth - toastWidth) / 2;
+
+  // Apply the left position to the toast element
+  toast.style.left = leftPosition + "px";
+
+  // Clear previous timeout if exists
+  if (showToast.timeoutId) {
+    clearTimeout(showToast.timeoutId);
   }
-  var message = document.createElement("p");
-  message.id = messageId;
-  message.innerText = messageString;
-  message.style.color = messageTextColor;
-  message.style.backgroundColor = messageBackgroundColor;
-  message.className = "error-message"; // Assigning the class for styling
-  // Append the message element to the body
-  document.body.appendChild(message);
 
   // Remove message after 2.5 seconds
-  setTimeout(removeMessage, 2500);
-
-  // Remove message when clicking anywhere on the message
-  message.addEventListener('click', removeMessage);
-
-  function removeMessage() {
-    if (message && message.parentNode) {
-      message.parentNode.removeChild(message);
-    }
-  }
+  showToast.timeoutId = setTimeout(hideToast, 2500);
 }
+
+function hideToast() {
+  var toast = document.getElementById('toast');
+  toast.style.display = 'none';
+}
+
 
 function toggleStartRouteButton() {
   var isAndroidGPSinUse = jsObject["is_android_GPS_used"] === "true";
@@ -208,13 +214,15 @@ function toggleStartRouteButton() {
   // If bluetooth not connected create error message and return
   if (parseInt(BluetoothConnectionState) !== 2) {
     // Create error message element
-    createMessage("Bluetooth not connected", "start-button-error-message", "red", "black");
+    showToast("Bluetooth not connected", "white");
+
     return;
   }
   // If no route selected create error message and return
   if (parseInt(currentIndex) === 0) {
     // Create error message element
-    createMessage("Please select a route first", "start-button-error-message", "red", "black");
+    showToast("Please select a route first", "white");
+
     return;
   } else {
     startRouteText.children[0].textContent = "Route started";

@@ -171,7 +171,7 @@ function DrawButtonFunction() {
   */ 
   if (markers.length < 3) {
     // Draw button clickable if >= 3 markers on map
-    createMessage("At least 3 markers required to change path type to loop", "start-button-error-message", "red", "black");
+    showToast("At least 3 markers required to change path type to loop", "white");
     return;
   } 
 

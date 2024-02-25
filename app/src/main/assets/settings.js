@@ -33,7 +33,7 @@ function updateSettingsDatabase() {
     getAllSettingsData();
 
     // Creates a message that shows that settings are saved
-    createMessage("Settings saved", "settings-saved-message", "green", "black");
+    showToast("Settings saved", "white");
 }
 
 function getAllSettingsData() {

@@ -6,6 +6,7 @@ const closeDialogButton = document.querySelectorAll(".close-dialog-button");
 const rangeSliders = document.querySelectorAll(".range-slider");
 const minusButtons = document.querySelectorAll(".minus-svg-icon");
 const plusButtons = document.querySelectorAll(".plus-svg-icon");
+const toastCloseButton = document.querySelectorAll(".toast-close-button");
 
 svgButtons.forEach(button => {
   // Mouseover event for desktop
@@ -103,4 +104,16 @@ minusButtons.forEach(button => {
    button.addEventListener("touchend", () => {
     button.src = 'icons/minus-icon.svg';
   });
+});
+
+toastCloseButton.forEach(button => {
+  button.addEventListener("touchstart", function(event) {
+    // Change the background color to black
+    button.style.color = "black";
+});
+ // Touchend event for mobile
+ button.addEventListener("touchend", () => {
+  // Revert the touch styles
+  button.style.color = ""; // Reset to default
+});
 });
