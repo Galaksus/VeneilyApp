@@ -8,6 +8,7 @@ const routesSelectDialog = document.getElementById('dropdown-dialog');
 const backwardRadioButton = document.getElementById("backward");
 const forwardRadioButton = document.getElementById("forward");
 const MenuHeaderContent = document.getElementById("menu-header-content");
+const lockAndAnchorText = document.getElementById("lock-and-anchor-text");
 const MenuDialogContentManualMode = document.getElementById(
   "menu-dialog-content-manual-mode"
 );
@@ -29,10 +30,12 @@ const BluetoothConnectionText = document.getElementById(
 );
 let BluetoothConnectionState = 10; // default value meaning "Not connected"
 const LockDirectionButton = document.getElementById("lock-direction-button");
+const anchorButton = document.getElementById("anchor-button");
 const startRouteButton = document.getElementById("start-route-button");
 const startRouteText = document.getElementById("start-route-text");
 
 let isLockModeOn = false;
+let isAnchorModeOn = false;
 let isRouteStarted = false; // Variable to store the interval id meaning if the route is started or not
 let interValForAutoModeBLE; // Interval for sending current location and orientation
 
@@ -76,7 +79,16 @@ const BLEConnectedElementIDs = {
 };
 
 
-
+function outboardMotorSendableData() {
+  let valueToSend;
+  if (forwardRadioButton.checked) {
+    valueToSend = ManualMotorSpeedSlider.value;
+  }
+  else {
+    valueToSend = "-" + ManualMotorSpeedSlider.value;
+  }
+  return valueToSend;
+}
 
 // Steering sliders
 ManualSteeringSlider.addEventListener("input", function () {
@@ -87,6 +99,10 @@ ManualSteeringSlider.addEventListener("input", function () {
   // if direction is locked then perform click on the button to stop it
   if (isLockModeOn) {
     LockDirectionButton.click();
+  }
+
+  if (isAnchorModeOn) {
+    anchorButton.click();
   }
 
   ManualSteeringSliderValue.textContent = ManualSteeringSlider.value;
@@ -116,18 +132,13 @@ ManualMotorSpeedSlider.addEventListener("input", function () {
     LockDirectionButton.click();
   }
 
+  if (isAnchorModeOn) {
+    anchorButton.click();
+  }
+
   ManualMotorSpeedSliderValue.textContent = ManualMotorSpeedSlider.value;
 
-  let valueToSend;
-  if (forwardRadioButton.checked) {
-    valueToSend = ManualMotorSpeedSlider.value;
-    //console.log(typeof(ManualSteeringSlider.value));
-  }
-  else {
-    valueToSend = "-" + ManualMotorSpeedSlider.value;
-  }
-
-  Android.JSToBLEInterfaceSliders(BLECharacteristicUUIDs.OUTBOARDMOTOR_CHARACTERISTIC_UUID, String(valueToSend));
+  Android.JSToBLEInterfaceSliders(BLECharacteristicUUIDs.OUTBOARDMOTOR_CHARACTERISTIC_UUID, String(outboardMotorSendableData()));
 });
 
 ManualMotorSpeedSlider.addEventListener("touchend", function () {
@@ -135,14 +146,14 @@ ManualMotorSpeedSlider.addEventListener("touchend", function () {
   setTimeout(function () {
     Android.JSToBLEInterfaceSliders(
       BLECharacteristicUUIDs.OUTBOARDMOTOR_CHARACTERISTIC_UUID,
-      ManualMotorSpeedSlider.value);
+      String(outboardMotorSendableData()));
   }, 75);
 });
 ManualMotorSpeedSliderValue.textContent = ManualMotorSpeedSlider.value; // Initialize with the default value
 
 LockDirectionButton.addEventListener("click", function () {
       if (parseInt(BluetoothConnectionState) !== 2 && !isLockModeOn) {
-        // Create error message element
+        // Create error message
         showToast("Bluetooth not connected", "white");
         return;
       }
@@ -152,19 +163,54 @@ LockDirectionButton.addEventListener("click", function () {
       startRouteButton.click();
     }
 
+    if (isAnchorModeOn) {
+      anchorButton.click();
+    }
+  
 
   if (!isLockModeOn) {
     Android.JSToBLEInterface(BLECharacteristicUUIDs.STEERING_DATA_CHARACTERISTIC_UUID, "Lock");
-    document.getElementById("lock-direction-text").style.display = "block";
+    lockAndAnchorText.style.display = "block";
+    lockAndAnchorText.textContent = "Current direction is now locked";
     LockDirectionButton.textContent = "Unlock direction";
   } else {
-    document.getElementById("lock-direction-text").style.display = "none";
+    lockAndAnchorText.style.display = "none";
     Android.JSToBLEInterface(
       BLECharacteristicUUIDs.STEERING_DATA_CHARACTERISTIC_UUID, "stop");
     LockDirectionButton.textContent = "Lock direction";
   }
   isLockModeOn = !isLockModeOn;
 });
+
+anchorButton.addEventListener("click", function () {
+  if (parseInt(BluetoothConnectionState) !== 2 && !isAnchorModeOn) {
+    // Create error message
+    showToast("Bluetooth not connected", "white");
+    return;
+  }
+  // if route is started then perform click on the button to stop it
+  if (isRouteStarted) {
+    startRouteButton.click();
+  }
+  if (isLockModeOn) {
+    LockDirectionButton.click();
+  }
+
+  if (!isAnchorModeOn) {
+    Android.JSToBLEInterface(BLECharacteristicUUIDs.STEERING_DATA_CHARACTERISTIC_UUID, "Anchor");
+    lockAndAnchorText.style.display = "block";
+    lockAndAnchorText.textContent = "Current location is now anchored";
+    anchorButton.textContent = "Remove anchor";
+  } else {
+    lockAndAnchorText.style.display = "none";
+    Android.JSToBLEInterface(
+      BLECharacteristicUUIDs.STEERING_DATA_CHARACTERISTIC_UUID, "stop");
+      anchorButton.textContent = "Set anchor";
+  }
+
+  isAnchorModeOn = !isAnchorModeOn;
+});
+
 
 BluetoothButton.addEventListener("click", function () {
   BluetoothDialog.style.display = "block";
@@ -237,11 +283,11 @@ function toggleStartRouteButton() {
     LockDirectionButton.click();
   }
 
-
-  // if direction is locked then perform click on the button to stop it
-  if (isLockModeOn) {
-    LockDirectionButton.click();
+  // if isAnchorModeOn then perform click on the button to stop it
+  if (isAnchorModeOn) {
+    anchorButton.click();
   }
+
   console.log("RouteStarted: ", isRouteStarted);
 
   if (isRouteStarted) {
@@ -347,6 +393,10 @@ function rangeSliderArithmetic(element) {
   if (isLockModeOn) {
     LockDirectionButton.click();
   }
+  
+  if (isAnchorModeOn) {
+    anchorButton.click();
+  }
 
   switch (element.id) {
     case "minus-svg-icon-speed":
@@ -354,14 +404,14 @@ function rangeSliderArithmetic(element) {
       ManualMotorSpeedSliderValue.textContent = ManualMotorSpeedSlider.value;
       Android.JSToBLEInterfaceSliders(
         BLECharacteristicUUIDs.OUTBOARDMOTOR_CHARACTERISTIC_UUID,
-        ManualMotorSpeedSlider.value);
+        String(outboardMotorSendableData()));
       break;
     case "plus-svg-icon-speed":
       ManualMotorSpeedSlider.value = parseInt(ManualMotorSpeedSlider.value) + 5;
       ManualMotorSpeedSliderValue.textContent = ManualMotorSpeedSlider.value;
       Android.JSToBLEInterfaceSliders(
         BLECharacteristicUUIDs.OUTBOARDMOTOR_CHARACTERISTIC_UUID,
-        ManualMotorSpeedSlider.value);
+        String(outboardMotorSendableData()));
 
       break;
     case "minus-svg-icon-steer":
