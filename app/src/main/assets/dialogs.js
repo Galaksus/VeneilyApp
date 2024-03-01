@@ -34,6 +34,7 @@ const anchorButton = document.getElementById("anchor-button");
 const startRouteButton = document.getElementById("start-route-button");
 const startRouteText = document.getElementById("start-route-text");
 
+let SendGPSandOriDataActive = false;
 let isLockModeOn = false;
 let isAnchorModeOn = false;
 let isRouteStarted = false; // Variable to store the interval id meaning if the route is started or not
@@ -180,6 +181,7 @@ LockDirectionButton.addEventListener("click", function () {
     LockDirectionButton.textContent = "Lock direction";
   }
   isLockModeOn = !isLockModeOn;
+  sendGPSandOriData(); // This function sends the GPS and orientation data via BLE or is actually an interface to the actual sender
 });
 
 anchorButton.addEventListener("click", function () {
@@ -209,6 +211,7 @@ anchorButton.addEventListener("click", function () {
   }
 
   isAnchorModeOn = !isAnchorModeOn;
+  sendGPSandOriData(); // This function sends the GPS and orientation data via BLE or is actually an interface to the actual sender
 });
 
 
@@ -293,39 +296,47 @@ function toggleStartRouteButton() {
   if (isRouteStarted) {
     startRouteButton.textContent = "Stop";
     startRouteText.style.display = "block";
-    Android.JSToBLEInterface(BLECharacteristicUUIDs.CURRENT_LOCATION_CHARACTERISTIC_UUID, "start");
+    Android.JSToBLEInterface(BLECharacteristicUUIDs.STEERING_DATA_CHARACTERISTIC_UUID, "start");
 
     // Here it sends all route coordinates via BLE
     // The second parameter is the current index of a route that is selected, it is then retrieved from the database with the given index
     Android.JSToBLEInterfaceSelectedRoute(BLECharacteristicUUIDs.ROUTE_COORDINATE_CHARACTERISTIC_UUID, parseInt(currentIndex));
 
-    // Send periodic data of Android GPS or Orientation if one or both of them are in use
-    if (isAndroidGPSinUse || isAndroidOrientationInUse) {
-      // Here it sends the current location every 1.5 seconds coordinates via BLE
-      interValForAutoModeBLE = setInterval(function () {
-        console.log("Sending location...");
-        Android.JSToBLEInterfaceGPSandOri(BLECharacteristicUUIDs.CURRENT_LOCATION_CHARACTERISTIC_UUID, isAndroidGPSinUse, isAndroidOrientationInUse);
-      }, 1500);
-      console.log("Interval started: ", interValForAutoModeBLE);
-    }
   } else {
     startRouteButton.textContent = "Start";
     startRouteText.style.display = "none";
 
+    // Send "stop"
+    Android.JSToBLEInterface(BLECharacteristicUUIDs.STEERING_DATA_CHARACTERISTIC_UUID, "stop");
+  }
+  sendGPSandOriData(); // This function sends the GPS and orientation data via BLE or is actually an interface to the actual sender
+}
+// Attach the toggleStartRouteButton function to the button click event
+startRouteButton.addEventListener("click", toggleStartRouteButton);
+
+function sendGPSandOriData() {
+  var isAndroidGPSinUse = jsObject["is_android_GPS_used"] === "true";
+  var isAndroidOrientationInUse = jsObject["is_android_orientation_used"] === "true";
+
+  SendGPSandOriDataActive = !SendGPSandOriDataActive;
+
+  if (SendGPSandOriDataActive) {
+    if (isAndroidGPSinUse || isAndroidOrientationInUse) {
+      // Here it sends the current location every 1.5 seconds coordinates via BLE
+      interValForAutoModeBLE = setInterval(function () {
+        Android.JSToBLEInterfaceGPSandOri(BLECharacteristicUUIDs.CURRENT_LOCATION_CHARACTERISTIC_UUID, isAndroidGPSinUse, isAndroidOrientationInUse);
+      }, 1500);
+      console.log("Interval started: ", interValForAutoModeBLE);
+    }
+} else {
     // Clear the interval if it's set
     if (interValForAutoModeBLE) {
       clearInterval(interValForAutoModeBLE);
       console.log("Interval cleared: ", interValForAutoModeBLE);
       interValForAutoModeBLE = null;
     }
-
-    // Send "stop"
-    Android.JSToBLEInterface(BLECharacteristicUUIDs.CURRENT_LOCATION_CHARACTERISTIC_UUID, "stop");
   }
 }
-
-// Attach the toggleStartRouteButton function to the button click event
-startRouteButton.addEventListener("click", toggleStartRouteButton);
 
 const BluetoothConnectionStates = {
   0: "Disconnected",
