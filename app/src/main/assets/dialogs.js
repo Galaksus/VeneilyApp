@@ -124,6 +124,9 @@ ManualSteeringSliderValue.textContent = ManualSteeringSlider.value; // Initializ
 
 // Motor speed sliders
 ManualMotorSpeedSlider.addEventListener("input", function () {
+
+  // Changing speed doesn't stop auto or lock mode, but only anchor mode
+  /*
   // if route is started then perform click on the button to stop it
   if (isRouteStarted) {
     startRouteButton.click();
@@ -131,11 +134,12 @@ ManualMotorSpeedSlider.addEventListener("input", function () {
   // if direction is locked then perform click on the button to stop it
   if (isLockModeOn) {
     LockDirectionButton.click();
-  }
+  }*/
 
+  // if Anchor mode is on then perform click on the button to stop it
   if (isAnchorModeOn) {
     anchorButton.click();
-  }
+  } 
 
   ManualMotorSpeedSliderValue.textContent = ManualMotorSpeedSlider.value;
 
@@ -396,6 +400,9 @@ function setBluetoothConnectionStateText(BLEState) {
 }
 
 function rangeSliderArithmetic(element) {
+  
+  // Changing speed doesn't stop auto or lock mode, but only anchor mode
+  /*
   // if route is started then perform click on the button to stop it
   if (isRouteStarted) {
     startRouteButton.click();
@@ -403,7 +410,7 @@ function rangeSliderArithmetic(element) {
   // if direction is locked then perform click on the button to stop it
   if (isLockModeOn) {
     LockDirectionButton.click();
-  }
+  }*/
   
   if (isAnchorModeOn) {
     anchorButton.click();
