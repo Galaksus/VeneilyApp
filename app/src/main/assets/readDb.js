@@ -6,9 +6,9 @@ function createDropdownOptions() {
   var dropdownContent = document.getElementById("dropdown-dialog-content");
   dropdownContent.innerHTML = "";
   // Remove all child elements
-document.querySelectorAll(".option-div-styles").forEach(function (el) {
-  el.remove();
-});
+  document.querySelectorAll(".option-div-styles").forEach(function (el) {
+    el.remove();
+  });
 
   // Store the currently selected div
   let selectedDiv = null;
@@ -74,6 +74,7 @@ document.querySelectorAll(".option-div-styles").forEach(function (el) {
         document.getElementById("delete-button").style.display = "none";
         // Moves view to current location
         map.setView(customMarker.getLatLng(), 10);
+        writeNewRouteDataToUserInterface(coordinates);
         return;
       }
       console.log("Selected div attribute:", coordinates);
@@ -92,23 +93,38 @@ document.querySelectorAll(".option-div-styles").forEach(function (el) {
         // Shows the delete button
         document.getElementById("delete-button").style.display = "flex";
 
-        // TODO ei toimi jotenkaa
-        // Set route datas to the auto mode dialog page
-        let originalRouteNameString = window.Android.getData(currentIndex, "title");
-        // Split the coordinates from the name resulting with only the name
-        document.getElementById("dynamicText-route-name").textContent = originalRouteNameString.split(' - ')[0];
-        document.getElementById("dynamicText-type").textContent = window.Android.getData(currentIndex, true);
-        //document.getElementById("dynamicText-type").textContent = ;
-    
-        document.getElementById("dynamicText-total-length").textContent = getTotalLengthOfRoute(coordinates) + " m";
-        document.getElementById("dynamicText-checkpoints").textContent = getMarkersOnMapCount(true);
-        //document.getElementById("dynamicText-completed").textContent = ; // Not implemented yet
+        writeNewRouteDataToUserInterface(coordinates);
+
       } else clearMap();
     } else {
       console.log("No div selected.");
     }
   }
 
+  function writeNewRouteDataToUserInterface(coordinates) {
+
+        const UIRouteName = document.getElementById("dynamicText-route-name");
+        const UIRouteType = document.getElementById("dynamicText-type");
+        const UIRouteLength = document.getElementById("dynamicText-total-length");
+        const UIRouteCheckpointsCount = document.getElementById("dynamicText-checkpoints");
+
+        // Set route datas to the auto mode dialog page
+        let originalRouteNameString = window.Android.getData(currentIndex, "title");
+        // Split the coordinates from the name resulting with only the name
+        UIRouteName.textContent = originalRouteNameString.split(' - ')[0];
+        UIRouteType.textContent = window.Android.getData(currentIndex, true);
+        //document.getElementById("dynamicText-type").textContent = ;
+    
+        if (coordinates !== null) {
+          UIRouteLength.textContent = getTotalLengthOfRoute(coordinates) + " m";
+          UIRouteCheckpointsCount.textContent = getMarkersOnMapCount(true);
+        }
+        else {
+          UIRouteLength.textContent = "";
+          UIRouteCheckpointsCount.textContent = "";
+        }
+        //document.getElementById("dynamicText-completed").textContent = ; // Not implemented yet
+  }
   var logButton = document.getElementById("select-ok-button");
 
   // Add event listener to the button
