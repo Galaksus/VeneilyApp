@@ -84,10 +84,22 @@ public class JavaScriptInterface implements GetOrientation.OrientationListener {
 
     @JavascriptInterface
     public void connectBluetooth() {
-        // Creates new instance everytime this method is called, also calls the startLeDeviceScanning
-        //blehandler = new BLEHandler(mainActivity, this.context);
+        // Start scanning for esp32 and connect to it if found
         blehandler.startLeDeviceScanning();
     }
+
+    @JavascriptInterface
+    public void disconnectBluetooth() {
+        // Disconnects bluetooth on the main thread
+        mainActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                blehandler.disconnectDevice();
+                Log.e("bluetoothscan", "Disconnect attempted");
+            }
+        });
+    }
+
 
 
     @JavascriptInterface

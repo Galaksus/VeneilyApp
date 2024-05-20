@@ -33,7 +33,6 @@ const LockDirectionButton = document.getElementById("lock-direction-button");
 const anchorButton = document.getElementById("anchor-button");
 const startRouteButton = document.getElementById("start-route-button");
 const startRouteText = document.getElementById("start-route-text");
-
 let SendGPSandOriDataActive = false;
 let isLockModeOn = false;
 let isAnchorModeOn = false;
@@ -224,8 +223,13 @@ BluetoothButton.addEventListener("click", function () {
 });
 
 ConnectBluetoothButton.addEventListener("click", function () {
-  Android.connectBluetooth();
+  if (BluetoothConnectionState == 0 || BluetoothConnectionState == 10) {
+    Android.connectBluetooth();
+  } else if (BluetoothConnectionState == 1 || BluetoothConnectionState == 2) {
+    Android.disconnectBluetooth();
+  }
 });
+
 
 
 function showToast(message, textColor) {
@@ -353,6 +357,7 @@ const BluetoothConnectionStates = {
 };
 
 function setBluetoothConnectionStateText(BLEState) {
+  console.log("Called with", BLEState);
   // Convert BLEState to a number explicitly
   BluetoothConnectionState = parseInt(BLEState, 10);
 
@@ -364,17 +369,24 @@ function setBluetoothConnectionStateText(BLEState) {
 
     // Use a switch statement to set the text color based on the connection state
     switch (BluetoothConnectionState) {
+      case 0:
+        BluetoothConnectionText.style.color = "red"; // Connected (green color)
+        BluetoothConnectionText.textContent = "Disconnected"
+        ConnectBluetoothButton.textContent = "Connect"
+
+        break;
       case 1:
       case 2:
         BluetoothConnectionText.style.color = "green"; // Connected (green color)
-        ConnectBluetoothButton.disabled = true;
+        ConnectBluetoothButton.disabled = false;
+        ConnectBluetoothButton.textContent = "Disconnect"
+        
        // BluetoothButton.src = 'icons/bluetooth-icon-green.svg';
        // Send settings to ESP32
        sendSettingsViaBLE();
 
        // Android.BLEReadRequest(); // Tää ei toimi (BLEHandlerin puolella Androidin Java-koodissa siis)
         break;
-      case 0:
       case 3:
       case 10:
       case 11:
