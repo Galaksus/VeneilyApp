@@ -223,6 +223,7 @@ BluetoothButton.addEventListener("click", function () {
 });
 
 ConnectBluetoothButton.addEventListener("click", function () {
+  console.log("BluetoothConnectionState", BluetoothConnectionState);
   if (BluetoothConnectionState == 0 || BluetoothConnectionState == 10) {
     Android.connectBluetooth();
   } else if (BluetoothConnectionState == 1 || BluetoothConnectionState == 2) {
@@ -383,7 +384,11 @@ function setBluetoothConnectionStateText(BLEState) {
         
        // BluetoothButton.src = 'icons/bluetooth-icon-green.svg';
        // Send settings to ESP32
-       sendSettingsViaBLE();
+       setTimeout(() => {
+        sendSettingsViaBLE();
+        console.log("sendSettingsViaBLE called after 1 second delay.");
+      }, "1000");
+      
 
        // Android.BLEReadRequest(); // Tää ei toimi (BLEHandlerin puolella Androidin Java-koodissa siis)
         break;

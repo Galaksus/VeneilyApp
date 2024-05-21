@@ -85,7 +85,9 @@ public class JavaScriptInterface implements GetOrientation.OrientationListener {
     @JavascriptInterface
     public void connectBluetooth() {
         // Start scanning for esp32 and connect to it if found
-        blehandler.startLeDeviceScanning();
+        blehandler.startScanning();
+        Log.e("bluetoothscan", "Connect attempted");
+
     }
 
     @JavascriptInterface
@@ -94,7 +96,7 @@ public class JavaScriptInterface implements GetOrientation.OrientationListener {
         mainActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                blehandler.disconnectDevice();
+                blehandler.disconnect();
                 Log.e("bluetoothscan", "Disconnect attempted");
             }
         });
@@ -106,9 +108,11 @@ public class JavaScriptInterface implements GetOrientation.OrientationListener {
     public void JSToBLEInterfaceSliders(String uuid, String data) {
         // There will be many send requests failing but it is fine...
         // with a while loop this doesn't work smoothly like in other similar functions that I use
-        boolean success = false;
-        // Try to write the characteristic
-        success = blehandler.writeCharacteristicWithData(UUID.fromString(uuid), data);
+        //boolean success = false;
+        //// Try to write the characteristic
+        //success = blehandler.writeCharacteristicWithData(uuid, data);
+        writeCharacteristic(uuid, data);
+
     }
 
     @JavascriptInterface
@@ -117,7 +121,7 @@ public class JavaScriptInterface implements GetOrientation.OrientationListener {
         long timeout = 1000; // 1 second timeout
         boolean success = false;
 
-        while (!success) {
+        /*while (!success) {
             // Check if timeout has been reached
             if (System.currentTimeMillis() - startTime > timeout) {
                 // Timeout reached, break out of the loop
@@ -126,8 +130,10 @@ public class JavaScriptInterface implements GetOrientation.OrientationListener {
             }
 
             // Try to write the characteristic
-            success = blehandler.writeCharacteristicWithData(UUID.fromString(uuid), data);
-        }
+            success = blehandler.writeCharacteristic(uuid, data);
+        }*/
+        writeCharacteristic(uuid, data);
+
     }
 
 
@@ -147,6 +153,7 @@ public class JavaScriptInterface implements GetOrientation.OrientationListener {
         // combine the strings
         String allDataRouteString = routeType + allRouteCoordinates;
 
+        /*
         // Safety mechanism to stop the loop if exceeds over "timeout" seconds
         long startTime = System.currentTimeMillis();
         long timeout = 1000; // 1 second timeout
@@ -161,8 +168,12 @@ public class JavaScriptInterface implements GetOrientation.OrientationListener {
             }
 
             // Try to write the characteristic
-            success = blehandler.writeCharacteristicWithData(UUID.fromString(uuid), allDataRouteString);
+            success = blehandler.writeCharacteristic(uuid, allDataRouteString);
         }
+        */
+
+        writeCharacteristic(uuid, allDataRouteString);
+
 
     }
         @JavascriptInterface
@@ -185,7 +196,7 @@ public class JavaScriptInterface implements GetOrientation.OrientationListener {
                 }
                 BLEStringToBeSent[0] = locationData + ";" + finalOrientationString;
 
-                blehandler.writeCharacteristicWithData(UUID.fromString(uuid), BLEStringToBeSent[0]);
+                blehandler.writeCharacteristic(uuid, BLEStringToBeSent[0]);
             }
 
             @Override
@@ -195,6 +206,11 @@ public class JavaScriptInterface implements GetOrientation.OrientationListener {
 
             }
         });
+    }
+
+
+    private void writeCharacteristic(String uuid, String data) {
+        blehandler.writeCharacteristic(uuid, data);
     }
 
     /* Database related methods */
