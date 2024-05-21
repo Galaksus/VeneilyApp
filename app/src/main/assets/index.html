@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="dialogs.css">
     <link rel="stylesheet" href="nameDialog.css">
     <link rel="stylesheet" href="bottomBarStyles.css">
+    <link rel="stylesheet" href="messageLogger.css">
+
 
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -97,6 +99,11 @@
                         <div class="svg-button" onclick="settingsButtonFunction()">
                             <img class="svg-image" id="settings-icon-button" src="icons/settings-icon.svg" alt="Settings icon">
                             <p class="menu-text">Settings</p>
+                        </div>
+                        
+                        <div class="svg-button" id="messages-button">
+                            <img class="svg-image" id="messages-button-src" src="icons/message-alert-icon.svg" alt="Messages Icon">
+                            <p class="menu-text">Messages</p>
                         </div>
 
                         <div class="svg-button" id="delete-button" style="display: none;">
@@ -205,8 +212,37 @@
                     </div>
                 </div>
             </div>
-
         </div>
+
+    <!-- The messages dialog container -->
+    <div id="message-dialog" class="default-dialog" onclick="closeDialog(this);">
+        <div class="dialog-container" onclick="event.stopPropagation();">
+            <!-- Header content -->
+            <div class="dialog-header-content">
+                Message log
+                <span class="close-dialog-button"
+                onclick="closeDialog(document.getElementById('message-dialog'))">&#10006;</span>
+            </div>
+            <div class="dialog-content" style="padding: 0px;">
+                <div id="message-dialog-widget-container">
+                    <select class="button-class" id="filter" onchange="filterMessages()">
+                        <option value="all">All</option>
+                        <option value="info">Info</option>
+                        <option value="warning">Warning</option>
+                        <option value="error">Error</option>
+                    </select>
+                <button class="button-class" id="clear-messages-button"  onclick="clearMessages()">Clear Messages</button>
+                <hr class="line-1" color="gray" size="2">
+
+                </div>
+            </div>
+            <div id="messages-container">
+                <div id="messages"></div>
+                <div id="placeholder-message">No messages at the moment</div>
+        </div>
+        </div>
+    </div>
+
         <!-- The menu dialog container -->
         <div id="menu-dialog" class="default-dialog" onclick="closeDialog(this)">
             <div class="dialog-container" onclick="event.stopPropagation();">
@@ -333,6 +369,7 @@
     <script src="LocationOrientation.js"></script>
     <script src="styles.js"></script>
     <script src="settings.js"></script>
+    <script src="messageLogger.js"></script>
 
 
     </div>

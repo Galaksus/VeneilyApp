@@ -1,0 +1,104 @@
+.message {
+    padding: 5px;
+    margin: 5px 0;
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+}
+#placeholder-message {
+    text-align: center;
+    color: #888;
+    font-size: 1em;
+}
+
+.info {
+    background-color: #d9edf7;
+    border: 1px solid #bce8f1;
+    color: #31708f;
+}
+.warning {
+    background-color: #fcf8e3;
+    border: 1px solid #faebcc;
+    color: #8a6d3b;
+}
+.error {
+    background-color: #f2dede;
+    border: 1px solid #ebccd1;
+    color: #a94442;
+}
+.close-btn {
+    margin-left: 10px;
+    font-weight: bold;
+    color: #a94442;
+    flex-shrink: 0;
+}
+.message-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex-grow: 1;
+}
+.overflow {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: inherit;
+}
+.timestamp {
+    margin-left: 10px;
+    color: #3b3b3b;
+    font-size: 0.7em;
+}
+
+#message-dialog-widget-container {
+    margin: 10px;
+}
+
+#filter {
+    /*background: linear-gradient(135deg, #6D83F2, #91A8F5);
+    border: 1px solid #5C6AC4;
+    border-radius: 5px;
+    color: #FFFFFF;
+    border-radius: 20px;
+    padding: 8px 12px;
+    font-size: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+    transition: all 0.3s ease;*/
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background: linear-gradient(0deg, #485876, #bac8e0);
+    color: #fff;
+    font-size: 12px;
+    outline: none;
+    cursor: pointer;
+}
+
+#filter option {
+    background-color: #FFFFFF;
+    color: #000000;
+}
+
+#clear-messages-button {
+   /* padding: 8px 14px;
+    font-size: 12px;
+    border-radius: 20px;
+*/
+    font-size: 12px;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    background: linear-gradient(0deg, #485876, #bac8e0);
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+#messages-container {
+    padding: 10px 10px 10px 10px;
+    max-height: 500px; /* Set the maximum height as per your requirement */
+    overflow-y: auto;  /* Enable vertical scrolling */
+}

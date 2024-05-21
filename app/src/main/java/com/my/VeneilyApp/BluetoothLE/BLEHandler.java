@@ -348,10 +348,7 @@ public class BLEHandler {
                 Log.w(TAG, "BLUETOOTH_CONNECT permission not granted");
                 return;
             }
-
             bluetoothGatt.disconnect();
-            //bluetoothGatt.close();
-            //bluetoothGatt = null;
             Log.w(TAG, "Disconnected from GATT server and cleaned up");
         }
     }
