@@ -53,6 +53,7 @@ public class BLEHandler {
 
     private Handler handler;
     private boolean isScanning;
+    private boolean specificDeviceFound;
     private Map<String, String> characteristicDataMap;
     private boolean isWritingCharacteristic = false;
     private static final UUID SERVICE_UUID = UUID.fromString("58ecb6f1-887b-487d-a378-0f9048c505da");
@@ -94,16 +95,8 @@ public class BLEHandler {
                 stopScanning();
                 // Create a GATT connection to the selected BLE device
                 bluetoothGatt = device.connectGatt(context, false, gattCallback);
-                return;
+                specificDeviceFound = true;
             }
-            // Run this part on the UI thread
-            new Handler(Looper.getMainLooper()).post(new Runnable() {
-                @Override
-                public void run() {
-                    int deviceWasNotFound = 11; // An id to tell javaScript that device was not found
-                    JavaScriptInterface.callJavaScriptFunction("setBluetoothConnectionStateText('" + deviceWasNotFound + "');");
-                }
-            });
         }
 
         @Override
@@ -134,9 +127,7 @@ public class BLEHandler {
         @Override
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
             super.onConnectionStateChange(gatt, status, newState);
-
-            Log.d(TAG, "onConnectionStateChanger" + status + newState);
-
+            Log.d(TAG, "onConnectionStateChange: status=" + status + ", newState=" + newState);
             if (newState == BluetoothProfile.STATE_CONNECTED) {
                 Log.d(TAG, "Connected to GATT server");
                 if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
@@ -148,9 +139,9 @@ public class BLEHandler {
                 Log.d(TAG, "Disconnected from GATT server");
                 gatt.close();
                 bluetoothGatt = null;
+                specificDeviceFound = false;
             }
             // Call JavaScript from UI thread to set connection state accordingly
-            // Run this part on the UI thread
             new Handler(Looper.getMainLooper()).post(new Runnable() {
                 @Override
                 public void run() {
@@ -307,6 +298,11 @@ public class BLEHandler {
                 @Override
                 public void run() {
                     stopScanning();
+                    Log.d(TAG, "Scanning period exceeded, device found is " + specificDeviceFound);
+                    if (!specificDeviceFound) {
+                        int deviceWasNotFound = 11; // An id to tell javaScript that device was not found
+                        JavaScriptInterface.callJavaScriptFunction("setBluetoothConnectionStateText('" + deviceWasNotFound + "');");
+                    }
                 }
             }, SCAN_PERIOD);
             isScanning = true;

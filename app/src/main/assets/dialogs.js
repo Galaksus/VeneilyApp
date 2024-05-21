@@ -224,14 +224,12 @@ BluetoothButton.addEventListener("click", function () {
 
 ConnectBluetoothButton.addEventListener("click", function () {
   console.log("BluetoothConnectionState", BluetoothConnectionState);
-  if (BluetoothConnectionState == 0 || BluetoothConnectionState == 10) {
+  if (BluetoothConnectionState == 0 || BluetoothConnectionState == 10 ||BluetoothConnectionState == 11) {
     Android.connectBluetooth();
   } else if (BluetoothConnectionState == 1 || BluetoothConnectionState == 2) {
     Android.disconnectBluetooth();
   }
 });
-
-
 
 function showToast(message, textColor) {
   var toast = document.getElementById('toast');
@@ -383,7 +381,7 @@ function setBluetoothConnectionStateText(BLEState) {
         ConnectBluetoothButton.textContent = "Disconnect"
         
        // BluetoothButton.src = 'icons/bluetooth-icon-green.svg';
-       // Send settings to ESP32
+       // Send settings to ESP32 after small delay, to give time for BLE to setup correctly
        setTimeout(() => {
         sendSettingsViaBLE();
         console.log("sendSettingsViaBLE called after 1 second delay.");
