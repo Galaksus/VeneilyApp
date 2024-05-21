@@ -56,7 +56,7 @@ function createDropdownOptions() {
 
     // First letter of the string within the div
     currentIndex = parseInt(
-      newSelectedDiv.innerText.trim().charAt(0).toLowerCase(),
+      newSelectedDiv.innerText.trim().split(':')[0].toLowerCase(),
       10
     );
   }
@@ -91,7 +91,7 @@ function createDropdownOptions() {
         closeDialog(document.getElementById("dropdown-dialog")); // Closes the dropdown dialog
 
         // Shows the delete button
-        document.getElementById("delete-button").style.display = "flex";
+        document.getElementById("delete-button").style.display = "inline-flex";
 
         writeNewRouteDataToUserInterface(coordinates);
 
