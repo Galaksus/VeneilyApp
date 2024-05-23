@@ -192,6 +192,29 @@ public class BLEHandler {
                 String stringValue = new String(value, StandardCharsets.UTF_8);  // Convert using UTF-8 encoding
                 Log.d(TAG, "Read data: " + stringValue);
 
+                // Check if the characteristic UUID is ERROR_MESSAGES_CHARACTERISTIC_UUID and call JS function
+                UUID characteristicUUID = characteristic.getUuid();
+                if (characteristicUUID.equals(ERROR_MESSAGES_CHARACTERISTIC_UUID)) {
+                    // Split the stringValue at the first ";" character
+                    String[] parts = stringValue.split(";", 2);
+                    // Parse stringValue to first ";" and the string before it is the severity and the string after it is the message
+                    if (parts.length == 2) {
+                        String severity = parts[0];
+                        String message = parts[1];
+
+                        // Send the message to the message logger in JS
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
+                                JavaScriptInterface.callJavaScriptFunction("logMessage('" + message + "','" + severity + "');");
+                            }
+                        });
+                    } else {
+                        Log.e(TAG, "Invalid message format: " + stringValue);
+                    }
+                }
+
+
             } else {
                 Log.e(TAG, "Characteristic read failed with status: " + status);
             }
@@ -205,11 +228,12 @@ public class BLEHandler {
             String message = new String(value, StandardCharsets.UTF_8);
             // Process the received message
             Log.d(TAG, "Received notification: " + message);
-            initiateReadRequest(characteristic);
+            updateCharacteristicData(characteristic.getUuid().toString(), message, true); // Mark as a read request
         }
     };
 
-    private void initiateReadRequest(BluetoothGattCharacteristic characteristic) {
+    // Method to initiate a read request for a characteristic
+    private void initiateReadRequest(String characteristicUuid) {
         if (bluetoothGatt == null) {
             Log.e(TAG, "BluetoothGatt not initialized");
             return;
@@ -217,11 +241,12 @@ public class BLEHandler {
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
+        BluetoothGattCharacteristic characteristic = bluetoothGatt.getService(SERVICE_UUID).getCharacteristic(UUID.fromString(characteristicUuid));
         boolean success = bluetoothGatt.readCharacteristic(characteristic);
         if (success) {
-            Log.d(TAG, "Read request initiated successfully");
+            Log.d(TAG, "Read request initiated successfully for characteristic: " + characteristicUuid);
         } else {
-            Log.e(TAG, "Failed to initiate read request");
+            Log.e(TAG, "Failed to initiate read request for characteristic: " + characteristicUuid);
         }
     }
 
@@ -240,15 +265,18 @@ public class BLEHandler {
     }
 
     // Method to add or update characteristic data in the map
-    private synchronized void updateCharacteristicData(String characteristicUuid, String data) {
+    private synchronized void updateCharacteristicData(String characteristicUuid, String data, boolean isRead) {
         Log.d("my_debug_tag", "updateCharacteristicData: " + data);
         characteristicDataMap.put(characteristicUuid, data);
         if (!isWritingCharacteristic) {
-            // If not currently writing, trigger writing the next characteristic
-            writeNextCharacteristic();
+            // If not currently writing, trigger writing/reading the next characteristic
+            if (isRead) {
+                initiateReadRequest(characteristicUuid); // Initiate a read request
+            } else {
+                writeNextCharacteristic(); // Initiate a write request
+            }
         }
     }
-
 
     // Method to write the next characteristic from the map
     private synchronized void writeNextCharacteristic() {
@@ -290,7 +318,7 @@ public class BLEHandler {
             Log.w(TAG, "Characteristic not found: " + characteristicUuid);
             return;
         }
-        updateCharacteristicData(characteristicUuid, data);
+        updateCharacteristicData(characteristicUuid, data, false);
     }
 
 
