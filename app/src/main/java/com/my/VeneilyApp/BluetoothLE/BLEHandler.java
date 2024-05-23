@@ -49,7 +49,7 @@ public class BLEHandler {
     private BluetoothAdapter bluetoothAdapter;
     private BluetoothGatt bluetoothGatt;
     private Context context;
-    private Context activity;
+    private Activity activity;
 
     private Handler handler;
     private boolean isScanning;
@@ -63,7 +63,8 @@ public class BLEHandler {
     public static final UUID OUTBOARDMOTOR_CHARACTERISTIC_UUID = UUID.fromString("f53de08c-1c0c-459a-a6d5-cd26a1523060");
     public static final UUID ANDROID_SETTINGS_CHARACTERISTIC_UUID = UUID.fromString("33c5c3d4-276d-42fc-88cd-c97422441bc1");
     public static final UUID ERROR_MESSAGES_CHARACTERISTIC_UUID = UUID.fromString("1e41b064-7652-41ad-b723-71540355bf4c");
-
+    private static final int REQUEST_ENABLE_BT = 1;
+    private static final int REQUEST_BT_SCAN = 1;
     private LayoutInflater mInflater;
 
     private LeDeviceListAdapter leDeviceListAdapter = new LeDeviceListAdapter(mInflater);
@@ -87,6 +88,7 @@ public class BLEHandler {
             BluetoothDevice device = result.getDevice();
             if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
                 Log.w(TAG, "BLUETOOTH_CONNECT permission not granted");
+                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.BLUETOOTH_CONNECT}, REQUEST_ENABLE_BT);
                 return;
             }
             Log.d(TAG, "Scan result: " + device.getName());
@@ -293,6 +295,13 @@ public class BLEHandler {
 
 
     public void startScanning() {
+        // Request permission first
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
+            Log.w(TAG, "BLUETOOTH_SCAN permission not granted");
+            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.BLUETOOTH_SCAN}, REQUEST_BT_SCAN);
+            return;
+        }
+
         if (bluetoothLeScanner != null && !isScanning) {
             handler.postDelayed(new Runnable() {
                 @Override
@@ -309,12 +318,10 @@ public class BLEHandler {
 
             ScanFilter scanFilter = new ScanFilter.Builder().build();
             ScanSettings scanSettings = new ScanSettings.Builder()
+
                     .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
                     .build();
-            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
-                Log.w(TAG, "BLUETOOTH_SCAN permission not granted");
-                return;
-            }
+
             bluetoothLeScanner.startScan(Collections.singletonList(scanFilter), scanSettings, scanCallback);
             Log.d(TAG, "Scanning started");
 
@@ -328,6 +335,7 @@ public class BLEHandler {
             });
         }
     }
+
 
 
     public void stopScanning() {
