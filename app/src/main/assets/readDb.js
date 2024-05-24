@@ -146,12 +146,6 @@ function readSQLiteDb(ID) {
         createDropdownOptions();
         return;
     }
-    /*// Stops the loop if ID > 20
-    if (ID > 20) {
-        // Creates dropdown options
-        createDropdownOptions();
-        return;
-    }*/
 
     // trim the "data" string to desired form
     trimmedCoordinates = dataStringTrimmer(data);

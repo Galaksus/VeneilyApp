@@ -58,7 +58,7 @@ routesSelectbutton.addEventListener("click", function () {
   routesSelectDialog.style.display = "block";
 });
 
-// tags to indentify correct BLE characteristics // Muokkaa UUID:ksi?
+// tags to indentify correct BLE characteristics
 const BLECharacteristicUUIDs = {
   CURRENT_LOCATION_CHARACTERISTIC_UUID:  "e0a432d7-8e2c-4380-b4b2-1568aa0412a3",
   ROUTE_COORDINATE_CHARACTERISTIC_UUID:  "20e88205-d8cd-42a9-bcfa-4b599484d362",

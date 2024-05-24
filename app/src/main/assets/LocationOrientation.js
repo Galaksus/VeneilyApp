@@ -29,11 +29,21 @@ function moveMapView(coordinatesPairs, currentIndex) {
   // Create an array to store LatLng objects for each marker
   var markerLatLngs = [];
 
-  // Add markers to the map and populate the markerLatLngs array
-  for (let i = 0; i < coordinatesPairs.length; i++) {
-    var myMarker = L.marker(coordinatesPairs[i]).addTo(map);
-    markerLatLngs.push(myMarker.getLatLng());
-  }
+// Add markers to the map and populate the markerLatLngs array
+for (let i = 0; i < coordinatesPairs.length; i++) {
+  var latlng = coordinatesPairs[i];
+  var myMarker = L.marker(latlng).addTo(map);
+  
+  // Create the popup content
+  var popupContent = `Index: ${i}, Coordinate: ${latlng[0]}, ${latlng[1]}`;
+  
+  // Bind the popup to the marker
+  myMarker.bindPopup(popupContent);
+  
+  // Add the marker's LatLng to the markerLatLngs array
+  markerLatLngs.push(myMarker.getLatLng());
+}
+
 
   let marginPercentage = 0.1;
   // Calculate bounds with margin

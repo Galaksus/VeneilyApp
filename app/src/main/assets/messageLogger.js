@@ -20,6 +20,8 @@ function getCurrentTimestamp() {
 }
 
 function logMessage(message, severity) {
+    severity = severity.toLowerCase();
+
     const timestamp = getCurrentTimestamp();
     
     const messageElement = document.createElement('div');
