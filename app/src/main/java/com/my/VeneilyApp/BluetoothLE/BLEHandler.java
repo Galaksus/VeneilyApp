@@ -55,6 +55,8 @@ public class BLEHandler {
     private boolean isScanning;
     private boolean specificDeviceFound;
     private Map<String, String> characteristicDataMap;
+    private Map<String, String> notificationMessages;
+
     private boolean isWritingCharacteristic = false;
     private static final UUID SERVICE_UUID = UUID.fromString("58ecb6f1-887b-487d-a378-0f9048c505da");
     public static final UUID CURRENT_LOCATION_CHARACTERISTIC_UUID = UUID.fromString("e0a432d7-8e2c-4380-b4b2-1568aa0412a3");
@@ -80,6 +82,10 @@ public class BLEHandler {
         }
         characteristicDataMap = new HashMap<>();
         Log.d(TAG, "BLEHandler initialized");
+
+        // Initialize notificationMessages map with all possible notification strings
+        notificationMessages = new HashMap<>();
+        populateMessages();
     }
 
     private final ScanCallback scanCallback = new ScanCallback() {
@@ -226,9 +232,40 @@ public class BLEHandler {
             // This method will be called whenever the server sends a notification
             // Handle the received data here
             String message = new String(value, StandardCharsets.UTF_8);
+            int splitIndex = 4;
+            String part1 = message.substring(0, splitIndex);
+            String part2 = message.substring(splitIndex);
+            String tag = part1;
             // Process the received message
-            Log.d(TAG, "Received notification: " + message);
-            updateCharacteristicData(characteristic.getUuid().toString(), message, true); // Mark as a read request
+            Log.d(TAG, "Received notification: " + tag);
+
+            String severity = getSeverity(tag);
+            String notificationMessage = getMessage(tag);
+            // Check if the characteristic UUID is ERROR_MESSAGES_CHARACTERISTIC_UUID and call JS function
+            UUID characteristicUUID = characteristic.getUuid();
+            if (characteristicUUID.equals(ERROR_MESSAGES_CHARACTERISTIC_UUID)) {
+                if (severity != "Unknown") {
+                    // Check if the message should contain a variable with function checkIfSecondCharIsOne()
+                    if (checkIfSecondCharIsOne(tag)) {
+                        // split String message after fourth character
+                        // And combine String notificationMessage with the second part of the String message
+                        notificationMessage = notificationMessage + " " + part2;
+
+                    }
+                    // Send the message to the message logger in JS
+                    String finalNotificationMessage = notificationMessage;
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            JavaScriptInterface.callJavaScriptFunction("logMessage('" + finalNotificationMessage + "','" + severity + "');");
+                        }
+                    });
+                }
+                else {
+                    // Do read request instead
+                    updateCharacteristicData(characteristic.getUuid().toString(), message, true); // Mark as a read request
+                }
+            }
         }
     };
 
@@ -243,10 +280,13 @@ public class BLEHandler {
         }
         BluetoothGattCharacteristic characteristic = bluetoothGatt.getService(SERVICE_UUID).getCharacteristic(UUID.fromString(characteristicUuid));
         boolean success = bluetoothGatt.readCharacteristic(characteristic);
-        if (success) {
+        if (!success) {
+            Log.e(TAG, "Characteristic write failed for characteristic: " + characteristic.getUuid());
+            isWritingCharacteristic = false;
+            initiateReadRequest(characteristicUuid); // Try writing the next characteristic
+        }
+        else {
             Log.d(TAG, "Read request initiated successfully for characteristic: " + characteristicUuid);
-        } else {
-            Log.e(TAG, "Failed to initiate read request for characteristic: " + characteristicUuid);
         }
     }
 
@@ -388,6 +428,58 @@ public class BLEHandler {
             Log.w(TAG, "Disconnected from GATT server and cleaned up");
         }
     }
+
+
+    /*
+    * Speficication of the values of the keys.
+    * Initialized in the .cpp file
+    * First digit of the value tells message severity:
+    *  - 1: INFO
+    *  - 2: WARNING
+    *  - 3: ERROR
+    * Second digit
+    *  - 0: Means the message goes without any extra variables
+    *  - 1: Means the message takes also an extra variable value
+    * Third and fourth digit
+    *  - are just identifiers
+    */
+    // Method to populate the map with predefined messages
+    private void populateMessages() {
+        // Info messages start with "1xxx"
+        notificationMessages.put("1000", "Route should now be started successfully");
+        // Warning messages start with "2xxx"
+        notificationMessages.put("1001", "Route should now be stopped successfully");
+        // Error messages start with "3xxx"
+        notificationMessages.put("1102", "Next route coordinate index updated to");
+    }
+
+    // Method to retrieve a message by its tag
+    public String getMessage(String tag) {
+        return notificationMessages.get(tag);
+    }
+
+    // Method to determine the severity of a message based on its tag
+    private String getSeverity(String tag) {
+        if (tag.startsWith("1")) {
+            return "Info";
+        } else if (tag.startsWith("2")) {
+            return "Warning";
+        } else if (tag.startsWith("3")) {
+            return "Error";
+        } else {
+            return "Unknown";
+        }
+    }
+
+    private boolean checkIfSecondCharIsOne(String tag) {
+        if (tag.charAt(1) == '1') {
+            return true;
+    }
+        else {
+            return false;
+        }
+    }
+
 }
 
 
