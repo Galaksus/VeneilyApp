@@ -1,12 +1,13 @@
 const SaveSettingsButton = document.getElementById("save-settings-button");
 const Switch_GPS = document.getElementById("Switch-GPS");
 const Switch_orientation = document.getElementById("Switch-orientation");
-
+const inputInterpolatedThresold = document.getElementById("distance-to-interpolated-point-threshold");
 
 // The settings, C++ equivalent of struct and JavaScript object (dict), where key equals table's column name and value the value for the column (string)
 var jsObject = {
     is_android_GPS_used: 'false',
-    is_android_orientation_used: 'false'
+    is_android_orientation_used: 'false',
+    distance_to_interpolated_point_threshold: 8
     //key3: 'value3' // add more column names and values when needed
 };
 
@@ -54,12 +55,15 @@ function getAllSettingsData() {
     // set the global object to be equal to the local object (data from DB)
     jsObject = jsObjectLocal;
 
+    console.log(jsObject);
+
 }
 
 function initSettingsDialogWidgets() {
     // set checked state according to the data in the objects
     Switch_GPS.checked = jsObject["is_android_GPS_used"] === "true";
     Switch_orientation.checked = jsObject["is_android_orientation_used"] === "true";
+    inputInterpolatedThresold.value = jsObject["distance_to_interpolated_point_threshold"];
 }
 
 
@@ -79,6 +83,10 @@ Switch_orientation.addEventListener("change", function () {
     // Change object value of the key 'is_android_orientation_used' to the checked state of the switch
     jsObject["is_android_orientation_used"] = Switch_orientation.checked;
   });
+
+inputInterpolatedThresold.addEventListener("change", function () {
+    jsObject["distance_to_interpolated_point_threshold"] = inputInterpolatedThresold.value;
+});
   
 // Reads db and initializes settis dialog widgets on startup
   getAllSettingsData();

@@ -84,9 +84,11 @@ function drawCircleOnCurrentLocationOnMap(latitude, longitude) {
       setViewOnCurrentLocation(latitude, longitude); // set location to current location
       var customIcon = L.divIcon({
         className: 'custom-icon-class',
-        iconSize: [32, 32],
+        iconSize: [30, 30], // Size of the icon
+        iconAnchor: [15, 15], // Center of the arrow (half of the icon size)
         html: '<img src="icons/location-arrow.svg" style="width: 100%; height: 100%; transform-origin: 50% 50%;">'
       });
+
       customMarker = L.marker([latitude, longitude], { icon: customIcon}).addTo(map); // add to map on first run
       isFirstRun = false; // First run is now false
     }
@@ -103,7 +105,8 @@ function drawCircleOnCurrentLocationOnMap(latitude, longitude) {
     angle = _angle - 46.5; // -46.5 is to set the icon to point to north 0 degrees (the icon currently points to 46.5 degreesish (one way to fix this is to make new icon))
     var newIcon = L.divIcon({
         className: 'custom-icon-class',
-        iconSize: [32, 32],
+        iconSize: [30, 30], // Size of the icon
+        iconAnchor: [15, 15], // Center of the arrow (half of the icon size)
         html: '<img src="icons/location-arrow.svg" style="width: 100%; height: 100%; transform-origin: 50% 50%; transform: rotate(' + angle + 'deg);">'
     });
   

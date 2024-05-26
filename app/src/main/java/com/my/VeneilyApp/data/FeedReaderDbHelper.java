@@ -23,13 +23,15 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
     private static final String SQL_CREATE_ANOTHER_ENTRIES =
             "CREATE TABLE " + SettingsTable.FeedEntry.TABLE_NAME + " (" +
                     SettingsTable.FeedEntry.COLUMN_NAME_1 + " TEXT," +
-                    SettingsTable.FeedEntry.COLUMN_NAME_2 + " TEXT)";
+                    SettingsTable.FeedEntry.COLUMN_NAME_2 + " TEXT," +
+                    SettingsTable.FeedEntry.COLUMN_NAME_3 + " int)";
 
     private static final String SQL_INSERT_ANOTHER_ENTRIES =
             "INSERT INTO " + SettingsTable.FeedEntry.TABLE_NAME + " (" +
                     SettingsTable.FeedEntry.COLUMN_NAME_1 + ", " +
-                    SettingsTable.FeedEntry.COLUMN_NAME_2 + ") " +
-                    "VALUES (0, 1)";
+                    SettingsTable.FeedEntry.COLUMN_NAME_2 + ", " +
+                    SettingsTable.FeedEntry.COLUMN_NAME_3 + ") " +
+                    "VALUES (0, 1, 8)";
 
     private static final String SQL_DELETE_ANOTHER_ENTRIES =
             "DROP TABLE IF EXISTS " + SettingsTable.FeedEntry.TABLE_NAME;

@@ -293,3 +293,42 @@ input:checked + .toggle-slider {
 input:checked + .toggle-slider:before {
   transform: translateX(26px);
 }
+
+
+.settings-pane {
+  margin-left: 1%; /* Adjust as needed */
+  margin-right: 1%; /* Adjust as needed */
+  background-color: #f2f2f2; /* Light gray background */
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 20px; /* Add margin on top */
+}
+.settings-pane  h3 {
+  margin-top: 5px; /* Modify default top margin of h2 */
+  border-bottom: 1px solid #000;
+}
+
+
+#distance-to-interpolated-point-threshold {
+  width: 80;
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  outline: none; /* Remove default outline */
+}
+
+#distance-to-interpolated-point-threshold:focus {
+  border-color: #007bff; /* Change border color when focused */
+}
+
+.input-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.input-container label {
+  margin-left: 10px;
+  font-size: 14px;
+}

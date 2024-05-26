@@ -185,6 +185,9 @@
                 <!-- Scrollable dialog content -->
                 <div class="dialog-content">
                     <!-- scrollable content -->
+                    <div class="settings-pane">
+                        <h3>GPS and Orientation</h3>
+
                     <!-- Switch 1 -->
                     <label class="toggle-switch">
                         <span class="text-element">Use Android GPS</span>
@@ -198,13 +201,15 @@
                             <input type="checkbox" id="Switch-orientation">
                             <span class="toggle-slider"></span>
                     </label>
-
-                    <p>Tee tänne Toggle Switch bluetooth buttonin värille että enable/disable</p>
-                    <p>Nämähän pitäis lukee sitten databasesta käynnistyksen kohilla</p>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit....</p>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit....</p>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit....</p>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit....</p>
+                </div>
+                    <div class="settings-pane">
+                        <h3>Auto Mode</h3>
+                        <span class="text-element">Threshold value for distance between current location and interpolated point</span>
+                        <div class="input-container">
+                            <input type="number" min="0" max="100" value="8" id="distance-to-interpolated-point-threshold">
+                            <label for="distance-to-interpolated-point-threshold">m</label>
+                        </div>
+                    </div>
                 </div>
                 <div class="bottom-bar-content">
                     <div class="center-div">

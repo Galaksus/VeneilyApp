@@ -12,6 +12,6 @@ public final class SettingsTable {
         public static final String TABLE_NAME = "Settings";
         public static final String COLUMN_NAME_1 = "is_android_GPS_used";
         public static final String COLUMN_NAME_2 = "is_android_orientation_used";
-        public static final String COLUMN_NAME_3 = "placeholder";
+        public static final String COLUMN_NAME_3 = "distance_to_interpolated_point_threshold";
     }
 }

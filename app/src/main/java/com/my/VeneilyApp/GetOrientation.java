@@ -14,7 +14,7 @@ public class GetOrientation implements SensorEventListener {
     private Sensor magnetometer;
     private float[] mGravity;
     private float[] mGeomagnetic;
-    private static final float ALPHA = 0.05f; // Adjust this value to control the filter strength
+    private static final float ALPHA = 0.025f; // Adjust this value to control the filter strength
     private OrientationListener orientationListener;
 
     // Callback interface to notify another class about orientation changes
