@@ -1,13 +1,26 @@
 const SaveSettingsButton = document.getElementById("save-settings-button");
 const Switch_GPS = document.getElementById("Switch-GPS");
 const Switch_orientation = document.getElementById("Switch-orientation");
-const inputInterpolatedThresold = document.getElementById("distance-to-interpolated-point-threshold");
+const Switch_OpenSeaMap_tile = document.getElementById("Switch-OpenSeaMap-tile");
+const inputInterpolatedThresold = document.getElementById("distance-to-interpolated-point-max");
+
+const kP = document.getElementById("kP");
+const kI = document.getElementById("kI");
+const kD = document.getElementById("kD");
+const dT = document.getElementById("dT");
+
 
 // The settings, C++ equivalent of struct and JavaScript object (dict), where key equals table's column name and value the value for the column (string)
+// These variables goes trough BLE
 var jsObject = {
     is_android_GPS_used: 'false',
     is_android_orientation_used: 'false',
-    distance_to_interpolated_point_threshold: 8
+    distance_to_interpolated_point_max: 8.0,
+    kP: 0,
+    kI: 0,
+    kD: 0,
+    dT: 0,
+    use_OpenSeaMap: 'false'  // This won't go trough BLE, or in fact it will but it will appear as unknown in the ESP32 side.
     //key3: 'value3' // add more column names and values when needed
 };
 
@@ -57,13 +70,25 @@ function getAllSettingsData() {
 
     console.log(jsObject);
 
+    updateUIwithDBdata();
+}
+
+function updateUIwithDBdata() {
+    // Update the UI according the settings
+    toggleSeaMapLayer(jsObject["use_OpenSeaMap"] === "true");
 }
 
 function initSettingsDialogWidgets() {
     // set checked state according to the data in the objects
     Switch_GPS.checked = jsObject["is_android_GPS_used"] === "true";
     Switch_orientation.checked = jsObject["is_android_orientation_used"] === "true";
-    inputInterpolatedThresold.value = jsObject["distance_to_interpolated_point_threshold"];
+    Switch_OpenSeaMap_tile.checked = jsObject["use_OpenSeaMap"] === "true";
+    inputInterpolatedThresold.value = jsObject["distance_to_interpolated_point_max"];
+    kP.value = jsObject["kP"];
+    kI.value = jsObject["kI"];
+    kD.value = jsObject["kD"];
+    dT.value = jsObject["dT"];
+
 }
 
 
@@ -72,6 +97,8 @@ SaveSettingsButton.addEventListener("click", function () {
     updateSettingsDatabase(); 
     // Send settings via bluetooth
     sendSettingsViaBLE();
+    // Update the UI according the settings
+    updateUIwithDBdata();
 });
 
 Switch_GPS.addEventListener("change", function () {
@@ -84,10 +111,29 @@ Switch_orientation.addEventListener("change", function () {
     jsObject["is_android_orientation_used"] = Switch_orientation.checked;
   });
 
+  Switch_OpenSeaMap_tile.addEventListener("change", function () {
+    // Change object value of the key 'use_OpenSeaMap' to the checked state of the switch
+    jsObject["use_OpenSeaMap"] = Switch_OpenSeaMap_tile.checked;
+  });
+
 inputInterpolatedThresold.addEventListener("change", function () {
-    jsObject["distance_to_interpolated_point_threshold"] = inputInterpolatedThresold.value;
+    jsObject["distance_to_interpolated_point_max"] = inputInterpolatedThresold.value;
 });
   
+kP.addEventListener("change", function () {
+    jsObject["kP"] = kP.value;
+});
+kI.addEventListener("change", function () {
+    jsObject["kI"] = kI.value;
+});
+kD.addEventListener("change", function () {
+    jsObject["kD"] = kD.value;
+});
+dT.addEventListener("change", function () {
+    jsObject["dT"] = dT.value;
+});
+
+
 // Reads db and initializes settis dialog widgets on startup
   getAllSettingsData();
   initSettingsDialogWidgets();

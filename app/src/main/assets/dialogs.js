@@ -332,7 +332,7 @@ function sendGPSandOriData() {
       // Here it sends the current location every 1.5 seconds coordinates via BLE
       interValForAutoModeBLE = setInterval(function () {
         Android.JSToBLEInterfaceGPSandOri(BLECharacteristicUUIDs.CURRENT_LOCATION_CHARACTERISTIC_UUID, isAndroidGPSinUse, isAndroidOrientationInUse);
-      }, 1500);
+      }, 200);
       console.log("Interval started: ", interValForAutoModeBLE);
     }
 } else {
@@ -479,6 +479,10 @@ function fwdBwdRadioButtonChanged() {
   }, 75);
 }
 
+function showPopup(id) {
+  var popup = document.getElementById(id);
+  popup.style.display = (popup.style.display === "block") ? "none" : "block";
+}
 
 // Initialize default value
 setBluetoothConnectionStateText(BluetoothConnectionState);

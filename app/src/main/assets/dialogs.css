@@ -266,8 +266,8 @@
 .toggle-slider {
   position: relative;
   cursor: pointer;
-  width: 60px;
-  height: 34px;
+  width: 55px;
+  height: 28px;
   margin-left: 10px;
   background-color: #ccc;
   border-radius: 34px;
@@ -277,8 +277,8 @@
 .toggle-slider:before {
   position: absolute;
   content: "";
-  height: 26px;
-  width: 26px;
+  height: 20px;
+  width: 20px;
   left: 4px;
   bottom: 4px;
   background-color: white;
@@ -294,7 +294,6 @@ input:checked + .toggle-slider:before {
   transform: translateX(26px);
 }
 
-
 .settings-pane {
   margin-left: 1%; /* Adjust as needed */
   margin-right: 1%; /* Adjust as needed */
@@ -303,23 +302,66 @@ input:checked + .toggle-slider:before {
   border-radius: 5px;
   margin-top: 20px; /* Add margin on top */
 }
-.settings-pane  h3 {
-  margin-top: 5px; /* Modify default top margin of h2 */
+
+.settings-pane h3 {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 5px; /* Modify default top margin of h3 */
   border-bottom: 1px solid #000;
+  align-items: center;
+}
+
+.info-icon {
+  width: 24px; /* Adjust the size of the icon */
+  height: 24px;
+  cursor: pointer;
+}
+
+.info-popup {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 280px; /* Adjust width as needed */
+  padding: 15px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 9999;
+}
+
+.info-popup p {
+  margin: 0 0 10px;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.info-popup h2 {
+  margin-top: 0;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.close-info-popup {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  cursor: pointer;
 }
 
 
-#distance-to-interpolated-point-threshold {
+#distance-to-interpolated-point-max {
   width: 80;
   padding: 10px;
   text-align: center;
   border: 1px solid #ccc;
   border-radius: 5px;
-  font-size: 16px;
   outline: none; /* Remove default outline */
 }
 
-#distance-to-interpolated-point-threshold:focus {
+#distance-to-interpolated-point-max:focus {
   border-color: #007bff; /* Change border color when focused */
 }
 
@@ -331,4 +373,42 @@ input:checked + .toggle-slider:before {
 .input-container label {
   margin-left: 10px;
   font-size: 14px;
+}
+
+
+/* Input container for PID parameters */
+.pid-input-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+/* Label styling */
+.pid-input-container label {
+  flex: 0 0 50px;
+  color: #666;
+  font-size: 0.95em;
+  margin-right: 10px;
+}
+
+/* Input field styling */
+.pid-input-container input {
+  width: 80px;
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  outline: none; /* Remove default outline */
+}
+
+.pid-input-container input:focus {
+  border-color: #007bff; /* Change border color when focused */
+}
+
+.close-info-popup {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  color: #3333;
 }

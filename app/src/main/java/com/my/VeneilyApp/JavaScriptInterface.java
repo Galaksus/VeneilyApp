@@ -299,6 +299,8 @@ public class JavaScriptInterface implements GetOrientation.OrientationListener {
         float pitchDegrees = (float) Math.toDegrees(pitch);
         float rollDegrees = (float) Math.toDegrees(roll);
         azimuthDegrees_ = azimuthDegrees;
+        Log.d("OrientationTAG2: ", "Deg: " + String.valueOf(azimuthDegrees_));
+
         callJavaScriptFunction("setMarkerRotation('"+azimuthDegrees+"');"); // Call the desired JS function with the orientation data
     }
 

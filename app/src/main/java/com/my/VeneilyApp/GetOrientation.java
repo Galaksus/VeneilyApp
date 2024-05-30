@@ -66,9 +66,9 @@ public class GetOrientation implements SensorEventListener {
                 }
 
                 // Log the orientation values
-                Log.d(TAG, "Azimuth: " + azimuth);
-                Log.d(TAG, "Pitch: " + pitch);
-                Log.d(TAG, "Roll: " + roll);
+               // Log.d(TAG, "Azimuth: " + azimuth);
+               // Log.d(TAG, "Pitch: " + pitch);
+               // Log.d(TAG, "Roll: " + roll);
             }
         }
     }

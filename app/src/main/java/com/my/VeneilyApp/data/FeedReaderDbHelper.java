@@ -24,14 +24,25 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
             "CREATE TABLE " + SettingsTable.FeedEntry.TABLE_NAME + " (" +
                     SettingsTable.FeedEntry.COLUMN_NAME_1 + " TEXT," +
                     SettingsTable.FeedEntry.COLUMN_NAME_2 + " TEXT," +
-                    SettingsTable.FeedEntry.COLUMN_NAME_3 + " int)";
+                    SettingsTable.FeedEntry.COLUMN_NAME_3 + " REAL," +
+                    SettingsTable.FeedEntry.COLUMN_NAME_4 + " REAL," +
+                    SettingsTable.FeedEntry.COLUMN_NAME_5 + " REAL," +
+                    SettingsTable.FeedEntry.COLUMN_NAME_6 + " REAL," +
+                    SettingsTable.FeedEntry.COLUMN_NAME_7 + " REAL," +
+                    SettingsTable.FeedEntry.COLUMN_NAME_8 + " TEXT);";
+
 
     private static final String SQL_INSERT_ANOTHER_ENTRIES =
             "INSERT INTO " + SettingsTable.FeedEntry.TABLE_NAME + " (" +
                     SettingsTable.FeedEntry.COLUMN_NAME_1 + ", " +
                     SettingsTable.FeedEntry.COLUMN_NAME_2 + ", " +
-                    SettingsTable.FeedEntry.COLUMN_NAME_3 + ") " +
-                    "VALUES (0, 1, 8)";
+                    SettingsTable.FeedEntry.COLUMN_NAME_3 + ", " +
+                    SettingsTable.FeedEntry.COLUMN_NAME_4 + ", " +
+                    SettingsTable.FeedEntry.COLUMN_NAME_5 + ", " +
+                    SettingsTable.FeedEntry.COLUMN_NAME_6 + ", " +
+                    SettingsTable.FeedEntry.COLUMN_NAME_7 + ", " +
+                    SettingsTable.FeedEntry.COLUMN_NAME_8 + ") " +
+                    "VALUES (1, 1, 8.0, 1.0, 0.1, 0.01, 0.2, 0)";
 
     private static final String SQL_DELETE_ANOTHER_ENTRIES =
             "DROP TABLE IF EXISTS " + SettingsTable.FeedEntry.TABLE_NAME;

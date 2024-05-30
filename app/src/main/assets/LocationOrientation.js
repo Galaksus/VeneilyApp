@@ -101,8 +101,8 @@ function drawCircleOnCurrentLocationOnMap(latitude, longitude) {
     }
   }
   
-  function setMarkerRotation(_angle) {
-    angle = _angle - 46.5; // -46.5 is to set the icon to point to north 0 degrees (the icon currently points to 46.5 degreesish (one way to fix this is to make new icon))
+  // Rotates the orientationIcon in the map according to current orientation called from javascript interface
+  function setMarkerRotation(angle) {
     var newIcon = L.divIcon({
         className: 'custom-icon-class',
         iconSize: [30, 30], // Size of the icon

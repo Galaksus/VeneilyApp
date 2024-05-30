@@ -186,7 +186,7 @@
                 <div class="dialog-content">
                     <!-- scrollable content -->
                     <div class="settings-pane">
-                        <h3>GPS and Orientation</h3>
+                        <h3>General settings</h3>
 
                     <!-- Switch 1 -->
                     <label class="toggle-switch">
@@ -201,15 +201,67 @@
                             <input type="checkbox" id="Switch-orientation">
                             <span class="toggle-slider"></span>
                     </label>
+
+                    <!-- Switch 3 -->
+                    <label class="toggle-switch">
+                        <span class="text-element">Remove/Add OpenSeaMap tile</span>
+                            <input type="checkbox" id="Switch-OpenSeaMap-tile">
+                            <span class="toggle-slider"></span>
+                    </label>
                 </div>
                     <div class="settings-pane">
-                        <h3>Auto Mode</h3>
-                        <span class="text-element">Threshold value for distance between current location and interpolated point</span>
+                        <h3>Auto Mode
+                            <img class="info-icon" src="icons/info-icon.svg" alt="Info" onclick="showPopup('auto-mode-info')">
+                        </h3>
+                        <span class="text-element">Maximum distance between current location and interpolated point, a lower value has more effect on the rotation of servo</span>
                         <div class="input-container">
-                            <input type="number" min="0" max="100" value="8" id="distance-to-interpolated-point-threshold">
-                            <label for="distance-to-interpolated-point-threshold">m</label>
+                            <input type="number" min="0" max="100" value="8" step="0.01" id="distance-to-interpolated-point-max">
+                            <label for="distance-to-interpolated-point-max">m</label>
+                        </div>
+                        <div id="auto-mode-info" class="info-popup">
+                            <span class="close-info-popup" style="color: #333;"
+                            onclick="closeDialog(document.getElementById('auto-mode-info'))">&#10006;</span>
+                            <p>Info about auto mode.</p>
                         </div>
                     </div>
+                    <div class="settings-pane">
+                        <h3>PID parameters
+                            <img class="info-icon" src="icons/info-icon.svg" alt="Info" onclick="showPopup('pidInfo')">
+                        </h3>
+                        <div class="pid-input-container">
+                            <label for="kP">kP:</label>
+                            <input type="number" id="kP" name="kP" step="0.01" value="0.00" id="kP">
+                        </div>
+                        <div class="pid-input-container">
+                            <label for="kI">kI:</label>
+                            <input type="number" id="kI" name="kI" step="0.01" value="0.00" id="kI">
+                        </div>
+                        <div class="pid-input-container">
+                            <label for="kD">kD:</label>
+                            <input type="number" id="kD" name="kD" step="0.01" value="0.00" id="kD">
+                        </div>
+                        <div class="pid-input-container">
+                            <label for="dT">dT:</label>
+                            <input type="number" id="dT" name="dT" step="0.01" value="0.00" id="dT">
+                        </div>
+                        <div id="pidInfo" class="info-popup">
+                            <span class="close-info-popup" style="color: #333;" onclick="closeDialog(document.getElementById('pidInfo'))">&#10006;</span>
+                            <h2>PID Controller Information</h2>
+                            <p><strong>kP (Proportional Gain):</strong></p>
+                            <p>Determines immediate response strength to current error. Higher values lead to faster but potentially more oscillatory response. Lower values result in smoother response but may be slower or cause steady-state error.</p>
+                            
+                            <p><strong>kI (Integral Gain):</strong></p>
+                            <p>Considers accumulation of past errors over time to eliminate steady-state error. Higher values eliminate error faster but can lead to instability. Lower values may result in slower error elimination or persistent error.</p>
+                            
+                            <p><strong>kD (Derivative Gain):</strong></p>
+                            <p>Accounts for rate of change of error to dampen system response. Higher values reduce overshoot and oscillations but may cause instability. Lower values allow more oscillations and overshoot.</p>
+                            
+                            <p><strong>dT (Sampling Time):</strong></p>
+                            <p>Controller update interval. Smaller values allow quicker response but may increase computational load. Larger values slow response but reduce computational load.</p>
+                        </div>
+                        
+                    </div>
+
                 </div>
                 <div class="bottom-bar-content">
                     <div class="center-div">
