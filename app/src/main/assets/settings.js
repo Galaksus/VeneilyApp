@@ -3,6 +3,7 @@ const Switch_GPS = document.getElementById("Switch-GPS");
 const Switch_orientation = document.getElementById("Switch-orientation");
 const Switch_OpenSeaMap_tile = document.getElementById("Switch-OpenSeaMap-tile");
 const inputInterpolatedThresold = document.getElementById("distance-to-interpolated-point-max");
+const servoMaxChange = document.getElementById("servo-max-change");
 
 const kP = document.getElementById("kP");
 const kI = document.getElementById("kI");
@@ -16,6 +17,7 @@ var jsObject = {
     is_android_GPS_used: 'false',
     is_android_orientation_used: 'false',
     distance_to_interpolated_point_max: 8.0,
+    servo_max_change: 10,
     kP: 0,
     kI: 0,
     kD: 0,
@@ -84,11 +86,11 @@ function initSettingsDialogWidgets() {
     Switch_orientation.checked = jsObject["is_android_orientation_used"] === "true";
     Switch_OpenSeaMap_tile.checked = jsObject["use_OpenSeaMap"] === "true";
     inputInterpolatedThresold.value = jsObject["distance_to_interpolated_point_max"];
+    servoMaxChange.value = jsObject["servo_max_change"];
     kP.value = jsObject["kP"];
     kI.value = jsObject["kI"];
     kD.value = jsObject["kD"];
     dT.value = jsObject["dT"];
-
 }
 
 
@@ -120,6 +122,19 @@ inputInterpolatedThresold.addEventListener("change", function () {
     jsObject["distance_to_interpolated_point_max"] = inputInterpolatedThresold.value;
 });
   
+servoMaxChange.addEventListener("input", function () {
+    // Ensure the value is an integer
+    const value = parseFloat(servoMaxChange.value);
+    if (!isNaN(value)) {
+        servoMaxChange.value = Math.round(value); // Display integer value
+    }
+});
+
+servoMaxChange.addEventListener("change", function () {
+    // Update the jsObject with the integer value
+    jsObject["servo_max_change"] = parseInt(servoMaxChange.value, 10);
+});
+
 kP.addEventListener("change", function () {
     jsObject["kP"] = kP.value;
 });

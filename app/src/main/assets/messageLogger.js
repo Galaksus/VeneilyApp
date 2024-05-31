@@ -97,6 +97,6 @@ function updatePlaceholder() {
 }
 
 // Example usage
-logMessage('This is an info message that is particularly long and should not overflow the container.', 'info');
-logMessage('This is a warning message', 'warning');
-logMessage('This is an error message', 'error');
+//logMessage('This is an info message that is particularly long and should not overflow the container.', 'info');
+//logMessage('This is a warning message', 'warning');
+//logMessage('This is an error message', 'error');

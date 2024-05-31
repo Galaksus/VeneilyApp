@@ -8,6 +8,9 @@ let centerMeButtonToggled = false;
 let angle; // Angle of the orientation arrow
 var customMarker; // This is the orientation arrow
 
+// Variable to store the polyline
+var lockModePolyline;
+
 centerMeButton.addEventListener("click", function () {
     centerMeButtonToggled = !centerMeButtonToggled;
     if (centerMeButtonToggled) {
@@ -24,6 +27,27 @@ centerMeButton.addEventListener("click", function () {
     }
   });
 
+function drawLockModeLine(coordianteString) {
+  console.log("coordianteString", coordianteString);
+
+  // Parse the coordinate string into latitude and longitude
+  var coords = coordianteString.split(',');
+  var lat = parseFloat(coords[0]);
+  var lon = parseFloat(coords[1]);
+
+  // Create a new LatLng object from the parsed coordinates
+  var targetLatLng = L.latLng(lat, lon);
+
+  // Create a polyline between the custom marker and the target coordinates
+  lockModePolyline = L.polyline([customMarker.getLatLng(), targetLatLng], { color: 'red' }).addTo(map);
+}
+// Function to remove the line
+function removeLine() {
+  if (lockModePolyline) {
+    map.removeLayer(lockModePolyline);
+    lockModePolyline = null;
+  }
+}
 function moveMapView(coordinatesPairs, currentIndex) {
   clearMap();
   // Create an array to store LatLng objects for each marker

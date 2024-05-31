@@ -237,7 +237,8 @@ public class BLEHandler {
             String part2 = message.substring(splitIndex);
             String tag = part1;
             // Process the received message
-            Log.d(TAG, "Received notification: " + tag);
+            Log.d(TAG, "Received notification with tag: " + tag);
+            Log.d(TAG, "Full message: " + message);
 
             String severity = getSeverity(tag);
             String notificationMessage = getMessage(tag);
@@ -258,6 +259,9 @@ public class BLEHandler {
                         @Override
                         public void run() {
                             JavaScriptInterface.callJavaScriptFunction("logMessage('" + finalNotificationMessage + "','" + severity + "');");
+                            if (tag.equals("1104")) {
+                                JavaScriptInterface.callJavaScriptFunction("drawLockModeLine('" + part2 + "');");
+                            }
                         }
                     });
                 }
@@ -446,11 +450,13 @@ public class BLEHandler {
     // Method to populate the map with predefined messages
     private void populateMessages() {
         // Info messages start with "1xxx"
-        notificationMessages.put("1000", "Route should now be started successfully");
         // Warning messages start with "2xxx"
-        notificationMessages.put("1001", "Route should now be stopped successfully");
         // Error messages start with "3xxx"
-        notificationMessages.put("1102", "Next route coordinate index updated to");
+        notificationMessages.put("1000", "Route should now be started successfully");
+        notificationMessages.put("1001", "Route should now be stopped successfully");
+        notificationMessages.put("1002", "Orientation for route mode should now be initialized successfully");
+        notificationMessages.put("1103", "Next route coordinate index updated to");
+        notificationMessages.put("1104", "Direction coordinate used in lock mode");
     }
 
     // Method to retrieve a message by its tag

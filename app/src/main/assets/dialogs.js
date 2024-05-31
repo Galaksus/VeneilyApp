@@ -156,6 +156,8 @@ ManualMotorSpeedSlider.addEventListener("touchend", function () {
 ManualMotorSpeedSliderValue.textContent = ManualMotorSpeedSlider.value; // Initialize with the default value
 
 LockDirectionButton.addEventListener("click", function () {
+    removeLine(); // Removes the lockModePolyline if it exists, this is done on every click of the Lock direction button
+  
       if (parseInt(BluetoothConnectionState) !== 2 && !isLockModeOn) {
         // Create error message
         showToast("Bluetooth not connected", "white");

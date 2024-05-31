@@ -352,7 +352,7 @@ input:checked + .toggle-slider:before {
 }
 
 
-#distance-to-interpolated-point-max {
+.auto-mode-input-container {
   width: 80;
   padding: 10px;
   text-align: center;
@@ -361,7 +361,7 @@ input:checked + .toggle-slider:before {
   outline: none; /* Remove default outline */
 }
 
-#distance-to-interpolated-point-max:focus {
+.auto-mode-input-container :focus {
   border-color: #007bff; /* Change border color when focused */
 }
 
