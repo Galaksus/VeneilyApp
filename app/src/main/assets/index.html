@@ -213,10 +213,10 @@
                         <h3>Auto Mode
                             <img class="info-icon" src="icons/info-icon.svg" alt="Info" onclick="showPopup('auto-mode-info')">
                         </h3>
-                        <span class="text-element">Maximum distance between current location and interpolated point, a lower value has more effect on the rotation of servo</span>
+                        <span class="text-element">Max distance in meters</span>
                         <div class="input-container">
                             <input type="number" min="0" max="100" value="50" step="0.01" class="auto-mode-input-container" id="distance-to-interpolated-point-max">
-                            <label for="distance-to-interpolated-point-max">m</label>
+                            <label for="distance-to-interpolated-point-max"></label>
                         </div>
                         <span class="text-element">Servo max change</span>
                         <div class="input-container">
@@ -224,9 +224,12 @@
                         </div>
 
                         <div id="auto-mode-info" class="info-popup">
-                            <span class="close-info-popup" style="color: #333;"
-                            onclick="closeDialog(document.getElementById('auto-mode-info'))">&#10006;</span>
-                            <p>Info about auto mode.</p>
+                            <span class="close-info-popup" style="color: #333;" onclick="closeDialog(document.getElementById('auto-mode-info'))">&#10006;</span>
+                            <h2>Auto mode info</h2>
+                            <p><strong>Maximum distance:</strong></p>
+                            <p>Maximum distance between current location and interpolated point in meters. A lower value has more effect on the rotation of the servo and a larger value has less effect.</p>
+                            <p><strong>Servo max change:</strong></p>
+                            <p>The maximum amount of rotation in degrees a servo can have after a single iteration of PID control algorithm.</p>
                         </div>
                     </div>
                     <div class="settings-pane">
@@ -254,19 +257,14 @@
                             <h2>PID Controller Information</h2>
                             <p><strong>kP (Proportional Gain):</strong></p>
                             <p>Determines immediate response strength to current error. Higher values lead to faster but potentially more oscillatory response. Lower values result in smoother response but may be slower or cause steady-state error.</p>
-                            
                             <p><strong>kI (Integral Gain):</strong></p>
                             <p>Considers accumulation of past errors over time to eliminate steady-state error. Higher values eliminate error faster but can lead to instability. Lower values may result in slower error elimination or persistent error.</p>
-                            
                             <p><strong>kD (Derivative Gain):</strong></p>
                             <p>Accounts for rate of change of error to dampen system response. Higher values reduce overshoot and oscillations but may cause instability. Lower values allow more oscillations and overshoot.</p>
-                            
                             <p><strong>dT (Sampling Time):</strong></p>
                             <p>Controller update interval. Smaller values allow quicker response but may increase computational load. Larger values slow response but reduce computational load.</p>
                         </div>
-                        
                     </div>
-
                 </div>
                 <div class="bottom-bar-content">
                     <div class="center-div">

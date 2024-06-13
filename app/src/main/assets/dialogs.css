@@ -353,7 +353,7 @@ input:checked + .toggle-slider:before {
 
 
 .auto-mode-input-container {
-  width: 80;
+  width: 80px;
   padding: 10px;
   text-align: center;
   border: 1px solid #ccc;

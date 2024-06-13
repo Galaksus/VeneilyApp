@@ -7,7 +7,7 @@ var isFirstRun = true; // This is for
 let centerMeButtonToggled = false;
 let angle; // Angle of the orientation arrow
 var customMarker; // This is the orientation arrow
-
+var previousLocation = null;
 // Variable to store the polyline
 var lockModePolyline;
 
@@ -20,10 +20,12 @@ centerMeButton.addEventListener("click", function () {
       //drawCircleOnCurrentLocationOnMap(currentLatLng.lat,  currentLatLng.lng);
   
       centerMeButtonSrc.src = "icons/center-me-active.svg"
+      if (previousLocation) {
+        setViewOnCurrentLocation(previousLocation.latitude, previousLocation.longitude); // set location to the previous location
+      }
 
     } else {
       centerMeButtonSrc.src = "icons/center-me-normal.svg"
-
     }
   });
 
@@ -102,9 +104,13 @@ function drawCircleOnCurrentLocationOnMap(latitude, longitude) {
      */
     // on startup (first time running this function) center location to current location
   
+    previousLocation = {
+      latitude: latitude,
+      longitude: longitude
+  };
+
     // Check if the marker already exists on the map
-  
-    if (isFirstRun) { // TUO centerMeButtonToggled TÄYTYY FIXATA!
+    if (isFirstRun) {
       setViewOnCurrentLocation(latitude, longitude); // set location to current location
       var customIcon = L.divIcon({
         className: 'custom-icon-class',
