@@ -6,7 +6,16 @@
 body {
   user-select: none;
 }
-
+.attribution-control {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  height: 30px;
+  width: 30px;
+  margin-left: 15px;
+  background: transparent;
+  z-index: 1000;
+}
 #map-container {
   margin: 0;
   padding: 0;

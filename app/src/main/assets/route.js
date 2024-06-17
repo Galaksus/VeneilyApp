@@ -48,6 +48,19 @@ var seaMapLayer = L.tileLayer('http://tiles.openseamap.org/seamark/{z}/{x}/{y}.p
     maxZoom: 18,
     opacity: 0.75
 });
+// Function to toggle the visibility of the attribution
+function toggleAttribution() {
+  var attributionElement = document.querySelector('.leaflet-control-attribution');
+  if (attributionElement.style.display === 'none') {
+    attributionElement.style.display = 'block';
+  } else {
+    attributionElement.style.display = 'none';
+  }
+}
+// Set the attribution initially invisible and move it to the top center
+var attributionElement = document.querySelector('.leaflet-control-attribution');
+attributionElement.style.display = 'none';
+attributionElement.style.transform = 'translateX(-25%)';
 
 // Function to add or remove the OpenSeaMap tile layer
 function toggleSeaMapLayer(showSeaMap) {
@@ -59,14 +72,11 @@ function toggleSeaMapLayer(showSeaMap) {
       // Add the OpenSeaMap tile layer to the map
       if (!map.hasLayer(seaMapLayer)) {
           seaMapLayer.addTo(map);
-          console.log("KÄVIKÖ");
       }
   } else {
       // Remove the OpenSeaMap tile layer from the map
       if (map.hasLayer(seaMapLayer)) {
           map.removeLayer(seaMapLayer);
-          console.log("KÄVIKÖ2");
-
       }
   }
 }
