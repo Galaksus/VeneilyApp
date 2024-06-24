@@ -3,6 +3,8 @@ const Switch_GPS = document.getElementById("Switch-GPS");
 const Switch_orientation = document.getElementById("Switch-orientation");
 const Switch_OpenSeaMap_tile = document.getElementById("Switch-OpenSeaMap-tile");
 const inputInterpolatedThresold = document.getElementById("distance-to-interpolated-point-max");
+const distanceToAnchorPointThreshold = document.getElementById("distance-to-anchor-point-threshold");
+const outboardMotorPwmMin = document.getElementById("outboard-motor-pwm-min");
 const servoMaxChange = document.getElementById("servo-max-change");
 
 const kP = document.getElementById("kP");
@@ -17,6 +19,8 @@ var jsObject = {
     is_android_GPS_used: 'false',
     is_android_orientation_used: 'false',
     distance_to_interpolated_point_max: 8.0,
+    distance_to_anchor_point_threshold: 3,
+    outboard_motor_pwm_min: 20,
     servo_max_change: 10,
     kP: 0,
     kI: 0,
@@ -86,6 +90,8 @@ function initSettingsDialogWidgets() {
     Switch_orientation.checked = jsObject["is_android_orientation_used"] === "true";
     Switch_OpenSeaMap_tile.checked = jsObject["use_OpenSeaMap"] === "true";
     inputInterpolatedThresold.value = jsObject["distance_to_interpolated_point_max"];
+    distanceToAnchorPointThreshold.value = jsObject["distance_to_anchor_point_threshold"];
+    outboardMotorPwmMin.value = jsObject["outboard_motor_pwm_min"];
     servoMaxChange.value = jsObject["servo_max_change"];
     kP.value = jsObject["kP"];
     kI.value = jsObject["kI"];
@@ -113,7 +119,7 @@ Switch_orientation.addEventListener("change", function () {
     jsObject["is_android_orientation_used"] = Switch_orientation.checked;
   });
 
-  Switch_OpenSeaMap_tile.addEventListener("change", function () {
+Switch_OpenSeaMap_tile.addEventListener("change", function () {
     // Change object value of the key 'use_OpenSeaMap' to the checked state of the switch
     jsObject["use_OpenSeaMap"] = Switch_OpenSeaMap_tile.checked;
   });
@@ -121,13 +127,27 @@ Switch_orientation.addEventListener("change", function () {
 inputInterpolatedThresold.addEventListener("change", function () {
     jsObject["distance_to_interpolated_point_max"] = inputInterpolatedThresold.value;
 });
-  
+
+distanceToAnchorPointThreshold.addEventListener("change", function () {
+    jsObject["distance_to_anchor_point_threshold"] = distanceToAnchorPointThreshold.value;
+});
+
 servoMaxChange.addEventListener("input", function () {
     // Ensure the value is an integer
     const value = parseFloat(servoMaxChange.value);
     if (!isNaN(value)) {
         servoMaxChange.value = Math.round(value); // Display integer value
     }
+});
+
+outboardMotorPwmMin.addEventListener("change", function () {
+    // Update the jsObject with the integer value
+    jsObject["outboard_motor_pwm_min"] = parseInt(outboardMotorPwmMin.value, 10);
+});
+
+outboardMotorPwmMin.addEventListener("change", function () {
+    // Update the jsObject with the integer value
+    jsObject["outboard_motor_pwm_min"] = parseInt(outboardMotorPwmMin.value, 10);
 });
 
 servoMaxChange.addEventListener("change", function () {

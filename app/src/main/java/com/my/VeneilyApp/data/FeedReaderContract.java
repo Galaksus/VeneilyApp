@@ -9,7 +9,7 @@ public final class FeedReaderContract {
 
     // Inner class that defines the table contents
     public static class FeedEntry implements BaseColumns {
-        public static final String TABLE_NAME = "entry";
+        public static final String TABLE_NAME = "Routes";
         public static final String COLUMN_NAME_TITLE = "title";
         public static final String COLUMN_NAME_COORDINATESTRING = "CoordinateString";
         public static final String COLUMN_NAME_TYPE = "routeType";

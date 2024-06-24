@@ -455,6 +455,7 @@ public class BLEHandler {
         notificationMessages.put("1000", "Route should now be started successfully");
         notificationMessages.put("1001", "Route should now be stopped successfully");
         notificationMessages.put("1002", "Orientation for route mode should now be initialized successfully");
+        notificationMessages.put("1003", "Motor speed set to zero on anchor mode");
         notificationMessages.put("1103", "Next route coordinate index updated to");
         notificationMessages.put("1104", "Direction coordinate used in lock mode");
     }

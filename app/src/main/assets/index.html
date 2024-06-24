@@ -105,7 +105,7 @@
                         </div>
                         
                         <div class="svg-button" id="messages-button">
-                            <img class="svg-image" id="messages-button-src" src="icons/message-alert-icon.svg" alt="Messages Icon">
+                            <img class="svg-image" id="messages-button-src" src="icons/message-icon.svg" alt="Messages Icon">
                             <p class="menu-text">Messages</p>
                         </div>
 
@@ -211,9 +211,16 @@
                             <input type="checkbox" id="Switch-OpenSeaMap-tile">
                             <span class="toggle-slider"></span>
                     </label>
+
+                    <!-- Input 1 -->
+                    <span class="text-element">Outboard motor PWM min</span>
+                    <div class="input-container">
+                        <input type="number" min="0" max="100" value="50" step="1" class="auto-mode-input-container" id="outboard-motor-pwm-min">
+                        <label for="outboard_motor_pwm_min"></label>
+                    </div>
                 </div>
                     <div class="settings-pane">
-                        <h3>Auto Mode
+                        <h3>Auto Mode / Lock Mode
                             <img class="info-icon" src="icons/info-icon.svg" alt="Info" onclick="showPopup('auto-mode-info')">
                         </h3>
                         <span class="text-element">Max distance in meters</span>
@@ -228,13 +235,32 @@
 
                         <div id="auto-mode-info" class="info-popup">
                             <span class="close-info-popup" style="color: #333;" onclick="closeDialog(document.getElementById('auto-mode-info'))">&#10006;</span>
-                            <h2>Auto mode info</h2>
+                            <h2>Auto / lock mode info</h2>
                             <p><strong>Maximum distance:</strong></p>
                             <p>Maximum distance between current location and interpolated point in meters. A lower value has more effect on the rotation of the servo and a larger value has less effect.</p>
                             <p><strong>Servo max change:</strong></p>
                             <p>The maximum amount of rotation in degrees a servo can have after a single iteration of PID control algorithm.</p>
                         </div>
                     </div>
+
+
+                    <div class="settings-pane">
+                        <h3> Anchor mode
+                            <img class="info-icon" src="icons/info-icon.svg" alt="Info" onclick="showPopup('anchor-mode-info')">
+                        </h3>
+                        <span class="text-element">Max distance in meters</span>
+                        <div class="input-container">
+                            <input type="number" min="0" max="100" value="3" step="0.01" class="auto-mode-input-container" id="distance-to-anchor-point-threshold">
+                            <label for="distance-to-interpolated-point-max"></label>
+                        </div>
+                        <div id="anchor-mode-info" class="info-popup">
+                            <span class="close-info-popup" style="color: #333;" onclick="closeDialog(document.getElementById('anchor-mode-info'))">&#10006;</span>
+                            <h2>Anchor mode info</h2>
+                            <p><strong>Maximum distance:</strong></p>
+                            <p>Maximum distance between current location and anchor point in meters. Too low value will cause unexpected motor control as the GPS accuracy may vary.</p>
+                        </div>
+                    </div>
+
                     <div class="settings-pane">
                         <h3>PID parameters
                             <img class="info-icon" src="icons/info-icon.svg" alt="Info" onclick="showPopup('pidInfo')">

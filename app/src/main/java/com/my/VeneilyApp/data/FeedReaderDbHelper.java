@@ -25,8 +25,10 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
                     SettingsTable.FeedEntry.is_android_GPS_used + " TEXT," +
                     SettingsTable.FeedEntry.is_android_orientation_used + " TEXT," +
                     SettingsTable.FeedEntry.distance_to_interpolated_point_max + " REAL," +
-                    SettingsTable.FeedEntry.servo_max_change + " REAL," +
-                    SettingsTable.FeedEntry.kP + " INT," +
+                    SettingsTable.FeedEntry.distance_to_anchor_point_threshold + " REAL," +
+                    SettingsTable.FeedEntry.outboard_motor_pwm_min + " INT," +
+                    SettingsTable.FeedEntry.servo_max_change + " INT," +
+                    SettingsTable.FeedEntry.kP + " REAL," +
                     SettingsTable.FeedEntry.kI + " REAL," +
                     SettingsTable.FeedEntry.kD + " REAL," +
                     SettingsTable.FeedEntry.dT + " REAL," +
@@ -38,13 +40,15 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
                     SettingsTable.FeedEntry.is_android_GPS_used + ", " +
                     SettingsTable.FeedEntry.is_android_orientation_used + ", " +
                     SettingsTable.FeedEntry.distance_to_interpolated_point_max + ", " +
+                    SettingsTable.FeedEntry.distance_to_anchor_point_threshold + ", " +
+                    SettingsTable.FeedEntry.outboard_motor_pwm_min + ", " +
                     SettingsTable.FeedEntry.servo_max_change + ", " +
                     SettingsTable.FeedEntry.kP + ", " +
                     SettingsTable.FeedEntry.kI + ", " +
                     SettingsTable.FeedEntry.kD + ", " +
                     SettingsTable.FeedEntry.dT + ", " +
                     SettingsTable.FeedEntry.use_OpenSeaMap + ") " +
-                    "VALUES (1, 1, 8.0, 10, 1.0, 0.1, 0.01, 0.2, 0)";
+                    "VALUES (1, 1, 8.0, 3, 20, 10, 1.0, 0.1, 0.01, 0.2, 0)";
 
     private static final String SQL_DELETE_ANOTHER_ENTRIES =
             "DROP TABLE IF EXISTS " + SettingsTable.FeedEntry.TABLE_NAME;
