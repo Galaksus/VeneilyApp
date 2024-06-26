@@ -6,6 +6,9 @@ import static com.my.VeneilyApp.MainActivity.mywebView;
 import android.app.Activity;
 import android.content.Context;
 import android.hardware.SensorManager;
+import android.location.Location;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.webkit.JavascriptInterface;
 import android.widget.Toast;
@@ -32,6 +35,10 @@ public class JavaScriptInterface implements GetOrientation.OrientationListener {
     private SensorManager sensorManager;
     private float azimuthDegrees_;
     private final GetLocation getLocation;
+    private Handler handler;
+    private boolean isDataStoring = false;
+    private String currentSessionId;
+
     public JavaScriptInterface(Context context, GetLocation getLocation, Activity activity) {
         this.context = context;
         mainActivity = activity;
@@ -42,6 +49,8 @@ public class JavaScriptInterface implements GetOrientation.OrientationListener {
         // Start getting orientation updates
         // Instantiate GetOrientation and set it up
         GetOrientation  getOrientation = new GetOrientation(context, this);
+        handler = new Handler();
+
     }
 
     // New route data from JavaScript to Java
@@ -266,10 +275,13 @@ public class JavaScriptInterface implements GetOrientation.OrientationListener {
     }
 
     public static void callJavaScriptFunction(String javascriptCode){
-        // Execute JavaScript function
-        Log.e("käykö", javascriptCode);
-
-        mywebView.evaluateJavascript(javascriptCode, null);
+        // Post to main thread
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                mywebView.evaluateJavascript(javascriptCode, null);
+            }
+        });
     }
 
 
@@ -302,6 +314,75 @@ public class JavaScriptInterface implements GetOrientation.OrientationListener {
         Log.d("OrientationTAG2: ", "Deg: " + String.valueOf(azimuthDegrees_));
 
         callJavaScriptFunction("setMarkerRotation('"+azimuthDegrees+"');"); // Call the desired JS function with the orientation data
+    }
+
+    @JavascriptInterface
+    public void clearResultsTable() {
+        DataAccessObject.clearResultsTable();
+    }
+
+    @JavascriptInterface
+    public void handleDataStoring(boolean state, String associated_data) {
+        Log.d("DataStoring", "Kutsuttu " + state + " " + associated_data);
+
+        // If state is true and data storing is not already in progress, start it
+        if (state && !isDataStoring) {
+            isDataStoring = true;
+            currentSessionId = UUID.randomUUID().toString(); // Generate a unique session ID
+            startDataStoring(associated_data);
+        } else if (!state) {  // If state is false, stop data storing
+            stopDataStoring();
+        }
+    }
+
+    private void startDataStoring(final String associated_data) {
+        handler = new Handler();
+        final long totalDuration = 5 * 60 * 1000; // 5 minutes in milliseconds
+        final long interval = 5 * 1000; // 10 seconds in milliseconds
+        final long startTime = System.currentTimeMillis();
+
+        // Define the runnable task to execute every interval
+        final Runnable dataStoringRunnable = new Runnable() {
+            @Override
+            public void run() {
+                Location latestLocation = GetLocation.getLatestLocation();
+
+                // Convert to string
+                String locationString;
+                if (latestLocation != null) {
+                    locationString = latestLocation.getLatitude() + ", " + latestLocation.getLongitude();
+                } else {
+                    locationString = "Location not available.";
+                }
+
+                // Store the data
+                DataAccessObject.addRowToResultsTable(currentSessionId, locationString, associated_data);
+                Log.d("DataStoring", "DB:hen kirjoitettu dataa");
+
+                // Check if the total duration has elapsed
+                if (System.currentTimeMillis() - startTime < totalDuration && isDataStoring) {
+                    // Schedule the next execution after interval milliseconds
+                    handler.postDelayed(this, interval);
+                } else {
+                    // Data storing duration has elapsed or it was stopped
+                    stopDataStoring();
+                    // call javascript so that the UI updates correctly
+                    callJavaScriptFunction("setTestDataSaveButtonStateFromJava('"+false+"');");
+                }
+            }
+        };
+
+        // Start executing the data storing task
+        handler.post(dataStoringRunnable);
+    }
+
+    private void stopDataStoring() {
+        if (handler != null) {
+            handler.removeCallbacksAndMessages(null); // Remove all pending callbacks and messages
+        }
+        isDataStoring = false;
+        Log.d("DataStoring", "Data storing stopped.");
+
     }
 
     public interface LocationCallback {

@@ -184,5 +184,31 @@ public class DataAccessObject {
 
         return jsonArray.toString();
     }
+
+    public void addRowToResultsTable(String session_id, String data, String associated_data) {
+        if (session_id == null) {
+            // Handle the error appropriately, e.g., log the error or throw an exception
+            Log.e("DataAccessObject", "Error inserting data: session_id is null");
+            return;
+        }
+        else if (data == null) {
+            // Handle the error appropriately, e.g., log the error or throw an exception
+            Log.e("DataAccessObject", "Error inserting data: data is null");
+            return;
+        }
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(TestResultsTable.FeedEntry.COLUMN_SESSION_ID, session_id);
+        values.put(TestResultsTable.FeedEntry.COLUMN_DATA, data);
+        values.put(TestResultsTable.FeedEntry.ASSOCIATED_WITH, associated_data);
+        db.insert(TestResultsTable.FeedEntry.TABLE_NAME, null, values);
+    }
+    public void clearResultsTable() {
+        // Clears all data from "TestResultsTable"
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        db.delete(TestResultsTable.FeedEntry.TABLE_NAME, null, null);
+    }
+
+    // ...
 }
 

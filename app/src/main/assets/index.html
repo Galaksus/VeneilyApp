@@ -113,6 +113,11 @@
                             <img class="svg-image" src="icons/delete-icon.svg" alt="Delete Icon">
                             <p class="menu-text">Delete</p>
                         </div>
+
+                        <div class="svg-button" id="test-data-saving-button">
+                            <img class="svg-image" src="icons/test-data-saving.svg" alt="Tsta data saving Icon">
+                            <p class="menu-text">Save test data</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -294,6 +299,19 @@
                             <p>Controller update interval. Smaller values allow quicker response but may increase computational load. Larger values slow response but reduce computational load.</p>
                         </div>
                     </div>
+                    
+                    <div class="settings-pane">
+                        <h3>Additional
+                            <img class="info-icon" src="icons/info-icon.svg" alt="Info" onclick="showPopup('pidInfo')">
+                        </h3>
+
+                        <span class="text-element">Full clear test data db</span>
+                        <div class="input-container">
+                            <button id="clear-test-data-db" class="button-class border-radius-20px" style="font-size: 10px;">Clear</button>
+                        </div>
+
+                    </div> 
+
                 </div>
                 <div class="bottom-bar-content">
                     <div class="center-div">
@@ -459,6 +477,7 @@
     <script src="styles.js"></script>
     <script src="settings.js"></script>
     <script src="messageLogger.js"></script>
+    <script src="TestData.js"></script>
 
 
     </div>

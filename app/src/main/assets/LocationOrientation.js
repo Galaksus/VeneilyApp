@@ -29,6 +29,8 @@ centerMeButton.addEventListener("click", function () {
     }
   });
 
+let globalLockModeCoordinates; // used with TestData.js
+
 function drawLockModeLine(coordianteString) {
   console.log("coordianteString", coordianteString);
 
@@ -42,7 +44,11 @@ function drawLockModeLine(coordianteString) {
 
   // Create a polyline between the custom marker and the target coordinates
   lockModePolyline = L.polyline([customMarker.getLatLng(), targetLatLng], { color: 'red' }).addTo(map);
+
+  // Combine the coordinates so that they can be stored with TestData.js if needed
+  globalLockModeCoordinates = customMarker.getLatLng() + ";" + coordianteString;
 }
+
 // Function to remove the line
 function removeLine() {
   if (lockModePolyline) {
@@ -50,6 +56,7 @@ function removeLine() {
     lockModePolyline = null;
   }
 }
+
 function moveMapView(coordinatesPairs, currentIndex) {
   clearMap();
   // Create an array to store LatLng objects for each marker

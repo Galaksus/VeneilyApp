@@ -20,7 +20,7 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
             "DROP TABLE IF EXISTS " + FeedReaderContract.FeedEntry.TABLE_NAME;
 
 
-    private static final String SQL_CREATE_ANOTHER_ENTRIES =
+    private static final String SQL_CREATE_SETTINGS_ENTRIES =
             "CREATE TABLE " + SettingsTable.FeedEntry.TABLE_NAME + " (" +
                     SettingsTable.FeedEntry.is_android_GPS_used + " TEXT," +
                     SettingsTable.FeedEntry.is_android_orientation_used + " TEXT," +
@@ -35,7 +35,7 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
                     SettingsTable.FeedEntry.use_OpenSeaMap + " TEXT);";
 
 
-    private static final String SQL_INSERT_ANOTHER_ENTRIES =
+    private static final String SQL_INSERT_SETTINGS_ENTRIES =
             "INSERT INTO " + SettingsTable.FeedEntry.TABLE_NAME + " (" +
                     SettingsTable.FeedEntry.is_android_GPS_used + ", " +
                     SettingsTable.FeedEntry.is_android_orientation_used + ", " +
@@ -50,6 +50,16 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
                     SettingsTable.FeedEntry.use_OpenSeaMap + ") " +
                     "VALUES (1, 1, 8.0, 3, 20, 10, 1.0, 0.1, 0.01, 0.2, 0)";
 
+
+    // Test table
+    private static final String SQL_CREATE_TESTDATA_ENTRIES =
+            "CREATE TABLE " + TestResultsTable.FeedEntry.TABLE_NAME + " (" +
+                    TestResultsTable.FeedEntry.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    TestResultsTable.FeedEntry.COLUMN_SESSION_ID + " TEXT NOT NULL, " +
+                    TestResultsTable.FeedEntry.COLUMN_DATA + " TEXT NOT NULL, " +
+                    TestResultsTable.FeedEntry.ASSOCIATED_WITH + " TEXT, " +
+                    TestResultsTable.FeedEntry.COLUMN_TIMESTAMP + " DATETIME DEFAULT CURRENT_TIMESTAMP);";
+
     private static final String SQL_DELETE_ANOTHER_ENTRIES =
             "DROP TABLE IF EXISTS " + SettingsTable.FeedEntry.TABLE_NAME;
 
@@ -61,8 +71,10 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
 
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(SQL_CREATE_ENTRIES);
-        db.execSQL(SQL_CREATE_ANOTHER_ENTRIES);
-        db.execSQL(SQL_INSERT_ANOTHER_ENTRIES);
+        db.execSQL(SQL_CREATE_SETTINGS_ENTRIES);
+        db.execSQL(SQL_INSERT_SETTINGS_ENTRIES);
+        db.execSQL(SQL_CREATE_TESTDATA_ENTRIES);
+
 
     }
 

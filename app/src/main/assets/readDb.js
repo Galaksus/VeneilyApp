@@ -1,6 +1,8 @@
 var arrCoordinates = [];
 var arrDropdownOptionNames = [];
 
+var GlobalVarCoordinates = null;
+
 function createDropdownOptions() {
   // Clear all existing div elements inside the dropdown content div
   var dropdownContent = document.getElementById("dropdown-dialog-content");
@@ -65,6 +67,7 @@ function createDropdownOptions() {
   function okPressedOnSelectContainer() {
     if (selectedDiv) {
       const coordinates = selectedDiv.getAttribute("data-coordinates");
+      GlobalVarCoordinates = coordinates; // This line is to save the coordinates to a global var that is accessed from TestData.js
       if (coordinates === null) { // 'coordinates' will be null when "default" route is selected
         clearMap();
         currentIndex = 0;
