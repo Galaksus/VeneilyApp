@@ -154,13 +154,35 @@
                 <!-- Input and buttons container -->
                 <div class="input-buttons-container-class" id="input-buttons-container">
                     <div class="name-buttons-class name-buttons-class-2">
-                        <button class="dialog-ok-cancel-buttons" onclick="cancelClickOnAreYouSurePrompt()">Cancel</button>
+                        <button class="dialog-ok-cancel-buttons" onclick="closeDialog(document.getElementById('are-you-sure-dialog'))">Cancel</button>
                         <button class="dialog-ok-cancel-buttons" onclick="OKClickOnAreYouSurePrompt()">OK</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- The 'Are you sure' dialog container -->
+    <div id="are-you-sure-dialog-2" class="default-dialog" onclick="closeDialog(this);">
+        <div class="dialog-container" onclick="event.stopPropagation();">
+            <!-- Header content -->
+            <div class="dialog-header-content">
+                Are you sure you want to delete all data from TestResults table?
+                <span class="close-dialog-button"
+                onclick="closeDialog(document.getElementById('are-you-sure-dialog-2'))">&#10006;</span>
+            </div>
+            <div class="dialog-content">
+                <!-- Input and buttons container -->
+                <div class="input-buttons-container-class">
+                    <div class="name-buttons-class name-buttons-class-2">
+                        <button class="dialog-ok-cancel-buttons" onclick="closeDialog(document.getElementById('are-you-sure-dialog-2'))">Cancel</button>
+                        <button class="dialog-ok-cancel-buttons" onclick="proceedToClearTestDataTable()">OK</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <!-- The bluetooth dialog container -->
     <div id="bluetooth-dialog" class="default-dialog" onclick="closeDialog(this);">
@@ -256,7 +278,7 @@
                         <span class="text-element">Max distance in meters</span>
                         <div class="input-container">
                             <input type="number" min="0" max="100" value="3" step="0.01" class="auto-mode-input-container" id="distance-to-anchor-point-threshold">
-                            <label for="distance-to-interpolated-point-max"></label>
+                            <label for="distance-to-anchor-point-threshold"></label>
                         </div>
                         <div id="anchor-mode-info" class="info-popup">
                             <span class="close-info-popup" style="color: #333;" onclick="closeDialog(document.getElementById('anchor-mode-info'))">&#10006;</span>
@@ -308,6 +330,18 @@
                         <span class="text-element">Full clear test data db</span>
                         <div class="input-container">
                             <button id="clear-test-data-db" class="button-class border-radius-20px" style="font-size: 10px;">Clear</button>
+                        </div>
+
+                        <span class="text-element">Test data save interval (s)</span>
+                        <div class="input-container">
+                            <input type="number" class="auto-mode-input-container" id="test-data-save-interval">
+                            <label for="test-data-save-interval"></label>
+                        </div>
+
+                        <span class="text-element">Test data save period (m)</span>
+                        <div class="input-container">
+                            <input type="number" class="auto-mode-input-container" id="test-data-save-period">
+                            <label for="test-data-save-period"></label>
                         </div>
 
                     </div> 

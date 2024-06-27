@@ -5,13 +5,6 @@ deleteButton.addEventListener('click', function() {
     AreYouSureDialog.style.display = "block";
 });
 
-function cancelClickOnAreYouSurePrompt() {
-  /*
-  * Hides the "are you sure" dialog on cancel click
-  */
-  AreYouSureDialog.style.display = "none";
-}
-
 function OKClickOnAreYouSurePrompt() {
   /*
    * Performs the delete operation if OK is cliced on the Are you sure propmpt
