@@ -233,7 +233,9 @@ ConnectBluetoothButton.addEventListener("click", function () {
   }
 });
 
-function showToast(message, textColor) {
+function showToast(message, textColor, timePeriod = 2500) {
+  timePeriod = parseInt(timePeriod)
+
   var toast = document.getElementById('toast');
   var toastText = document.getElementById('toast-text');
   toastText.textContent = message;
@@ -257,7 +259,7 @@ function showToast(message, textColor) {
   }
 
   // Remove message after 2.5 seconds
-  showToast.timeoutId = setTimeout(hideToast, 2500);
+  showToast.timeoutId = setTimeout(hideToast, timePeriod);
 }
 
 function hideToast() {

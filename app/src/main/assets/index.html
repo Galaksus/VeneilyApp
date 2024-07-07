@@ -48,7 +48,7 @@
 
             <div class="svg-button" onclick="openDialog(document.getElementById('menu-dialog'))">
               <img class="svg-image" src="icons/menu-icon.svg" alt="Menu Icon">
-              <p class="menu-text">Menu</p>
+              <p class="menu-text">Control</p>
             </div>
 
             <div class="svg-button" id="center-me-button"> 
@@ -103,6 +103,15 @@
                             <img class="svg-image" id="settings-icon-button" src="icons/settings-icon.svg" alt="Settings icon">
                             <p class="menu-text">Settings</p>
                         </div>
+
+
+
+                        <div class="svg-button" onclick="openDialog(document.getElementById('menu-dialog'))">
+                            <img class="svg-image" id="automatic-modes-icon-button" src="icons/automatic-mode.svg" alt="Automatic mode icon">
+                            <p class="menu-text">Automatic modes</p>
+                        </div>
+
+
                         
                         <div class="svg-button" id="messages-button">
                             <img class="svg-image" id="messages-button-src" src="icons/message-icon.svg" alt="Messages Icon">
@@ -324,7 +333,7 @@
                     
                     <div class="settings-pane">
                         <h3>Additional
-                            <img class="info-icon" src="icons/info-icon.svg" alt="Info" onclick="showPopup('pidInfo')">
+                            <img class="info-icon" src="icons/info-icon.svg" alt="Info" onclick="showPopup('additionalInfo')">
                         </h3>
 
                         <span class="text-element">Full clear test data db</span>
@@ -334,14 +343,24 @@
 
                         <span class="text-element">Test data save interval (s)</span>
                         <div class="input-container">
-                            <input type="number" class="auto-mode-input-container" id="test-data-save-interval">
+                            <input type="number" class="auto-mode-input-container" id="test-data-save-interval" value="10">
                             <label for="test-data-save-interval"></label>
                         </div>
 
                         <span class="text-element">Test data save period (m)</span>
                         <div class="input-container">
-                            <input type="number" class="auto-mode-input-container" id="test-data-save-period">
+                            <input type="number" class="auto-mode-input-container" id="test-data-save-period" value="5">
                             <label for="test-data-save-period"></label>
+                        </div>
+                        <div id="additionalInfo" class="info-popup">
+                            <span class="close-info-popup" style="color: #333;" onclick="closeDialog(document.getElementById('additionalInfo'))">&#10006;</span>
+                            <h2>Additional Settings Information</h2>
+                            <p><strong>Full clear test data db</strong></p>
+                            <p>This erases all data from the TestResults table</p>
+                            <p><strong>Test data save interval (s)</strong></p>
+                            <p>This can be used to modify the interval in which the the test data results are stored in to the TestResults table. Unit is seconds.</p>
+                            <p><strong>Test data save period (m)</strong></p>
+                            <p>The total time test data is stored to the database after "Save test data" button is pressed. Unit is minutes.</p>
                         </div>
 
                     </div> 

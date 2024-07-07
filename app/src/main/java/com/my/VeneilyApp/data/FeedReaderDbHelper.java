@@ -7,17 +7,17 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class FeedReaderDbHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
-    private static final String DATABASE_NAME = "FeedReader.db";
+    private static final String DATABASE_NAME = "VeneilyAppDatabase.db";
 
     private static final String SQL_CREATE_ENTRIES =
-            "CREATE TABLE " + FeedReaderContract.FeedEntry.TABLE_NAME + " (" +
-                    FeedReaderContract.FeedEntry._ID + " INTEGER PRIMARY KEY," +
-                    FeedReaderContract.FeedEntry.COLUMN_NAME_TITLE + " TEXT," +
-                    FeedReaderContract.FeedEntry.COLUMN_NAME_COORDINATESTRING + " TEXT," +
-                    FeedReaderContract.FeedEntry.COLUMN_NAME_TYPE + " TEXT)";
+            "CREATE TABLE " + RouteData.FeedEntry.TABLE_NAME + " (" +
+                    RouteData.FeedEntry._ID + " INTEGER PRIMARY KEY," +
+                    RouteData.FeedEntry.COLUMN_NAME_TITLE + " TEXT," +
+                    RouteData.FeedEntry.COLUMN_NAME_COORDINATESTRING + " TEXT," +
+                    RouteData.FeedEntry.COLUMN_NAME_TYPE + " TEXT)";
 
     private static final String SQL_DELETE_ENTRIES =
-            "DROP TABLE IF EXISTS " + FeedReaderContract.FeedEntry.TABLE_NAME;
+            "DROP TABLE IF EXISTS " + RouteData.FeedEntry.TABLE_NAME;
 
 
     private static final String SQL_CREATE_SETTINGS_ENTRIES =

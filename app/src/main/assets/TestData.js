@@ -8,6 +8,9 @@ const imgElement = testDataSaveButton.querySelector(".svg-image");
 const AreYouSureDialog2 = document.getElementById("are-you-sure-dialog-2");
 
 const clearTestDataDb = document.getElementById("clear-test-data-db");
+const testDataSaveInterval = document.getElementById("test-data-save-interval");
+const testDataSavePeriod = document.getElementById("test-data-save-period");
+
 
 let testDataSaveButtonToggleState = false;
 
@@ -25,8 +28,6 @@ testDataSaveButton.addEventListener('click', function() {
     /*
     * 
     */
-      // if route is started then perform click on the button to stop it
-
     if (!isRouteStarted && !isLockModeOn && !isAnchorModeOn && !testDataSaveButtonToggleState) {
         showToast("None of the automatic modes are active", "white");
         return;
@@ -44,8 +45,19 @@ testDataSaveButton.addEventListener('click', function() {
     else if (isLockModeOn) {
         associatedData = globalLockModeCoordinates;
     }
-    
-    Android.handleDataStoring(testDataSaveButtonToggleState, associatedData);
+    // Convert interval and period to floats if they are not already
+    let interval = parseFloat(testDataSaveInterval.value);
+    let period = parseFloat(testDataSavePeriod.value);
+    Android.handleDataStoring(testDataSaveButtonToggleState, associatedData, interval, period);
+
+    if (testDataSaveButtonToggleState) {
+        showToast(`Test data is now being saved for ${period} minutes with interval of ${interval} seconds`, 'white', 5000);
+    }
+    else {
+        showToast('Test data saving stopped.', 'white');
+
+    }
+
   });
   
   function setTestDataSaveButtonStateFromJava(state) {

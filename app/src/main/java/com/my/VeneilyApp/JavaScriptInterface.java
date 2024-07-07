@@ -15,7 +15,7 @@ import android.widget.Toast;
 
 import com.my.VeneilyApp.BluetoothLE.BLEHandler;
 import com.my.VeneilyApp.data.DataAccessObject;
-import com.my.VeneilyApp.data.FeedReaderContract;
+import com.my.VeneilyApp.data.RouteData;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -156,9 +156,9 @@ public class JavaScriptInterface implements GetOrientation.OrientationListener {
         }
 
         // trim the string that is to be sent
-        String allRouteCoordinates = dataStringTrimmer(DataAccessObject.getData(selectedRoute, FeedReaderContract.FeedEntry.COLUMN_NAME_COORDINATESTRING));
+        String allRouteCoordinates = dataStringTrimmer(DataAccessObject.getData(selectedRoute, RouteData.FeedEntry.COLUMN_NAME_COORDINATESTRING));
         // retrieve also the route type
-        String routeType = DataAccessObject.getData(selectedRoute, FeedReaderContract.FeedEntry.COLUMN_NAME_TYPE) + ";";
+        String routeType = DataAccessObject.getData(selectedRoute, RouteData.FeedEntry.COLUMN_NAME_TYPE) + ";";
         // combine the strings
         String allDataRouteString = routeType + allRouteCoordinates;
 
@@ -322,23 +322,25 @@ public class JavaScriptInterface implements GetOrientation.OrientationListener {
     }
 
     @JavascriptInterface
-    public void handleDataStoring(boolean state, String associated_data) {
+    public void handleDataStoring(boolean state, String associated_data, float intervalInSeconds, float totalDurationInMinutes) {
         Log.d("DataStoring", "Kutsuttu " + state + " " + associated_data);
 
         // If state is true and data storing is not already in progress, start it
         if (state && !isDataStoring) {
             isDataStoring = true;
             currentSessionId = UUID.randomUUID().toString(); // Generate a unique session ID
-            startDataStoring(associated_data);
+            startDataStoring(associated_data, intervalInSeconds, totalDurationInMinutes);
         } else if (!state) {  // If state is false, stop data storing
             stopDataStoring();
         }
     }
 
-    private void startDataStoring(final String associated_data) {
+    private void startDataStoring(final String associated_data, float intervalInSeconds, float totalDurationInMinutes) {
         handler = new Handler();
-        final long totalDuration = 5 * 60 * 1000; // 5 minutes in milliseconds
-        final long interval = 5 * 1000; // 10 seconds in milliseconds
+
+        // Convert float values to long
+        final long totalDuration = (long) (totalDurationInMinutes * 60 * 1000);
+        final long interval = (long) (intervalInSeconds * 1000);
         final long startTime = System.currentTimeMillis();
 
         // Define the runnable task to execute every interval
@@ -357,17 +359,17 @@ public class JavaScriptInterface implements GetOrientation.OrientationListener {
 
                 // Store the data
                 DataAccessObject.addRowToResultsTable(currentSessionId, locationString, associated_data);
-                Log.d("DataStoring", "DB:hen kirjoitettu dataa");
+                Log.d("DataStoring", "DB: Data written.");
 
                 // Check if the total duration has elapsed
-                if (System.currentTimeMillis() - startTime < totalDuration && isDataStoring) {
+                if (System.currentTimeMillis() - startTime < totalDuration) {
                     // Schedule the next execution after interval milliseconds
                     handler.postDelayed(this, interval);
                 } else {
-                    // Data storing duration has elapsed or it was stopped
+                    // Data storing duration has elapsed
                     stopDataStoring();
-                    // call javascript so that the UI updates correctly
-                    callJavaScriptFunction("setTestDataSaveButtonStateFromJava('"+false+"');");
+                    // Call JavaScript function to update UI
+                    callJavaScriptFunction("setTestDataSaveButtonStateFromJava('false');");
                 }
             }
         };
