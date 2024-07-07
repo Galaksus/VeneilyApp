@@ -46,7 +46,9 @@
                 <p class="menu-text" id="">Home</p>
             </div>
 
-            <div class="svg-button" onclick="openDialog(document.getElementById('menu-dialog'))">
+
+            <div class="svg-button" onclick="toggleElementVisibility('motor-control-dialog')">
+
               <img class="svg-image" src="icons/menu-icon.svg" alt="Menu Icon">
               <p class="menu-text">Control</p>
             </div>
@@ -55,8 +57,8 @@
               <img class="svg-image" id="center-me-button-src" src="icons/center-me-normal.svg" alt="Delete Icon">
               <p class="menu-text">Center</p>
             </div>
-            <div class="svg-button" onclick="MoreButtonsFunction()">
-                <img class="svg-image" id="" src="icons/more-icon.svg" alt="Bluetooth icon">  <!-- TODO TEE ID KUNTOON-->
+            <div class="svg-button" onclick="toggleElementVisibility('button-navigation-dialog')">
+                <img class="svg-image" src="icons/more-icon.svg" alt="Bluetooth icon"> 
                 <p class="menu-text">More</p>
             </div>
 
@@ -131,6 +133,54 @@
                 </div>
             </div>
         </div>
+
+    <!-- Steering and speed control of motor -->
+    <div id="motor-control-dialog" class="default-dialog" style="background: transparent;" onclick="closeDialog(this);">
+        <div class="dialog-container" id="motor-control-dialog-container" onclick="event.stopPropagation();">
+            <div class="dialog-header-content" id="motor-control-dialog-header-content" style="flex-direction: column; flex-wrap: wrap; background-color: #474747;">
+                <span class="close-dialog-button"
+                onclick="closeDialog(document.getElementById('motor-control-dialog'))">&#10006;</span>
+                <div class="align-text align-radio-buttons">
+                    <label id="backward-text-label" >Bwd</label><br>
+                    <input type="radio" id="backward" name="direction" value="backward" onchange="fwdBwdRadioButtonChanged()">
+                    <p>Motor speed control</p>
+                    <input type="radio" id="forward" name="direction" value="forward" checked onchange="fwdBwdRadioButtonChanged()">
+                    <label for="forward" id="forward-text-label" >Fwd</label><br>
+                </div>
+
+                <div class="slider-container">
+                    <output for="manual-motor-speed-slider" id="manual-motor-speed-slider-value">0</output>
+                    <input type="range" class="range-slider" min="0" max="100" value="0"
+                        id="manual-motor-speed-slider">
+                </div>
+                <div class="minus-plus-icon-container">
+
+                <img src="icons/minus-icon.svg" class="minus-svg-icon" id="minus-svg-icon-speed" width="24" height="24"
+                    onclick="rangeSliderArithmetic(this, false);">
+                <img src="icons/plus-icon.svg" class="plus-svg-icon" id="plus-svg-icon-speed" width="24" height="24"
+                    onclick="rangeSliderArithmetic(this, true);">
+                </div>
+
+                <hr class="line-1" color="gray" size="2">
+
+                <div class="align-text">
+                    <p>Motor steering control</p>
+                </div>
+                <div class="slider-container">
+                    <output for="manual-steering-slider" id="manual-steering-slider-value">50</output>
+                    <input type="range" class="range-slider" min="0" max="100" value="50"
+                        id="manual-steering-slider">
+                </div>
+                <div class="minus-plus-icon-container">
+                    <img src="icons/minus-icon.svg" class="minus-svg-icon" id="minus-svg-icon-steer" width="24" height="24"
+                        onclick="rangeSliderArithmetic(this, false);">
+                    <img src="icons/plus-icon.svg" class="plus-svg-icon" id="plus-svg-icon-steer" width="24" height="24"
+                        onclick="rangeSliderArithmetic(this, true);">
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <!-- Routes select dropdown dialog -->
     <div id="dropdown-dialog" class="default-dialog" onclick="closeDialog(this);">
@@ -450,49 +500,25 @@
                 <!-- Scrollable dialog content -->
                 <div class="enabled" id="menu-dialog-content-manual-mode">
 
-                    <div class="align-text align-radio-buttons">
-                        <label id="backward-text-label" >Bwd</label><br>
-                        <input type="radio" id="backward" name="direction" value="backward" onchange="fwdBwdRadioButtonChanged()">
-                        <p>Motor speed control</p>
-                        <input type="radio" id="forward" name="direction" value="forward" checked onchange="fwdBwdRadioButtonChanged()">
-                        <label for="forward" id="forward-text-label" >Fwd</label><br>
-                    </div>
-
-                    <div class="slider-container">
-                        <output for="manual-motor-speed-slider" id="manual-motor-speed-slider-value">0</output>
-                        <input type="range" class="range-slider" min="0" max="100" value="0"
-                            id="manual-motor-speed-slider">
-                    </div>
-                    <div class="minus-plus-icon-container">
-
-                    <img src="icons/minus-icon.svg" class="minus-svg-icon" id="minus-svg-icon-speed" width="24" height="24"
-                        onclick="rangeSliderArithmetic(this, false);">
-                    <img src="icons/plus-icon.svg" class="plus-svg-icon" id="plus-svg-icon-speed" width="24" height="24"
-                        onclick="rangeSliderArithmetic(this, true);">
-                    </div>
 
                     <hr class="line-1" color="gray" size="2">
-
-                    <div class="align-text">
-                        <p>Motor steering control</p>
+                    <div class="auto-mode-info-data">
+                        <p id="auto-mode-selected-route"> Lock direction mode:</p>
                     </div>
-                    <div class="slider-container">
-                        <output for="manual-steering-slider" id="manual-steering-slider-value">50</output>
-                        <input type="range" class="range-slider" min="0" max="100" value="50"
-                            id="manual-steering-slider">
-                    </div>
-                    <div class="minus-plus-icon-container">
-                        <img src="icons/minus-icon.svg" class="minus-svg-icon" id="minus-svg-icon-steer" width="24" height="24"
-                            onclick="rangeSliderArithmetic(this, false);">
-                        <img src="icons/plus-icon.svg" class="plus-svg-icon" id="plus-svg-icon-steer" width="24" height="24"
-                            onclick="rangeSliderArithmetic(this, true);">
-                    </div>
-                    <hr class="line-1" color="gray" size="2">
-
-                    <div class="menu-button-container">
+                    <div class="center-div">
                         <button id="lock-direction-button" class="button-class  border-radius-20px">Lock direction</button>
-                        <button id="anchor-button" class="button-class  border-radius-20px">Set anchor</button>
                     </div>
+
+                    <hr class="line-1" color="gray" size="2">
+                    <div class="auto-mode-info-data">
+                        <p id="auto-mode-selected-route"> Anchor mode:</p>
+                    </div>
+
+                    <div class="center-div" style="padding-bottom: 7px;">
+                        <button id="anchor-button" class="button-class  border-radius-20px">Set anchor</button>
+
+                    </div>
+
                     <div id="lock-and-anchor-text" class="align-text" style="display: none; color: green;">
                         <p>Current direction is now locked</p>
                     </div>

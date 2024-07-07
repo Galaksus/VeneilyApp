@@ -29,7 +29,7 @@
   /* Center horizontally and vertically */
 }
 
-#button-navigation-dialog-container {
+#button-navigation-dialog-container, #motor-control-dialog-container {
   top: auto;
   left: auto;
   transform: none;
@@ -54,7 +54,7 @@
   position: relative;
 }
 
-#button-navigation-dialog-header-content {
+#button-navigation-dialog-header-content, #motor-control-dialog-header-content  {
   padding: 10px;
   display: flex;
   border-radius: 15px;
@@ -144,7 +144,7 @@
   appearance: none;
   width: 20px;
   height: 20px;
-  background: #387072;
+  background: rgb(52, 147, 190);
   border-radius: 50%;
   cursor: pointer;
 
@@ -163,7 +163,7 @@
   margin-top: 10px;
   font-size: 16px;
   font-weight: bold;
-  color: #000000;
+  color: #ddd;
 }
 
 .minus-svg-icon {

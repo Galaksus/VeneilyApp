@@ -86,7 +86,7 @@ function NewRouteButtonFunction() {
   markersEnabled = !markersEnabled; // Toggle markers enabled variable
 
   if (markersEnabled) {
-    MoreButtonsFunction();
+    toggleElementVisibility('button-navigation-dialog');
   }
 
   // Get all the SVG buttons
@@ -189,19 +189,26 @@ function isMarkerOnTop(markerLatLng) {
     y <= DeleteDraggableMarkergBounds.bottom
   );
 }
-function MoreButtonsFunction() {
-  /*
-  * toggles the display of an element with the ID "button-navigation-dialog" each time tis function is called
-  */
-  let moreButtons = document.getElementById("button-navigation-dialog");
-  let displayStyle = window.getComputedStyle(moreButtons).display;
 
-  if (displayStyle === "none") {
-    moreButtons.style.display = "flex";
+function toggleElementVisibility(elementId) {
+  /*
+  * Toggles the display of the element with the given ID each time this function is called
+  */
+  let element = document.getElementById(elementId);
+  
+  if (element) {
+    let displayStyle = window.getComputedStyle(element).display;
+  
+    if (displayStyle === "none") {
+      element.style.display = "flex";
+    } else {
+      element.style.display = "none";
+    }
   } else {
-    moreButtons.style.display = "none";
+    console.error(`Element with ID "${elementId}" not found.`);
   }
 }
+
 
 
 function DrawButtonFunction() {
