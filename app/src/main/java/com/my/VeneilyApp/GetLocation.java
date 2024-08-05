@@ -30,6 +30,7 @@ public class GetLocation {
     private LocationRequest locationRequest;
     private static final int REQUEST_LOCATION_PERMISSION = 1;
     private final int MAX_ALLOWED_ACCURACY_METERS = 20;
+    private static Location latestLocation;
 
     public GetLocation(Context context) {
         mContext = context;
@@ -49,6 +50,9 @@ public class GetLocation {
                     // Handle location updates here
                     Log.d("MYLOCATION", "Lat: " + location.getLatitude() + ", Lon: " + location.getLongitude());
 
+                    // Store the latest location
+                    latestLocation = location;
+
                     // Converts getLatitude and getLongitude to String
                     String latitude = String.valueOf(location.getLatitude());
                     String longitude = String.valueOf(location.getLongitude());
@@ -67,10 +71,7 @@ public class GetLocation {
                         //    return;
                     } else {
                     }
-
-
                 }
-
             }
         };
     }
@@ -94,7 +95,7 @@ public class GetLocation {
                 .setMaxUpdateDelayMillis(1000) // Sets the longest a location update may be delayed
                 .build(); // Builds a new LocationRequest
 
-        // Permisison check required here as well
+        // Permission check required here as well
 
         mFusedLocationClient.requestLocationUpdates(locationRequest,
                 mLocationCallback,
@@ -104,7 +105,6 @@ public class GetLocation {
     public void startLocationUpdatesInternal() {
 
     }
-
 
     public void stopLocationUpdates() {
         // stops location updates
@@ -145,5 +145,8 @@ public class GetLocation {
                 });
     }
 
+    // Getter method for the latest location
+    public static Location getLatestLocation() {
+        return latestLocation;
+    }
 }
-

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+  <!-- Outer Circle -->
+  <circle cx="12" cy="12" r="10" fill="none" stroke="#bdbdbd" stroke-width="2"/>
+  
+  <!-- Letter A -->
+  <text x="12" y="12" font-size="12" font-weight="bold" stroke="#bdbdbd" fill="#bdbdbd" text-anchor="middle" alignment-baseline="middle">A</text>
+</svg>

@@ -46,17 +46,19 @@
                 <p class="menu-text" id="">Home</p>
             </div>
 
-            <div class="svg-button" onclick="openDialog(document.getElementById('menu-dialog'))">
+
+            <div class="svg-button" onclick="toggleElementVisibility('motor-control-dialog')">
+
               <img class="svg-image" src="icons/menu-icon.svg" alt="Menu Icon">
-              <p class="menu-text">Menu</p>
+              <p class="menu-text">Control</p>
             </div>
 
             <div class="svg-button" id="center-me-button"> 
               <img class="svg-image" id="center-me-button-src" src="icons/center-me-normal.svg" alt="Delete Icon">
               <p class="menu-text">Center</p>
             </div>
-            <div class="svg-button" onclick="MoreButtonsFunction()">
-                <img class="svg-image" id="" src="icons/more-icon.svg" alt="Bluetooth icon">  <!-- TODO TEE ID KUNTOON-->
+            <div class="svg-button" onclick="toggleElementVisibility('button-navigation-dialog')">
+                <img class="svg-image" src="icons/more-icon.svg" alt="Bluetooth icon"> 
                 <p class="menu-text">More</p>
             </div>
 
@@ -103,6 +105,15 @@
                             <img class="svg-image" id="settings-icon-button" src="icons/settings-icon.svg" alt="Settings icon">
                             <p class="menu-text">Settings</p>
                         </div>
+
+
+
+                        <div class="svg-button" onclick="openDialog(document.getElementById('menu-dialog'))">
+                            <img class="svg-image" id="automatic-modes-icon-button" src="icons/automatic-mode.svg" alt="Automatic mode icon">
+                            <p class="menu-text">Automatic modes</p>
+                        </div>
+
+
                         
                         <div class="svg-button" id="messages-button">
                             <img class="svg-image" id="messages-button-src" src="icons/message-icon.svg" alt="Messages Icon">
@@ -111,12 +122,65 @@
 
                         <div class="svg-button" id="delete-button" style="display: none;">
                             <img class="svg-image" src="icons/delete-icon.svg" alt="Delete Icon">
-                            <p class="menu-text">Delete</p>
+                            <p class="menu-text">Delete selected route</p>
+                        </div>
+
+                        <div class="svg-button" id="test-data-saving-button">
+                            <img class="svg-image" src="icons/test-data-saving.svg" alt="Tsta data saving Icon">
+                            <p class="menu-text">Save test data</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+    <!-- Steering and speed control of motor -->
+    <div id="motor-control-dialog" class="default-dialog" style="background: transparent;" onclick="closeDialog(this);">
+        <div class="dialog-container" id="motor-control-dialog-container" onclick="event.stopPropagation();">
+            <div class="dialog-header-content" id="motor-control-dialog-header-content" style="flex-direction: column; flex-wrap: wrap; background-color: #474747;">
+                <span class="close-dialog-button"
+                onclick="closeDialog(document.getElementById('motor-control-dialog'))">&#10006;</span>
+                <div class="align-text align-radio-buttons">
+                    <label id="backward-text-label" >Bwd</label><br>
+                    <input type="radio" id="backward" name="direction" value="backward" onchange="fwdBwdRadioButtonChanged()">
+                    <p>Speed</p>
+                    <input type="radio" id="forward" name="direction" value="forward" checked onchange="fwdBwdRadioButtonChanged()">
+                    <label for="forward" id="forward-text-label" >Fwd</label><br>
+                </div>
+
+                <div class="slider-container">
+                    <output for="manual-motor-speed-slider" id="manual-motor-speed-slider-value">0</output>
+                    <input type="range" class="range-slider" min="0" max="100" value="0"
+                        id="manual-motor-speed-slider">
+                </div>
+                <div class="minus-plus-icon-container">
+
+                <img src="icons/minus-icon.svg" class="minus-svg-icon" id="minus-svg-icon-speed" width="24" height="24"
+                    onclick="rangeSliderArithmetic(this, false);">
+                <img src="icons/plus-icon.svg" class="plus-svg-icon" id="plus-svg-icon-speed" width="24" height="24"
+                    onclick="rangeSliderArithmetic(this, true);">
+                </div>
+
+                <hr class="line-1" color="gray" size="2">
+
+                <div class="align-text">
+                    <p>Steering</p>
+                </div>
+                <div class="slider-container">
+                    <output for="manual-steering-slider" id="manual-steering-slider-value">50</output>
+                    <input type="range" class="range-slider" min="0" max="100" value="50"
+                        id="manual-steering-slider">
+                </div>
+                <div class="minus-plus-icon-container">
+                    <img src="icons/minus-icon.svg" class="minus-svg-icon" id="minus-svg-icon-steer" width="24" height="24"
+                        onclick="rangeSliderArithmetic(this, false);">
+                    <img src="icons/plus-icon.svg" class="plus-svg-icon" id="plus-svg-icon-steer" width="24" height="24"
+                        onclick="rangeSliderArithmetic(this, true);">
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <!-- Routes select dropdown dialog -->
     <div id="dropdown-dialog" class="default-dialog" onclick="closeDialog(this);">
@@ -149,13 +213,35 @@
                 <!-- Input and buttons container -->
                 <div class="input-buttons-container-class" id="input-buttons-container">
                     <div class="name-buttons-class name-buttons-class-2">
-                        <button class="dialog-ok-cancel-buttons" onclick="cancelClickOnAreYouSurePrompt()">Cancel</button>
+                        <button class="dialog-ok-cancel-buttons" onclick="closeDialog(document.getElementById('are-you-sure-dialog'))">Cancel</button>
                         <button class="dialog-ok-cancel-buttons" onclick="OKClickOnAreYouSurePrompt()">OK</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- The 'Are you sure' dialog container -->
+    <div id="are-you-sure-dialog-2" class="default-dialog" onclick="closeDialog(this);">
+        <div class="dialog-container" onclick="event.stopPropagation();">
+            <!-- Header content -->
+            <div class="dialog-header-content">
+                Are you sure you want to delete all data from TestResults table?
+                <span class="close-dialog-button"
+                onclick="closeDialog(document.getElementById('are-you-sure-dialog-2'))">&#10006;</span>
+            </div>
+            <div class="dialog-content">
+                <!-- Input and buttons container -->
+                <div class="input-buttons-container-class">
+                    <div class="name-buttons-class name-buttons-class-2">
+                        <button class="dialog-ok-cancel-buttons" onclick="closeDialog(document.getElementById('are-you-sure-dialog-2'))">Cancel</button>
+                        <button class="dialog-ok-cancel-buttons" onclick="proceedToClearTestDataTable()">OK</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <!-- The bluetooth dialog container -->
     <div id="bluetooth-dialog" class="default-dialog" onclick="closeDialog(this);">
@@ -189,7 +275,9 @@
                 <div class="dialog-content">
                     <!-- scrollable content -->
                     <div class="settings-pane">
-                        <h3>General settings</h3>
+                        <h3>General settings
+                            <img class="info-icon" src="icons/info-icon.svg" alt="Info" onclick="showPopup('general-info')">
+                        </h3>
 
                     <!-- Switch 1 -->
                     <label class="toggle-switch">
@@ -218,6 +306,23 @@
                         <input type="number" min="0" max="100" value="50" step="1" class="auto-mode-input-container" id="outboard-motor-pwm-min">
                         <label for="outboard_motor_pwm_min"></label>
                     </div>
+
+
+                    <div id="general-info" class="info-popup">
+                        <span class="close-info-popup" style="color: #333;" onclick="closeDialog(document.getElementById('general-info'))">&#10006;</span>
+                        <h2>General settings info</h2>
+                        <p><strong>Use Android GPS:</strong></p>
+                        <p>Switch between using Android's GPS or embedded system's GPS module</p>
+                        <p><strong>Use Android orientation:</strong></p>
+                        <p>Switch between using Android's orientation sensors or embedded system's orientation sensors</p>
+                        <p><strong>Remove/Add OpenSeaMap tile:</strong></p>
+                        <p>Switch between using OpenSeaMap tiles on top of OpenStreetMap tile</p>
+                        <p><strong>Outboard motor PWM min:</strong></p>
+                        <p>Can be modified to find out the lowest PWM value with what the outboard motor starts rotating.</p>
+                    </div>
+
+
+
                 </div>
                     <div class="settings-pane">
                         <h3>Auto Mode / Lock Mode
@@ -251,7 +356,7 @@
                         <span class="text-element">Max distance in meters</span>
                         <div class="input-container">
                             <input type="number" min="0" max="100" value="3" step="0.01" class="auto-mode-input-container" id="distance-to-anchor-point-threshold">
-                            <label for="distance-to-interpolated-point-max"></label>
+                            <label for="distance-to-anchor-point-threshold"></label>
                         </div>
                         <div id="anchor-mode-info" class="info-popup">
                             <span class="close-info-popup" style="color: #333;" onclick="closeDialog(document.getElementById('anchor-mode-info'))">&#10006;</span>
@@ -294,6 +399,41 @@
                             <p>Controller update interval. Smaller values allow quicker response but may increase computational load. Larger values slow response but reduce computational load.</p>
                         </div>
                     </div>
+                    
+                    <div class="settings-pane">
+                        <h3>Additional
+                            <img class="info-icon" src="icons/info-icon.svg" alt="Info" onclick="showPopup('additionalInfo')">
+                        </h3>
+
+                        <span class="text-element">Full clear test data db</span>
+                        <div class="input-container">
+                            <button id="clear-test-data-db" class="button-class border-radius-20px" style="font-size: 10px;">Clear</button>
+                        </div>
+
+                        <span class="text-element">Test data save interval (s)</span>
+                        <div class="input-container">
+                            <input type="number" class="auto-mode-input-container" id="test-data-save-interval" value="10">
+                            <label for="test-data-save-interval"></label>
+                        </div>
+
+                        <span class="text-element">Test data save period (m)</span>
+                        <div class="input-container">
+                            <input type="number" class="auto-mode-input-container" id="test-data-save-period" value="5">
+                            <label for="test-data-save-period"></label>
+                        </div>
+                        <div id="additionalInfo" class="info-popup">
+                            <span class="close-info-popup" style="color: #333;" onclick="closeDialog(document.getElementById('additionalInfo'))">&#10006;</span>
+                            <h2>Additional Settings Information</h2>
+                            <p><strong>Full clear test data db</strong></p>
+                            <p>This erases all data from the TestResults table</p>
+                            <p><strong>Test data save interval (s)</strong></p>
+                            <p>This can be used to modify the interval in which the the test data results are stored in to the TestResults table. Unit is seconds.</p>
+                            <p><strong>Test data save period (m)</strong></p>
+                            <p>The total time test data is stored to the database after "Save test data" button is pressed. Unit is minutes.</p>
+                        </div>
+
+                    </div> 
+
                 </div>
                 <div class="bottom-bar-content">
                     <div class="center-div">
@@ -379,49 +519,25 @@
                 <!-- Scrollable dialog content -->
                 <div class="enabled" id="menu-dialog-content-manual-mode">
 
-                    <div class="align-text align-radio-buttons">
-                        <label id="backward-text-label" >Bwd</label><br>
-                        <input type="radio" id="backward" name="direction" value="backward" onchange="fwdBwdRadioButtonChanged()">
-                        <p>Motor speed control</p>
-                        <input type="radio" id="forward" name="direction" value="forward" checked onchange="fwdBwdRadioButtonChanged()">
-                        <label for="forward" id="forward-text-label" >Fwd</label><br>
-                    </div>
-
-                    <div class="slider-container">
-                        <output for="manual-motor-speed-slider" id="manual-motor-speed-slider-value">0</output>
-                        <input type="range" class="range-slider" min="0" max="100" value="0"
-                            id="manual-motor-speed-slider">
-                    </div>
-                    <div class="minus-plus-icon-container">
-
-                    <img src="icons/minus-icon.svg" class="minus-svg-icon" id="minus-svg-icon-speed" width="24" height="24"
-                        onclick="rangeSliderArithmetic(this, false);">
-                    <img src="icons/plus-icon.svg" class="plus-svg-icon" id="plus-svg-icon-speed" width="24" height="24"
-                        onclick="rangeSliderArithmetic(this, true);">
-                    </div>
 
                     <hr class="line-1" color="gray" size="2">
-
-                    <div class="align-text">
-                        <p>Motor steering control</p>
+                    <div class="auto-mode-info-data">
+                        <p id="auto-mode-selected-route"> Lock direction mode:</p>
                     </div>
-                    <div class="slider-container">
-                        <output for="manual-steering-slider" id="manual-steering-slider-value">50</output>
-                        <input type="range" class="range-slider" min="0" max="100" value="50"
-                            id="manual-steering-slider">
-                    </div>
-                    <div class="minus-plus-icon-container">
-                        <img src="icons/minus-icon.svg" class="minus-svg-icon" id="minus-svg-icon-steer" width="24" height="24"
-                            onclick="rangeSliderArithmetic(this, false);">
-                        <img src="icons/plus-icon.svg" class="plus-svg-icon" id="plus-svg-icon-steer" width="24" height="24"
-                            onclick="rangeSliderArithmetic(this, true);">
-                    </div>
-                    <hr class="line-1" color="gray" size="2">
-
-                    <div class="menu-button-container">
+                    <div class="center-div">
                         <button id="lock-direction-button" class="button-class  border-radius-20px">Lock direction</button>
-                        <button id="anchor-button" class="button-class  border-radius-20px">Set anchor</button>
                     </div>
+
+                    <hr class="line-1" color="gray" size="2">
+                    <div class="auto-mode-info-data">
+                        <p id="auto-mode-selected-route"> Anchor mode:</p>
+                    </div>
+
+                    <div class="center-div" style="padding-bottom: 7px;">
+                        <button id="anchor-button" class="button-class  border-radius-20px">Set anchor</button>
+
+                    </div>
+
                     <div id="lock-and-anchor-text" class="align-text" style="display: none; color: green;">
                         <p>Current direction is now locked</p>
                     </div>
@@ -459,6 +575,7 @@
     <script src="styles.js"></script>
     <script src="settings.js"></script>
     <script src="messageLogger.js"></script>
+    <script src="TestData.js"></script>
 
 
     </div>

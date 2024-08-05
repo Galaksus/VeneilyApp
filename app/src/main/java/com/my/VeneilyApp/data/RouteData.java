@@ -2,10 +2,10 @@ package com.my.VeneilyApp.data;
 
 import android.provider.BaseColumns;
 
-public final class FeedReaderContract {
+public final class RouteData {
     // To prevent someone from accidentally instantiating the contract class,
     // make the constructor private.
-    private FeedReaderContract() {}
+    private RouteData() {}
 
     // Inner class that defines the table contents
     public static class FeedEntry implements BaseColumns {

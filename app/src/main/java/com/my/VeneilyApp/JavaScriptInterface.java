@@ -6,13 +6,16 @@ import static com.my.VeneilyApp.MainActivity.mywebView;
 import android.app.Activity;
 import android.content.Context;
 import android.hardware.SensorManager;
+import android.location.Location;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.webkit.JavascriptInterface;
 import android.widget.Toast;
 
 import com.my.VeneilyApp.BluetoothLE.BLEHandler;
 import com.my.VeneilyApp.data.DataAccessObject;
-import com.my.VeneilyApp.data.FeedReaderContract;
+import com.my.VeneilyApp.data.RouteData;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,6 +35,10 @@ public class JavaScriptInterface implements GetOrientation.OrientationListener {
     private SensorManager sensorManager;
     private float azimuthDegrees_;
     private final GetLocation getLocation;
+    private Handler handler;
+    private boolean isDataStoring = false;
+    private String currentSessionId;
+
     public JavaScriptInterface(Context context, GetLocation getLocation, Activity activity) {
         this.context = context;
         mainActivity = activity;
@@ -42,6 +49,8 @@ public class JavaScriptInterface implements GetOrientation.OrientationListener {
         // Start getting orientation updates
         // Instantiate GetOrientation and set it up
         GetOrientation  getOrientation = new GetOrientation(context, this);
+        handler = new Handler();
+
     }
 
     // New route data from JavaScript to Java
@@ -147,9 +156,9 @@ public class JavaScriptInterface implements GetOrientation.OrientationListener {
         }
 
         // trim the string that is to be sent
-        String allRouteCoordinates = dataStringTrimmer(DataAccessObject.getData(selectedRoute, FeedReaderContract.FeedEntry.COLUMN_NAME_COORDINATESTRING));
+        String allRouteCoordinates = dataStringTrimmer(DataAccessObject.getData(selectedRoute, RouteData.FeedEntry.COLUMN_NAME_COORDINATESTRING));
         // retrieve also the route type
-        String routeType = DataAccessObject.getData(selectedRoute, FeedReaderContract.FeedEntry.COLUMN_NAME_TYPE) + ";";
+        String routeType = DataAccessObject.getData(selectedRoute, RouteData.FeedEntry.COLUMN_NAME_TYPE) + ";";
         // combine the strings
         String allDataRouteString = routeType + allRouteCoordinates;
 
@@ -266,10 +275,13 @@ public class JavaScriptInterface implements GetOrientation.OrientationListener {
     }
 
     public static void callJavaScriptFunction(String javascriptCode){
-        // Execute JavaScript function
-        Log.e("käykö", javascriptCode);
-
-        mywebView.evaluateJavascript(javascriptCode, null);
+        // Post to main thread
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                mywebView.evaluateJavascript(javascriptCode, null);
+            }
+        });
     }
 
 
@@ -302,6 +314,77 @@ public class JavaScriptInterface implements GetOrientation.OrientationListener {
         Log.d("OrientationTAG2: ", "Deg: " + String.valueOf(azimuthDegrees_));
 
         callJavaScriptFunction("setMarkerRotation('"+azimuthDegrees+"');"); // Call the desired JS function with the orientation data
+    }
+
+    @JavascriptInterface
+    public void clearResultsTable() {
+        DataAccessObject.clearResultsTable();
+    }
+
+    @JavascriptInterface
+    public void handleDataStoring(boolean state, String associated_data, float intervalInSeconds, float totalDurationInMinutes) {
+        Log.d("DataStoring", "Kutsuttu " + state + " " + associated_data);
+
+        // If state is true and data storing is not already in progress, start it
+        if (state && !isDataStoring) {
+            isDataStoring = true;
+            currentSessionId = UUID.randomUUID().toString(); // Generate a unique session ID
+            startDataStoring(associated_data, intervalInSeconds, totalDurationInMinutes);
+        } else if (!state) {  // If state is false, stop data storing
+            stopDataStoring();
+        }
+    }
+
+    private void startDataStoring(final String associated_data, float intervalInSeconds, float totalDurationInMinutes) {
+        handler = new Handler();
+
+        // Convert float values to long
+        final long totalDuration = (long) (totalDurationInMinutes * 60 * 1000);
+        final long interval = (long) (intervalInSeconds * 1000);
+        final long startTime = System.currentTimeMillis();
+
+        // Define the runnable task to execute every interval
+        final Runnable dataStoringRunnable = new Runnable() {
+            @Override
+            public void run() {
+                Location latestLocation = GetLocation.getLatestLocation();
+
+                // Convert to string
+                String locationString;
+                if (latestLocation != null) {
+                    locationString = latestLocation.getLatitude() + ", " + latestLocation.getLongitude();
+                } else {
+                    locationString = "Location not available.";
+                }
+
+                // Store the data
+                DataAccessObject.addRowToResultsTable(currentSessionId, locationString, associated_data);
+                Log.d("DataStoring", "DB: Data written.");
+
+                // Check if the total duration has elapsed
+                if (System.currentTimeMillis() - startTime < totalDuration) {
+                    // Schedule the next execution after interval milliseconds
+                    handler.postDelayed(this, interval);
+                } else {
+                    // Data storing duration has elapsed
+                    stopDataStoring();
+                    // Call JavaScript function to update UI
+                    callJavaScriptFunction("setTestDataSaveButtonStateFromJava('false');");
+                }
+            }
+        };
+
+        // Start executing the data storing task
+        handler.post(dataStoringRunnable);
+    }
+
+    private void stopDataStoring() {
+        if (handler != null) {
+            handler.removeCallbacksAndMessages(null); // Remove all pending callbacks and messages
+        }
+        isDataStoring = false;
+        Log.d("DataStoring", "Data storing stopped.");
+
     }
 
     public interface LocationCallback {
