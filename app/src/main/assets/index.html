@@ -275,7 +275,9 @@
                 <div class="dialog-content">
                     <!-- scrollable content -->
                     <div class="settings-pane">
-                        <h3>General settings</h3>
+                        <h3>General settings
+                            <img class="info-icon" src="icons/info-icon.svg" alt="Info" onclick="showPopup('general-info')">
+                        </h3>
 
                     <!-- Switch 1 -->
                     <label class="toggle-switch">
@@ -304,6 +306,23 @@
                         <input type="number" min="0" max="100" value="50" step="1" class="auto-mode-input-container" id="outboard-motor-pwm-min">
                         <label for="outboard_motor_pwm_min"></label>
                     </div>
+
+
+                    <div id="general-info" class="info-popup">
+                        <span class="close-info-popup" style="color: #333;" onclick="closeDialog(document.getElementById('general-info'))">&#10006;</span>
+                        <h2>General settings info</h2>
+                        <p><strong>Use Android GPS:</strong></p>
+                        <p>Switch between using Android's GPS or embedded system's GPS module</p>
+                        <p><strong>Use Android orientation:</strong></p>
+                        <p>Switch between using Android's orientation sensors or embedded system's orientation sensors</p>
+                        <p><strong>Remove/Add OpenSeaMap tile:</strong></p>
+                        <p>Switch between using OpenSeaMap tiles on top of OpenStreetMap tile</p>
+                        <p><strong>Outboard motor PWM min:</strong></p>
+                        <p>Can be modified to find out the lowest PWM value with what the outboard motor starts rotating.</p>
+                    </div>
+
+
+
                 </div>
                     <div class="settings-pane">
                         <h3>Auto Mode / Lock Mode
