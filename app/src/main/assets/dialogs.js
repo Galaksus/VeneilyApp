@@ -190,6 +190,8 @@ LockDirectionButton.addEventListener("click", function () {
 });
 
 anchorButton.addEventListener("click", function () {
+  removeAnchorMarker(); // Removes the anchorMarker if it exists, this is done on every click of the Lock direction button
+
   if (parseInt(BluetoothConnectionState) !== 2 && !isAnchorModeOn) {
     // Create error message
     showToast("Bluetooth not connected", "white");
@@ -217,6 +219,9 @@ anchorButton.addEventListener("click", function () {
 
   isAnchorModeOn = !isAnchorModeOn;
   sendGPSandOriData(); // This function sends the GPS and orientation data via BLE or is actually an interface to the actual sender
+  if (isAnchorModeOn) {
+    drawAnchorMarker();
+  }
 });
 
 

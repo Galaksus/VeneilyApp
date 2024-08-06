@@ -45,6 +45,11 @@ testDataSaveButton.addEventListener('click', function() {
     else if (isLockModeOn) {
         associatedData = globalLockModeCoordinates;
     }
+    else if (isAnchorModeOn) {
+        let latLng = anchorMarker.getLatLng();
+        associatedData = `${latLng.lat.toFixed(6)}, ${latLng.lng.toFixed(6)}`;
+        console.log(associatedData); // Outputs something like "51.500000, -0.090000"
+    }
     // Convert interval and period to floats if they are not already
     let interval = parseFloat(testDataSaveInterval.value);
     let period = parseFloat(testDataSavePeriod.value);
