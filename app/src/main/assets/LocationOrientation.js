@@ -8,8 +8,9 @@ let centerMeButtonToggled = false;
 let angle; // Angle of the orientation arrow
 var customMarker; // This is the orientation arrow
 var previousLocation = null;
-// Variable to store the polyline
+// Variable to store the polyline and anchorMarker
 var lockModePolyline;
+var anchorMarker;
 
 centerMeButton.addEventListener("click", function () {
     centerMeButtonToggled = !centerMeButtonToggled;
@@ -54,6 +55,71 @@ function removeLine() {
   if (lockModePolyline) {
     map.removeLayer(lockModePolyline);
     lockModePolyline = null;
+  }
+}
+
+function drawAnchorMarker() {
+  let initialLatLng = customMarker.getLatLng();
+  let changed = false;
+
+  // Set up the 2-second timeout
+  let timeoutId = setTimeout(function () {
+    let finalLatLng = changed ? customMarker.getLatLng() : initialLatLng;
+    anchorMarker = L.marker(finalLatLng).addTo(map);
+    anchorMarker.bindPopup('This is the anchor marker.');
+
+    // Add event listener for when the popup is opened
+    anchorMarker.on('popupopen', function () {
+      // Calculate the distance between anchorMarker and customMarker
+      let anchorLatLng = anchorMarker.getLatLng();
+      let customLatLng = customMarker.getLatLng();
+      let distance = anchorLatLng.distanceTo(customLatLng);
+
+      console.log('Popup opened at:', anchorLatLng);
+      console.log('Distance between anchorMarker and customMarker:', distance, 'meters');
+
+      // Update the popup content with the distance
+      this.setPopupContent(`This is the anchor marker. Distance to current location: ${distance.toFixed(2)} meters.`);
+    });
+
+    console.log('Anchor marker added at:', finalLatLng);
+  }, 2000);
+
+  // Event listener for marker position change
+  customMarker.on('move', function () {
+    if (!changed) {
+      changed = true;
+      clearTimeout(timeoutId); // Cancel the 2-second timer
+
+      // Add the anchor marker immediately at the new position
+      let finalLatLng = customMarker.getLatLng();
+      anchorMarker = L.marker(finalLatLng).addTo(map);
+      anchorMarker.bindPopup('This is the anchor marker.');
+
+      // Add event listener for when the popup is opened
+      anchorMarker.on('popupopen', function () {
+        // Calculate the distance between anchorMarker and customMarker
+        let anchorLatLng = anchorMarker.getLatLng();
+        let customLatLng = customMarker.getLatLng();
+        let distance = anchorLatLng.distanceTo(customLatLng);
+
+        console.log('Popup opened at:', anchorLatLng);
+        console.log('Distance between anchorMarker and customMarker:', distance, 'meters');
+
+        // Update the popup content with the distance
+        this.setPopupContent(`This is the anchor marker. Distance to current location: ${distance.toFixed(2)} meters.`);
+      });
+
+      console.log('Anchor marker added immediately at:', finalLatLng);
+    }
+  });
+}
+
+// Function to remove the anchorMarker
+function removeAnchorMarker() {
+  if (anchorMarker) {
+    map.removeLayer(anchorMarker);
+    anchorMarker = null;
   }
 }
 
