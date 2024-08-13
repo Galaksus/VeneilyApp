@@ -46,8 +46,9 @@ function drawLockModeLine(coordianteString) {
   // Create a polyline between the custom marker and the target coordinates
   lockModePolyline = L.polyline([customMarker.getLatLng(), targetLatLng], { color: 'red' }).addTo(map);
 
-  // Combine the coordinates so that they can be stored with TestData.js if needed
-  globalLockModeCoordinates = customMarker.getLatLng() + ";" + coordianteString;
+  // Save the lock mode coordinates for further use of testData database
+  let latLng = customMarker.getLatLng();
+  globalLockModeCoordinates = `${latLng.lat.toFixed(6)}, ${latLng.lng.toFixed(6)}` + "," + coordianteString;
 }
 
 // Function to remove the line
