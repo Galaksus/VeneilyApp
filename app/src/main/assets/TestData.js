@@ -10,7 +10,8 @@ const AreYouSureDialog2 = document.getElementById("are-you-sure-dialog-2");
 const clearTestDataDb = document.getElementById("clear-test-data-db");
 const testDataSaveInterval = document.getElementById("test-data-save-interval");
 const testDataSavePeriod = document.getElementById("test-data-save-period");
-
+const testDataSavingButtonText = document.querySelector('#test-data-saving-button p');
+const testDataSavingButtonDefaultText = 'Save test data';
 
 let testDataSaveButtonToggleState = false;
 
@@ -24,6 +25,9 @@ function updateTestDataSaveButtonStyles() {
     }
 }
 
+
+let countdownInterval;
+let remainingTime;
 testDataSaveButton.addEventListener('click', function() {
     /*
     * 
@@ -57,9 +61,36 @@ testDataSaveButton.addEventListener('click', function() {
 
     if (testDataSaveButtonToggleState) {
         showToast(`Test data is now being saved for ${period} minutes with interval of ${interval} seconds`, 'white', 5000);
+
+
+        remainingTime = period * 60; // Convert minutes to seconds
+
+        // Set up an interval to update the remaining time every second
+        countdownInterval = setInterval(function() {
+            if (remainingTime > 0) {
+                // Calculate minutes and seconds
+                let minutes = Math.floor(remainingTime / 60);
+                let seconds = remainingTime % 60;
+
+                // Format seconds to always show two digits
+                seconds = seconds < 10 ? '0' + seconds : seconds;
+
+                console.log(`Remaining time: ${remainingTime}`);
+
+                remainingTime--; // Decrement after checking
+                testDataSavingButtonText.textContent = testDataSavingButtonDefaultText + ' ' + `${minutes}:${seconds}`;
+            } else {
+                clearInterval(countdownInterval);
+                console.log('Time is up!');
+            }
+        }, 1000);
     }
     else {
         showToast('Test data saving stopped.', 'white');
+        testDataSavingButtonText.textContent = testDataSavingButtonDefaultText;
+        //
+        clearInterval(countdownInterval); // Stop the countdown when the button is toggled off
+        console.log('Countdown stopped.');
 
     }
 
