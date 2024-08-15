@@ -35,32 +35,14 @@ var customAttribution = L.control.attribution({
 });
 
 customAttribution.addTo(map);
-// Add also OpenSeaMap tile in top of OpenStreetMap tile
-/*L.tileLayer('http://tiles.openseamap.org/seamark/{z}/{x}/{y}.png', {
-    attribution: 'Map data &copy; <a href="http://www.openseamap.org/">OpenSeaMap</a>',
-    maxZoom: 18,
-    opacity: 0.75
-}).addTo(map);*/
 
 // Define the OpenSeaMap tile layer as a global variable
-var seaMapLayer = L.tileLayer('http://tiles.openseamap.org/seamark/{z}/{x}/{y}.png', {
-    //attribution: 'Map data &copy; <a href="http://www.openseamap.org/">OpenSeaMap</a>',
-    maxZoom: 18,
-    opacity: 0.75
-});
-// Function to toggle the visibility of the attribution
-function toggleAttribution() {
-  var attributionElement = document.querySelector('.leaflet-control-attribution');
-  if (attributionElement.style.display === 'none') {
-    attributionElement.style.display = 'block';
-  } else {
-    attributionElement.style.display = 'none';
-  }
-}
-// Set the attribution initially invisible and move it to the top center
-var attributionElement = document.querySelector('.leaflet-control-attribution');
-attributionElement.style.display = 'none';
-attributionElement.style.transform = 'translateX(-25%)';
+var seaMapLayer = L.tileLayer("https://tiles.openseamap.org/seamark/{z}/{x}/{y}.png", {
+  attribution: '<br>&copy; <a href="http://www.openseamap.org">OpenSeaMap</a> contributors',
+  maxZoom: 18,
+  tileSize: 256,
+  zoomOffset: 0
+}).addTo(map);
 
 // Function to add or remove the OpenSeaMap tile layer
 function toggleSeaMapLayer(showSeaMap) {
@@ -80,6 +62,21 @@ function toggleSeaMapLayer(showSeaMap) {
       }
   }
 }
+
+// Function to toggle the visibility of the attribution
+function toggleAttribution() {
+  var attributionElement = document.querySelector('.leaflet-control-attribution');
+  if (attributionElement.style.display === 'none') {
+    attributionElement.style.display = 'block';
+  } else {
+    attributionElement.style.display = 'none';
+  }
+}
+// Set the attribution initially invisible and move it to the top center
+var attributionElement = document.querySelector('.leaflet-control-attribution');
+attributionElement.style.display = 'none';
+attributionElement.style.transform = 'translateX(-25%)';
+
 
 function NewRouteButtonFunction() {
   updateDrawButtonIcon(); 

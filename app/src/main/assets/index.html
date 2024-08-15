@@ -338,6 +338,17 @@
                             <input type="number" min="0" max="100" value="8" step="1" class="auto-mode-input-container" id="servo-max-change">
                         </div>
 
+                        <span class="text-element">Hysteresis normal range</span>
+                        <div class="input-container">
+                            <input type="number" min="0" max="100" value="7.0" step="0.01" class="auto-mode-input-container" id="hysteresis-normal-range">
+                        </div>
+
+                        <span class="text-element">Hysteresis strict range</span>
+                        <div class="input-container">
+                            <input type="number" min="0" max="100" value="2.0" step="0.01" class="auto-mode-input-container" id="hysteresis-strict-range">
+                        </div>
+
+
                         <div id="auto-mode-info" class="info-popup">
                             <span class="close-info-popup" style="color: #333;" onclick="closeDialog(document.getElementById('auto-mode-info'))">&#10006;</span>
                             <h2>Auto / lock mode info</h2>
@@ -345,6 +356,12 @@
                             <p>Maximum distance between current location and interpolated point in meters. A lower value has more effect on the rotation of the servo and a larger value has less effect.</p>
                             <p><strong>Servo max change:</strong></p>
                             <p>The maximum amount of rotation in degrees a servo can have after a single iteration of PID control algorithm.</p>
+                            <p><strong>Hysteresis normal range:</strong></p>
+                            <p>The system starts with the normal hysteresis range (e.g., ±7.0 units around the setpoint).
+                                As long as the error (difference between the setpoint and the measured value) stays within this range, the controller considers the system to be in an acceptable state, and the error is effectively ignored (treated as zero). </p>
+                            <p><strong>Hysteresis strict range:</strong></p>
+                            <p>If the error exceeds the normal hysteresis threshold (e.g., the error becomes larger than ±7.0 units), the controller switches to a stricter hysteresis range (e.g., ±2 units).
+                                In this mode, the controller becomes more aggressive, aiming to reduce the error more precisely, pushing the system closer to the setpoint.</p>
                         </div>
                     </div>
 

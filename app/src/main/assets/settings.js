@@ -6,6 +6,8 @@ const inputInterpolatedThresold = document.getElementById("distance-to-interpola
 const distanceToAnchorPointThreshold = document.getElementById("distance-to-anchor-point-threshold");
 const outboardMotorPwmMin = document.getElementById("outboard-motor-pwm-min");
 const servoMaxChange = document.getElementById("servo-max-change");
+const hysteresisNormalRange = document.getElementById("hysteresis-normal-range");
+const hysteresisStrictRange = document.getElementById("hysteresis-strict-range");
 
 const kP = document.getElementById("kP");
 const kI = document.getElementById("kI");
@@ -22,6 +24,8 @@ var jsObject = {
     distance_to_anchor_point_threshold: 3,
     outboard_motor_pwm_min: 20,
     servo_max_change: 10,
+    hysteresis_normal_range: 7.0,
+    hysteresis_strict_range: 2.0,
     kP: 0,
     kI: 0,
     kD: 0,
@@ -93,6 +97,9 @@ function initSettingsDialogWidgets() {
     distanceToAnchorPointThreshold.value = jsObject["distance_to_anchor_point_threshold"];
     outboardMotorPwmMin.value = jsObject["outboard_motor_pwm_min"];
     servoMaxChange.value = jsObject["servo_max_change"];
+    hysteresisNormalRange.value = jsObject["hysteresis_normal_range"];
+    hysteresisStrictRange.value = jsObject["hysteresis_strict_range"];
+
     kP.value = jsObject["kP"];
     kI.value = jsObject["kI"];
     kD.value = jsObject["kD"];
@@ -106,7 +113,7 @@ SaveSettingsButton.addEventListener("click", function () {
     // Send settings via bluetooth
     sendSettingsViaBLE();
     // Update the UI according the settings
-    updateUIwithDBdata();
+    //updateUIwithDBdata();
 });
 
 Switch_GPS.addEventListener("change", function () {
@@ -154,6 +161,17 @@ servoMaxChange.addEventListener("change", function () {
     // Update the jsObject with the integer value
     jsObject["servo_max_change"] = parseInt(servoMaxChange.value, 10);
 });
+
+//////
+hysteresisNormalRange.addEventListener("change", function () {
+    jsObject["hysteresis_normal_range"] = hysteresisNormalRange.value;
+});
+
+hysteresisStrictRange.addEventListener("change", function () {
+    jsObject["hysteresis_strict_range"] = hysteresisStrictRange.value;
+});
+//////
+
 
 kP.addEventListener("change", function () {
     jsObject["kP"] = kP.value;

@@ -16,6 +16,8 @@ public final class SettingsTable {
         public static final String distance_to_anchor_point_threshold = "distance_to_anchor_point_threshold";
         public static  final String outboard_motor_pwm_min = "outboard_motor_pwm_min";
         public static  final String servo_max_change = "servo_max_change";
+        public static  final String hysteresis_normal_range = "hysteresis_normal_range";
+        public static  final String hysteresis_strict_range = "hysteresis_strict_range";
         public static final String kP = "kP";
         public static final String kI = "kI";
         public static final String kD = "kD";

@@ -369,6 +369,7 @@ input:checked + .toggle-slider:before {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column-reverse;
 }
 .input-container label {
   margin-left: 10px;
@@ -380,6 +381,7 @@ input:checked + .toggle-slider:before {
 .pid-input-container {
   display: flex;
   align-items: center;
+  justify-content: center;
   margin-bottom: 15px;
 }
 

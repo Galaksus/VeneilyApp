@@ -28,6 +28,8 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
                     SettingsTable.FeedEntry.distance_to_anchor_point_threshold + " REAL," +
                     SettingsTable.FeedEntry.outboard_motor_pwm_min + " INT," +
                     SettingsTable.FeedEntry.servo_max_change + " INT," +
+                    SettingsTable.FeedEntry.hysteresis_normal_range + " REAL," +
+                    SettingsTable.FeedEntry.hysteresis_strict_range + " REAL," +
                     SettingsTable.FeedEntry.kP + " REAL," +
                     SettingsTable.FeedEntry.kI + " REAL," +
                     SettingsTable.FeedEntry.kD + " REAL," +
@@ -43,12 +45,14 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
                     SettingsTable.FeedEntry.distance_to_anchor_point_threshold + ", " +
                     SettingsTable.FeedEntry.outboard_motor_pwm_min + ", " +
                     SettingsTable.FeedEntry.servo_max_change + ", " +
+                    SettingsTable.FeedEntry.hysteresis_normal_range + ", " +
+                    SettingsTable.FeedEntry.hysteresis_strict_range + ", " +
                     SettingsTable.FeedEntry.kP + ", " +
                     SettingsTable.FeedEntry.kI + ", " +
                     SettingsTable.FeedEntry.kD + ", " +
                     SettingsTable.FeedEntry.dT + ", " +
                     SettingsTable.FeedEntry.use_OpenSeaMap + ") " +
-                    "VALUES (1, 1, 8.0, 3, 20, 10, 1.0, 0.1, 0.01, 0.2, 0)";
+                    "VALUES (1, 1, 8.0, 3, 20, 10, 7.0, 2.0, 1.0, 0.1, 0.01, 0.2, 0)";
 
 
     // Test table
