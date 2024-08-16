@@ -6,6 +6,7 @@ const inputInterpolatedThresold = document.getElementById("distance-to-interpola
 const distanceToAnchorPointThreshold = document.getElementById("distance-to-anchor-point-threshold");
 const outboardMotorPwmMin = document.getElementById("outboard-motor-pwm-min");
 const servoMaxChange = document.getElementById("servo-max-change");
+const routeCoordinateUpdateRadius = document.getElementById("route-coordinate-update-radius");
 const hysteresisNormalRange = document.getElementById("hysteresis-normal-range");
 const hysteresisStrictRange = document.getElementById("hysteresis-strict-range");
 
@@ -24,6 +25,7 @@ var jsObject = {
     distance_to_anchor_point_threshold: 3,
     outboard_motor_pwm_min: 20,
     servo_max_change: 10,
+    route_coordinate_update_radius: 10.0,
     hysteresis_normal_range: 7.0,
     hysteresis_strict_range: 2.0,
     kP: 0,
@@ -97,6 +99,7 @@ function initSettingsDialogWidgets() {
     distanceToAnchorPointThreshold.value = jsObject["distance_to_anchor_point_threshold"];
     outboardMotorPwmMin.value = jsObject["outboard_motor_pwm_min"];
     servoMaxChange.value = jsObject["servo_max_change"];
+    routeCoordinateUpdateRadius.value = jsObject["route_coordinate_update_radius"];
     hysteresisNormalRange.value = jsObject["hysteresis_normal_range"];
     hysteresisStrictRange.value = jsObject["hysteresis_strict_range"];
 
@@ -152,17 +155,15 @@ outboardMotorPwmMin.addEventListener("change", function () {
     jsObject["outboard_motor_pwm_min"] = parseInt(outboardMotorPwmMin.value, 10);
 });
 
-outboardMotorPwmMin.addEventListener("change", function () {
-    // Update the jsObject with the integer value
-    jsObject["outboard_motor_pwm_min"] = parseInt(outboardMotorPwmMin.value, 10);
-});
-
 servoMaxChange.addEventListener("change", function () {
     // Update the jsObject with the integer value
     jsObject["servo_max_change"] = parseInt(servoMaxChange.value, 10);
 });
 
-//////
+routeCoordinateUpdateRadius.addEventListener("change", function () {
+    jsObject["route_coordinate_update_radius"] = routeCoordinateUpdateRadius.value;
+});
+
 hysteresisNormalRange.addEventListener("change", function () {
     jsObject["hysteresis_normal_range"] = hysteresisNormalRange.value;
 });
@@ -170,7 +171,7 @@ hysteresisNormalRange.addEventListener("change", function () {
 hysteresisStrictRange.addEventListener("change", function () {
     jsObject["hysteresis_strict_range"] = hysteresisStrictRange.value;
 });
-//////
+
 
 
 kP.addEventListener("change", function () {

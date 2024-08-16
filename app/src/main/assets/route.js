@@ -477,3 +477,9 @@ function displayLocationPermissionRequiredNoteForUser(hide) {
     permissionRequiredLabel.style.display = "flex";
   }
 }
+
+function stopAutoMode() {
+  /* This function is called from Java. And it should be called only when a route is at its end (path) type of route.
+   This should effectively stops the route from running */
+  startRouteButton.click();
+}
