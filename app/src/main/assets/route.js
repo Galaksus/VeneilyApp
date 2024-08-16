@@ -398,6 +398,9 @@ function getMarkersOnMapCount(markersOnly) {
 }
 
 function highlightMarkerOnMap(coordinate) {
+
+  /* Not used as for now */
+
   // Split the coordinate string into latitude and longitude
   var coordinates = coordinate.split(",");
   var textToDisplay = "This is the next checkpoint";
@@ -465,7 +468,6 @@ function parseCoordinate(coordinateString) {
 }
 
 function displayLocationPermissionRequiredNoteForUser(hide) {
-  console.log("Kutsuttu?", "Parameterillä: ", hide)
   let permissionRequiredLabel = document.getElementById("location-permission-required-label");
 
   if (hide === "true") {
