@@ -330,6 +330,8 @@ input:checked + .toggle-slider:before {
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   z-index: 9999;
+  max-height: 125%; /* Set maximum height as needed */
+  overflow-y: auto; /* Make the content scrollable if it exceeds the max height */
 }
 
 .info-popup p {
