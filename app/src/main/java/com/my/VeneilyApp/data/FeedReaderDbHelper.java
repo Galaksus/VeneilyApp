@@ -22,7 +22,7 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
 
     private static final String SQL_CREATE_SETTINGS_ENTRIES =
             "CREATE TABLE " + SettingsTable.FeedEntry.TABLE_NAME + " (" +
-                    SettingsTable.FeedEntry.is_android_GPS_used + " TEXT," +
+                    SettingsTable.FeedEntry.is_android_GPS_used + " BOOL," +
                     SettingsTable.FeedEntry.is_android_orientation_used + " TEXT," +
                     SettingsTable.FeedEntry.distance_to_interpolated_point_max + " REAL," +
                     SettingsTable.FeedEntry.distance_to_anchor_point_threshold + " REAL," +
@@ -54,7 +54,7 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
                     SettingsTable.FeedEntry.kD + ", " +
                     SettingsTable.FeedEntry.dT + ", " +
                     SettingsTable.FeedEntry.use_OpenSeaMap + ") " +
-                    "VALUES (1, 1, 8.0, 3, 20, 10, 10.0, 7.0, 2.0, 1.0, 0.1, 0.01, 0.2, 0)";
+                    "VALUES ('true', 'true', 8.0, 3, 20, 180, 10.0, 4.0, 2.0, 0.7, 0, 0.01, 0.2, 0)";
 
 
     // Test table
@@ -63,6 +63,7 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
                     TestResultsTable.FeedEntry.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     TestResultsTable.FeedEntry.COLUMN_SESSION_ID + " TEXT NOT NULL, " +
                     TestResultsTable.FeedEntry.COLUMN_DATA + " TEXT NOT NULL, " +
+                    TestResultsTable.FeedEntry.ORIENTATION + " TEXT, " +
                     TestResultsTable.FeedEntry.ASSOCIATED_WITH + " TEXT, " +
                     TestResultsTable.FeedEntry.COLUMN_TIMESTAMP + " DATETIME DEFAULT CURRENT_TIMESTAMP);";
 

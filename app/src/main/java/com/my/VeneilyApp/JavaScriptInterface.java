@@ -357,8 +357,10 @@ public class JavaScriptInterface implements GetOrientation.OrientationListener {
                     locationString = "Location not available.";
                 }
 
+                String orientationString = String.valueOf(azimuthDegrees_);
+
                 // Store the data
-                DataAccessObject.addRowToResultsTable(currentSessionId, locationString, associated_data);
+                DataAccessObject.addRowToResultsTable(currentSessionId, locationString, orientationString, associated_data);
                 Log.d("DataStoring", "DB: Data written.");
 
                 // Check if the total duration has elapsed

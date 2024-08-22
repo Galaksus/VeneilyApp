@@ -185,7 +185,7 @@ public class DataAccessObject {
         return jsonArray.toString();
     }
 
-    public void addRowToResultsTable(String session_id, String data, String associated_data) {
+    public void addRowToResultsTable(String session_id, String data, String orientation, String associated_data) {
         if (session_id == null) {
             // Handle the error appropriately, e.g., log the error or throw an exception
             Log.e("DataAccessObject", "Error inserting data: session_id is null");
@@ -200,6 +200,7 @@ public class DataAccessObject {
         ContentValues values = new ContentValues();
         values.put(TestResultsTable.FeedEntry.COLUMN_SESSION_ID, session_id);
         values.put(TestResultsTable.FeedEntry.COLUMN_DATA, data);
+        values.put(TestResultsTable.FeedEntry.ORIENTATION, orientation);
         values.put(TestResultsTable.FeedEntry.ASSOCIATED_WITH, associated_data);
         db.insert(TestResultsTable.FeedEntry.TABLE_NAME, null, values);
     }

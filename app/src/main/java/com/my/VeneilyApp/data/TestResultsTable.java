@@ -14,6 +14,7 @@ public final class TestResultsTable {
         public static final String ID = "id";
         public static final String COLUMN_SESSION_ID = "session_id";
         public static final String COLUMN_DATA = "data";
+        public static final String ORIENTATION = "orientation";
         public static final String ASSOCIATED_WITH = "associated_with";
         public static final String COLUMN_TIMESTAMP = "timestamp";
 

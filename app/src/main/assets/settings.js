@@ -19,8 +19,8 @@ const dT = document.getElementById("dT");
 // The settings, C++ equivalent of struct and JavaScript object (dict), where key equals table's column name and value the value for the column (string)
 // These variables goes trough BLE
 var jsObject = {
-    is_android_GPS_used: 'false',
-    is_android_orientation_used: 'false',
+    is_android_GPS_used: 'true',
+    is_android_orientation_used: 'true',
     distance_to_interpolated_point_max: 8.0,
     distance_to_anchor_point_threshold: 3,
     outboard_motor_pwm_min: 20,
