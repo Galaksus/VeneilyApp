@@ -79,6 +79,14 @@ public class BLEHandler {
         if (bluetoothManager != null) {
             bluetoothAdapter = bluetoothManager.getAdapter();
             bluetoothLeScanner = bluetoothAdapter.getBluetoothLeScanner();
+
+            // Check if Bluetooth is enabled, if not request to enable it
+            if (bluetoothAdapter != null && !bluetoothAdapter.isEnabled()) {
+                Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                }
+                activity.startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+            }
         }
         characteristicDataMap = new HashMap<>();
         Log.d(TAG, "BLEHandler initialized");
