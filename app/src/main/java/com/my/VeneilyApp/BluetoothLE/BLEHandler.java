@@ -470,6 +470,7 @@ public class BLEHandler {
         notificationMessages.put("1004", "Route completed successfully");
         notificationMessages.put("1103", "Next route coordinate index updated to");
         notificationMessages.put("1104", "Direction coordinate used in lock mode");
+        notificationMessages.put("3001", "Compass not detected, check wiring!");
     }
 
     // Method to retrieve a message by its tag
