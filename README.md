@@ -1,5 +1,9 @@
 README under progress.
+This is my theses project. Theses is yet to be published.
 
+This is the Android application / User interface for the theses prohect.
+
+Here you can find the embedded system implementation https://github.com/Galaksus/VeneilyApp_esp32
 
 Default view of Android Application:
 
