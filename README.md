@@ -1,5 +1,4 @@
-README under progress.
-This is my thesis project. Thesis is yet to be published.
+This is my thesis project. Thesis can be found here: https://trepo.tuni.fi/bitstream/handle/10024/204924/LalloKonsta.pdf?sequence=2&isAllowed=y
 
 This is the Android application / User interface for the thesis project.
 
